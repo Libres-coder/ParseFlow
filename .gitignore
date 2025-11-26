@@ -10,6 +10,14 @@ build/
 *.tsbuildinfo
 tsconfig.tsbuildinfo
 
+# TypeScript compiled files in source directories
+packages/*/src/**/*.js
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts.map
+!packages/*/src/**/*.test.js
+!packages/*/src/types/pdf-parse.d.ts
+
 # Environment variables
 .env
 .env.local

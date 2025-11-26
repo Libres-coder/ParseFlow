@@ -20,8 +20,8 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    '^@parseflow/core$': '<rootDir>/packages/pdf-parser-core/src',
-    '^@parseflow/mcp-server$': '<rootDir>/packages/mcp-server/src',
+    '^@parseflow/core$': '<rootDir>/packages/pdf-parser-core/src/index.ts',
+    '^@parseflow/mcp-server$': '<rootDir>/packages/mcp-server/src/index.ts',
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
 };

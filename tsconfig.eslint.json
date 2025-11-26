@@ -5,7 +5,12 @@
     "declaration": false,
     "declarationMap": false,
     "sourceMap": false,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@parseflow/core": ["./packages/pdf-parser-core/src/index.ts"],
+      "@parseflow/mcp-server": ["./packages/mcp-server/src/index.ts"]
+    }
   },
   "include": [
     "packages/*/src/**/*",
