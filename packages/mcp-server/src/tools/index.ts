@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser } from '@parseflow/core';
+import { PDFParser, type TOCItem } from '@parseflow/core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
@@ -223,7 +223,10 @@ export class ToolHandler {
       results.length === 0
         ? '未找到匹配结果'
         : `找到 ${results.length} 个结果：\n\n${results
-            .map((r, i) => `[${i + 1}] 第 ${r.page} 页\n${r.context}\n`)
+            .map(
+              (r: { page: number; context: string }, i: number) =>
+                `[${i + 1}] 第 ${r.page} 页\n${r.context}\n`
+            )
             .join('\n')}`;
 
     return {
@@ -338,9 +341,9 @@ ${JSON.stringify(structuredData, null, 2)}`;
       };
     }
 
-    const formatToc = (items: typeof toc, level = 0): string => {
+    const formatToc = (items: TOCItem[], level = 0): string => {
       return items
-        .map((item) => {
+        .map((item: TOCItem) => {
           const indent = '  '.repeat(level);
           let result = `${indent}${item.title} (第 ${item.page} 页)`;
           if (item.children && item.children.length > 0) {
