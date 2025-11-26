@@ -209,19 +209,27 @@ D:\example.pdf 有多少页？
 
 ## 📚 文档
 
-### 快速开始
-- [快速开始指南](QUICK_START.md) - 5 分钟上手
-- [常见问题 FAQ](FAQ.md) - 故障排除
+### 📖 用户指南
+- [快速开始](docs/guides/quick-start.md) - 5 分钟上手 ParseFlow
+- [常见问题](docs/guides/faq.md) - FAQ 和故障排除
+- [使用示例](docs/guides/examples.md) - 代码示例和最佳实践
 
-### IDE 配置
-- [Windsurf 配置](WINDSURF_SETUP.md) - Windsurf 详细配置（推荐）
-- [Cursor 配置](CURSOR_SETUP.md) - Cursor 详细配置
+### ⚙️ 环境配置
+- [Windsurf 配置](docs/setup/windsurf.md) - Windsurf IDE 配置指南（推荐）
+- [Cursor 配置](docs/setup/cursor.md) - Cursor IDE 配置指南
 
-### 技术文档
-- [API 文档](docs/API.md) - 完整 API 参考
-- [架构设计](docs/ARCHITECTURE.md) - 系统架构说明
-- [开发指南](docs/DEVELOPMENT.md) - 开发和贡献
-- [使用示例](docs/EXAMPLES.md) - 更多使用场景
+### 🛠️ 开发文档
+- [API 文档](docs/development/api.md) - 完整 API 参考
+- [架构设计](docs/development/architecture.md) - 系统架构说明
+- [开发指南](docs/development/development.md) - 如何参与开发
+- [命名规范](docs/development/naming-conventions.md) - 代码规范
+
+### 📋 项目规划
+- [待办事项](docs/planning/todo.md) - 功能路线图
+- [分发分析](docs/planning/distribution-analysis.md) - 发布计划
+
+### 📂 文档索引
+- [完整文档目录](docs/README.md) - 所有文档的索引
 
 ---
 
@@ -402,8 +410,8 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 - AI 文档分析
 - 更多 IDE 集成
 
-**详细路线图**: [TODO.md](TODO.md)  
-**技术分析**: [DISTRIBUTION_ANALYSIS.md](docs/DISTRIBUTION_ANALYSIS.md)
+**详细路线图**: [docs/planning/todo.md](docs/planning/todo.md)  
+**技术分析**: [docs/planning/distribution-analysis.md](docs/planning/distribution-analysis.md)
 
 ---
 
@@ -425,7 +433,7 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 
 如果遇到问题：
 
-1. 查看 [FAQ.md](FAQ.md) 常见问题
+1. 查看 [docs/guides/faq.md](docs/guides/faq.md) 常见问题
 2. 查看 [logs/parseflow.log](logs/) 日志文件
 3. 提交 [Issue](https://github.com/Libres-coder/ParseFlow/issues)
 

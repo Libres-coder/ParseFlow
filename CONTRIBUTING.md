@@ -176,9 +176,10 @@ describe('PDFParser', () => {
 
 ### 文档
 
-- [架构设计](./docs/ARCHITECTURE.md)
-- [API 文档](./docs/API.md)
-- [开发指南](./docs/DEVELOPMENT.md)
+- [架构设计](./docs/development/architecture.md)
+- [API 文档](./docs/development/api.md)
+- [开发指南](./docs/development/development.md)
+- [命名规范](./docs/development/naming-conventions.md)
 
 ### 相关技术
 
