@@ -4,6 +4,7 @@
 
 **🚀 High-Performance PDF Parsing MCP Server**
 
+[![CI](https://github.com/Libres-coder/ParseFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/Libres-coder/ParseFlow/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org)
 [![MCP](https://img.shields.io/badge/MCP-1.0-purple.svg)](https://modelcontextprotocol.io)
