@@ -43,16 +43,20 @@ async function main(): Promise<void> {
     logger.info('ParseFlow MCP Server started successfully');
 
     // 优雅关闭
-    process.on('SIGINT', async () => {
-      logger.info('Shutting down ParseFlow MCP Server...');
-      await server.stop();
-      process.exit(0);
+    process.on('SIGINT', () => {
+      void (async () => {
+        logger.info('Shutting down ParseFlow MCP Server...');
+        await server.stop();
+        process.exit(0);
+      })();
     });
 
-    process.on('SIGTERM', async () => {
-      logger.info('Shutting down ParseFlow MCP Server...');
-      await server.stop();
-      process.exit(0);
+    process.on('SIGTERM', () => {
+      void (async () => {
+        logger.info('Shutting down ParseFlow MCP Server...');
+        await server.stop();
+        process.exit(0);
+      })();
     });
   } catch (error) {
     logger.error('Failed to start ParseFlow MCP Server', { error });
@@ -61,7 +65,7 @@ async function main(): Promise<void> {
 }
 
 // 运行服务器
-main().catch((error) => {
+main().catch((error: unknown) => {
   logger.error('Unhandled error', { error });
   process.exit(1);
 });

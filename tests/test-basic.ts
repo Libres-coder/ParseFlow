@@ -1,10 +1,14 @@
 /**
  * 基础功能测试
+ * 这是一个手动测试脚本，不是自动化测试
  */
+
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { PDFParser } from '../packages/pdf-parser-core/dist/index.js';
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🧪 ParseFlow 基础功能测试\n');
 
   const parser = new PDFParser({
@@ -70,4 +74,4 @@ async function main() {
   }
 }
 
-main();
+void main();

@@ -108,25 +108,25 @@ export class PDFParser {
   /**
    * 提取图片（简化实现）
    */
-  async extractImages(
+  extractImages(
     _path: string,
     _outputDir: string,
     _options?: ImageExtractOptions
   ): Promise<string[]> {
     // 提取图片需要使用 pdfjs-dist，这里返回占位符
     // 实际实现见 ImageExtractor 类
-    throw new Error(
-      'Image extraction not implemented yet. Use pdfjs-dist for full implementation.'
+    return Promise.reject(
+      new Error('Image extraction not implemented yet. Use pdfjs-dist for full implementation.')
     );
   }
 
   /**
    * 获取目录（简化实现）
    */
-  async getTOC(_path: string): Promise<TOCItem[]> {
+  getTOC(_path: string): Promise<TOCItem[]> {
     // PDF 目录提取需要使用 pdfjs-dist
     // 这里返回空数组占位
-    return [];
+    return Promise.resolve([]);
   }
 
   /**

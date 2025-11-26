@@ -47,18 +47,15 @@ jobs:
 
       - name: Lint
         run: pnpm lint
-        continue-on-error: true
 
       - name: Type check
         run: pnpm typecheck
-        continue-on-error: true
 
       - name: Build
         run: pnpm build
 
       - name: Test
         run: pnpm test
-        continue-on-error: true
 
   coverage:
     name: Coverage
@@ -83,7 +80,6 @@ jobs:
 
       - name: Run tests with coverage
         run: pnpm test:coverage
-        continue-on-error: true
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

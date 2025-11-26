@@ -1,8 +1,8 @@
 /**
  * MCP 客户端使用示例
- * 
+ *
  * 演示如何从客户端调用 ParseFlow MCP 服务器
- * 
+ *
  * 注意：需要安装 @modelcontextprotocol/sdk
  * npm install @modelcontextprotocol/sdk
  */
@@ -38,7 +38,7 @@ async function main(): Promise<void> {
    * ⚠️ 取消注释以下代码前，请先安装依赖：
    * npm install @modelcontextprotocol/sdk
    */
-  
+
   /*
   // 创建 MCP 客户端
   const transport = new StdioClientTransport({

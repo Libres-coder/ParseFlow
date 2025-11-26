@@ -1,6 +1,6 @@
 /**
  * ParseFlow 基本使用示例
- * 
+ *
  * 注意：这是一个参考模板，展示如何使用 ParseFlow PDF Parser
  * 在实际项目中，根据你的 monorepo 配置调整导入路径
  */
@@ -75,7 +75,6 @@ async function main(): Promise<void> {
     console.log('Raw length:', rawText.length);
     console.log('Formatted length:', formattedText.length);
     console.log('Clean length:', cleanText.length);
-
   } catch (error) {
     console.error('Error:', error);
   }

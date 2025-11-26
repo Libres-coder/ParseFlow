@@ -11,17 +11,18 @@ export class MetadataExtractor {
    */
   async extract(buffer: Buffer, fileSize: number): Promise<PDFMetadata> {
     const data = await pdf(buffer);
+    const info = data.info;
 
     return {
       info: {
-        Title: data.info?.Title,
-        Author: data.info?.Author,
-        Subject: data.info?.Subject,
-        Keywords: data.info?.Keywords,
-        Creator: data.info?.Creator,
-        Producer: data.info?.Producer,
-        CreationDate: data.info?.CreationDate ? new Date(data.info.CreationDate) : undefined,
-        ModDate: data.info?.ModDate ? new Date(data.info.ModDate) : undefined,
+        Title: info.Title,
+        Author: info.Author,
+        Subject: info.Subject,
+        Keywords: info.Keywords,
+        Creator: info.Creator,
+        Producer: info.Producer,
+        CreationDate: info.CreationDate ? new Date(info.CreationDate) : undefined,
+        ModDate: info.ModDate ? new Date(info.ModDate) : undefined,
       },
       metadata: {
         pageCount: data.numpages,

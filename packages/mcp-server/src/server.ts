@@ -61,26 +61,17 @@ export class ParseFlowServer {
    */
   private setupHandlers(): void {
     // Resource 处理
-    this.server.setRequestHandler(
-      ListResourcesRequestSchema,
-      async () => await this.resourceHandler.list()
-    );
+    this.server.setRequestHandler(ListResourcesRequestSchema, () => this.resourceHandler.list());
 
-    this.server.setRequestHandler(
-      ReadResourceRequestSchema,
-      async (request) => await this.resourceHandler.read(request.params.uri)
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) =>
+      this.resourceHandler.read(request.params.uri)
     );
 
     // Tool 处理
-    this.server.setRequestHandler(
-      ListToolsRequestSchema,
-      async () => await this.toolHandler.list()
-    );
+    this.server.setRequestHandler(ListToolsRequestSchema, () => this.toolHandler.list());
 
-    this.server.setRequestHandler(
-      CallToolRequestSchema,
-      async (request) =>
-        await this.toolHandler.call(request.params.name, request.params.arguments ?? {})
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) =>
+      this.toolHandler.call(request.params.name, request.params.arguments ?? {})
     );
 
     // 错误处理

@@ -20,7 +20,7 @@ export class ToolHandler {
   /**
    * 列出可用工具
    */
-  async list(): Promise<{ tools: Tool[] }> {
+  list(): { tools: Tool[] } {
     logger.info('Listing available tools');
     return { tools: this.tools };
   }

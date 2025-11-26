@@ -19,7 +19,7 @@ export class ResourceHandler {
   /**
    * 列出可用的 PDF 资源
    */
-  async list(): Promise<{ resources: Resource[] }> {
+  list(): { resources: Resource[] } {
     try {
       logger.info('Listing PDF resources');
 
