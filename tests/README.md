@@ -6,7 +6,7 @@
 
 找一个您系统中的 PDF 文件，例如：
 - `D:\documents\report.pdf`
-- `C:\Users\YourName\Downloads\manual.pdf`
+- `C:\Users\<你的用户名>\Downloads\manual.pdf`
 - 或任何其他 PDF 文件
 
 ### 2. 运行基础功能测试

@@ -4,16 +4,16 @@
   "description": "MCP Server for PDF parsing and analysis in Windsurf IDE",
   "type": "module",
   "private": true,
-  "author": "Your Name <your-email@example.com>",
+  "author": "ParseFlow Contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/ParseFlow.git"
+    "url": "https://github.com/Libres-coder/ParseFlow.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/ParseFlow/issues"
+    "url": "https://github.com/Libres-coder/ParseFlow/issues"
   },
-  "homepage": "https://github.com/your-username/ParseFlow#readme",
+  "homepage": "https://github.com/Libres-coder/ParseFlow#readme",
   "keywords": [
     "pdf",
     "parser",

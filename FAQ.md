@@ -2,12 +2,27 @@
 
 ## 📌 安装和配置
 
-### Q1: 如何在 Windsurf 中配置 ParseFlow？
+### Q1: ParseFlow 支持哪些 IDE？
 
-**A:** 参考 [QUICK_START.md](../QUICK_START.md)，主要步骤：
-1. 编辑 `%APPDATA%\Windsurf\mcp_config.json`
-2. 添加 ParseFlow 配置
-3. 重启 Windsurf
+**A:** ParseFlow 支持两种 IDE：
+- ✅ **Windsurf**（推荐）- 自动识别，无需明确指示
+- ✅ **Cursor**（0.45.x+）- 需在 Agent 模式明确指示
+
+详细配置参考：
+- Windsurf: [WINDSURF_SETUP.md](WINDSURF_SETUP.md)
+- Cursor: [CURSOR_SETUP.md](CURSOR_SETUP.md)
+
+### Q2: 如何配置 ParseFlow？
+
+**A:** 根据你的 IDE 选择配置文件：
+
+**Windsurf**（推荐）：
+- 配置文件: `C:\Users\<用户名>\.codeium\windsurf\mcp_config.json`
+- 参考: [QUICK_START.md](QUICK_START.md)
+
+**Cursor**：
+- 配置文件: `C:\Users\<用户名>\.cursor\mcp.json`
+- 参考: [CURSOR_SETUP.md](CURSOR_SETUP.md)
 
 ### Q2: 配置后 Windsurf 没有调用 ParseFlow？
 
@@ -26,7 +41,35 @@ pnpm install
 pnpm build
 ```
 
-### Q4: 如何更新到最新版本？
+### Q4: 在 Cursor 中无法使用 ParseFlow？
+
+**A:** Cursor 的 MCP 使用有特殊要求：
+
+1. **必须在 Agent 模式**
+   - 在 Composer 中切换到 Agent 模式
+   - Chat 模式下无法使用 MCP
+
+2. **必须明确指示工具**
+   - ❌ 错误："分析 D:\report.pdf"
+   - ✅ 正确："请使用 parseflow 工具读取 D:\report.pdf"
+
+3. **确认配置正确**
+   - 配置文件: `C:\Users\<用户名>\.cursor\mcp.json`
+   - 参考: [CURSOR_SETUP.md](CURSOR_SETUP.md)
+
+### Q5: Windsurf 和 Cursor 哪个更好用？
+
+**A:** **推荐使用 Windsurf**，原因：
+- ✅ 自动识别 MCP 工具，无需明确指示
+- ✅ Chat 和 Agent 模式都可用
+- ✅ 更智能的工具调用
+- ✅ 无工具数量限制
+
+Cursor 也可用，但需要：
+- ⚠️ 必须在 Agent 模式
+- ⚠️ 必须明确指示工具名称
+
+### Q6: 如何更新到最新版本？
 
 **A:** 
 ```powershell
@@ -34,13 +77,13 @@ git pull origin main
 pnpm install
 pnpm build
 ```
-然后重启 Windsurf。
+然后重启你的 IDE。
 
 ---
 
 ## 📄 PDF 解析
 
-### Q5: 支持哪些 PDF 格式？
+### Q7: 支持哪些 PDF 格式？
 
 **A:** 
 - ✅ 标准 PDF（文本类型）
@@ -48,14 +91,14 @@ pnpm build
 - ⚠️ 扫描版 PDF（需要 OCR，未实现）
 - ⚠️ 加密 PDF（需要密码，未实现）
 
-### Q6: 能处理多大的 PDF 文件？
+### Q8: 能处理多大的 PDF 文件？
 
 **A:** 
 - 默认限制：50MB
 - 可在 `.env` 中修改：`PARSEFLOW_MAX_FILE_SIZE=104857600` (100MB)
 - 建议：超大文件（>100MB）可能导致内存问题
 
-### Q7: 文本提取乱码怎么办？
+### Q9: 文本提取乱码怎么办？
 
 **A:** 尝试不同的提取策略：
 ```javascript
@@ -229,7 +272,7 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 ```json
 "env": {
   "LOG_LEVEL": "debug",
-  "PARSEFLOW_LOG_FILE": "D:\\ParseFlow\\logs\\debug.log"
+  "PARSEFLOW_LOG_FILE": "<项目根目录>\\logs\\debug.log"
 }
 ```
 
@@ -276,6 +319,129 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 
 ---
 
+## 🚀 未来计划
+
+### Q31: 会有 MCP Marketplace 版本吗？
+
+**A:** ✅ **是的！这是高优先级计划**
+
+**计划内容**：
+- 发布到 npm 公开包
+- 提交到官方 MCP Registry
+- 用户可以一键安装 ParseFlow
+
+**收益**：
+- ✅ 无需手动配置
+- ✅ 自动版本管理
+- ✅ 官方认可
+
+**优先级**: ⭐⭐⭐⭐⭐
+
+**参考**: [TODO.md](../TODO.md) 和 [DISTRIBUTION_ANALYSIS.md](./DISTRIBUTION_ANALYSIS.md)
+
+### Q32: 能通过 VSCode 扩展（VSIX）安装吗？
+
+**A:** ✅ **可以，已列入计划**
+
+**技术上完全可行**：
+- Windsurf 和 Cursor 都基于 VSCode
+- 支持加载 VSCode 扩展
+- 扩展可以自动管理 MCP 配置
+
+**功能设计**：
+- ✅ 一键安装配置
+- ✅ 自动管理 MCP 配置文件
+- ✅ MCP Server 启停控制
+- ✅ 版本更新管理
+
+**⚠️ 重要说明**：
+```
+✅ 可以改善：安装和配置体验
+❌ 不能改变：AI 的工具选择行为
+
+即使通过扩展安装：
+- Windsurf 仍然自动识别 ✅
+- Cursor 仍需 Agent 模式明确指示 ⚠️
+
+因为 AI 工具选择是 IDE 内部逻辑，
+扩展无法改变。
+```
+
+**优先级**: ⭐⭐⭐⭐（高）  
+**前置条件**: MCP Marketplace 发布后
+
+**参考**: [DISTRIBUTION_ANALYSIS.md](./DISTRIBUTION_ANALYSIS.md)
+
+### Q33: VSCode 扩展能让 Cursor 自动使用 ParseFlow 吗？
+
+**A:** ❌ **不能，这是技术限制**
+
+**原因解释**：
+
+**1. AI 工具选择由 IDE 决定**
+```
+AI 如何选择工具 = IDE 内部的 AI 层逻辑
+
+无论通过什么方式：
+❌ VSCode 扩展
+❌ MCP 配置
+❌ 外部脚本
+
+都无法改变 AI 的决策行为
+```
+
+**2. Cursor Agent 模式是设计**
+- 这是 Cursor 团队的产品设计
+- 采用保守的工具选择策略
+- 需要明确指示避免误调用
+
+**3. 只有 Cursor 自己能改变**
+- ✅ 未来 Cursor 可能改进
+- ✅ 可能扩展到 Chat 模式
+- ✅ 可能更智能的自动选择
+
+**结论**：
+```
+VSCode 扩展能做的：
+✅ 改善安装体验
+✅ 自动配置管理
+✅ 版本更新
+
+VSCode 扩展不能做的：
+❌ 改变 Cursor 的工具选择行为
+❌ 让 Cursor 自动调用工具
+❌ 绕过 Agent 模式要求
+```
+
+**建议**：
+- 如果希望自动调用，使用 Windsurf
+- 如果使用 Cursor，接受需要明确指示
+- 或等待 Cursor 团队未来改进
+
+**详细技术分析**: [DISTRIBUTION_ANALYSIS.md](./DISTRIBUTION_ANALYSIS.md)
+
+### Q34: 未来有什么新功能？
+
+**A:** 查看完整路线图：[TODO.md](../TODO.md)
+
+**高优先级**：
+- ⭐⭐⭐⭐⭐ MCP Marketplace 发布
+- ⭐⭐⭐⭐ VSCode 扩展开发
+
+**计划中**：
+- 目录（TOC）提取
+- 图像导出
+- 高级搜索功能
+- 性能优化
+- 错误处理改进
+
+**未来考虑**：
+- OCR 支持（扫描件）
+- AI 文档分析
+- Web 界面（可选）
+
+---
+
 ## 💬 获取帮助
 
 如果以上没有解决您的问题：
@@ -285,13 +451,13 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
    - [API 文档](./API.md)
    - [开发指南](./DEVELOPMENT.md)
 
-2. **社区支持**：
-   - GitHub Issues
-   - GitHub Discussions
+2. **提交 Issue**：
+   - [GitHub Issues](https://github.com/Libres-coder/ParseFlow/issues)
+   - 描述问题和错误日志
 
-3. **联系维护者**：
-   - Email: liud1@mails.neu.edu.cn
-   - GitHub: Libres-coder
+3. **查看日志**：
+   - 检查 `logs/parseflow.log`
+   - 检查 Windsurf 日志
 
 ---
 

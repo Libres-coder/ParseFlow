@@ -8,6 +8,7 @@ yarn.lock
 dist/
 build/
 *.tsbuildinfo
+tsconfig.tsbuildinfo
 
 # Environment variables
 .env
@@ -44,6 +45,26 @@ coverage/
 .parseflow/
 cache/
 temp/
+
+# Test files (临时测试脚本)
+analyze-*.ts
+analyze-*.js
+parse-*.ts
+parse-*.js
+check-pages.*
+test-quick.*
+*.test.local.ts
+*.test.local.js
+
+# Test data (测试用 PDF 和报告)
+*.pdf
+*-report.txt
+*-analysis*.txt
+
+# Cleanup and temporary files
+.cleanup-plan.md
+CLEANUP_SUMMARY.md
+PROJECT_STRUCTURE_ANALYSIS.md
 
 # OS
 Thumbs.db

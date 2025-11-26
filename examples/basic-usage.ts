@@ -1,10 +1,20 @@
 /**
  * ParseFlow 基本使用示例
+ * 
+ * 注意：这是一个参考模板，展示如何使用 ParseFlow PDF Parser
+ * 在实际项目中，根据你的 monorepo 配置调整导入路径
  */
 
-import { PDFParser } from '@parseflow/core';
+// 选项 1：使用相对路径（推荐用于开发）
+import { PDFParser } from '../packages/pdf-parser-core/src/parser.js';
 
-async function main() {
+// 选项 2：如果配置了 workspace aliases
+// import { PDFParser } from '@parseflow/pdf-parser-core';
+
+/**
+ * 主函数：演示 PDFParser 的基本用法
+ */
+async function main(): Promise<void> {
   // 创建解析器实例
   const parser = new PDFParser({
     cache: {
@@ -16,6 +26,7 @@ async function main() {
     },
   });
 
+  // ⚠️ 替换为你的 PDF 文件路径
   const pdfPath = 'path/to/your/file.pdf';
 
   try {
@@ -52,7 +63,7 @@ async function main() {
       maxResults: 5,
     });
     console.log(`找到 ${results.length} 个结果`);
-    results.forEach((result, i) => {
+    results.forEach((result: any, i: number) => {
       console.log(`[${i + 1}] 第 ${result.page} 页: ${result.context}`);
     });
 
@@ -70,4 +81,5 @@ async function main() {
   }
 }
 
+// 运行示例
 main();

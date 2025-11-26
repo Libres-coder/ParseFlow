@@ -8,7 +8,7 @@
 
 如果您发现了 Bug，请：
 
-1. 检查 [Issues](https://github.com/your-username/ParseFlow/issues) 确认该问题是否已被报告
+1. 检查 [Issues](https://github.com/Libres-coder/ParseFlow/issues) 确认该问题是否已被报告
 2. 如果没有，创建新 Issue 并提供：
    - 清晰的标题和描述
    - 复现步骤
@@ -220,7 +220,7 @@ describe('PDFParser', () => {
 如果您有任何问题：
 
 1. 查看 [文档](./docs)
-2. 搜索 [Issues](https://github.com/your-username/ParseFlow/issues)
+2. 搜索 [Issues](https://github.com/Libres-coder/ParseFlow/issues)
 3. 在 Issue 中提问
 4. 联系维护者
 

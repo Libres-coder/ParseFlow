@@ -14,10 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Semantic search with vector embeddings
 - Performance optimization with streaming and parallel processing
 
-## [1.0.0] - 2024-11-26
+## [1.0.0] - 2025-11-26
 
 ### Added
-- Initial release of ParseFlow
+- Initial release of ParseFlow MCP Server
+- **Local deployment only** - Configure via `mcp_config.json`, not available in public registries
 - MCP Server implementation for Windsurf IDE integration
 - PDF Parser Core library
 - Text extraction with multiple strategies (raw, formatted, clean)
@@ -57,5 +58,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Contributing guidelines
 - MIT License
 
-[Unreleased]: https://github.com/your-username/ParseFlow/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/your-username/ParseFlow/releases/tag/v1.0.0
+[Unreleased]: https://github.com/Libres-coder/ParseFlow/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Libres-coder/ParseFlow/releases/tag/v1.0.0

@@ -60,26 +60,26 @@ export class ToolHandler {
     return [
       {
         name: 'extract_text',
-        description: '从 PDF 提取文本内容',
+        description: 'Extract text content from PDF files. Use this tool when the user asks to read, analyze, summarize, or extract content from a PDF file. Supports extracting specific pages or page ranges. This is the primary tool for accessing PDF content.',
         inputSchema: {
           type: 'object',
           properties: {
             path: {
               type: 'string',
-              description: 'PDF 文件路径',
+              description: 'Absolute path to the PDF file (e.g., D:\\documents\\file.pdf or C:\\Users\\username\\file.pdf)',
             },
             page: {
               type: 'number',
-              description: '页码（可选，从 1 开始）',
+              description: 'Optional: Extract a specific page number (1-indexed). Use when user asks for a specific page.',
             },
             range: {
               type: 'string',
-              description: '页码范围（可选，格式：\'1-10\'）',
+              description: 'Optional: Extract a page range in format "start-end" (e.g., "1-10", "5-20"). Use when user wants multiple pages.',
             },
             strategy: {
               type: 'string',
               enum: ['raw', 'formatted', 'clean'],
-              description: '提取策略',
+              description: 'Text extraction strategy: "raw" for unprocessed text, "formatted" (default) for cleaned and structured text, "clean" for minimal whitespace',
               default: 'formatted',
             },
           },
@@ -88,26 +88,26 @@ export class ToolHandler {
       },
       {
         name: 'search_pdf',
-        description: '在 PDF 中搜索关键词',
+        description: 'Search for keywords or phrases within a PDF file. Use this tool when the user wants to find specific text, locate information, or search for keywords in a PDF. Returns matching results with page numbers and context snippets.',
         inputSchema: {
           type: 'object',
           properties: {
             path: {
               type: 'string',
-              description: 'PDF 文件路径',
+              description: 'Absolute path to the PDF file to search',
             },
             query: {
               type: 'string',
-              description: '搜索关键词',
+              description: 'The keyword or phrase to search for in the PDF',
             },
             caseSensitive: {
               type: 'boolean',
-              description: '是否区分大小写',
+              description: 'Whether the search should be case-sensitive. Default is false (case-insensitive)',
               default: false,
             },
             maxResults: {
               type: 'number',
-              description: '最大结果数',
+              description: 'Maximum number of search results to return. Default is 10.',
               default: 10,
             },
           },
@@ -116,13 +116,13 @@ export class ToolHandler {
       },
       {
         name: 'get_metadata',
-        description: '获取 PDF 元数据',
+        description: 'Get metadata and information about a PDF file without reading its content. Use this tool when the user asks about PDF properties like: number of pages, file size, title, author, creation date, PDF version, or other document information. This is faster than extract_text for just getting file info.',
         inputSchema: {
           type: 'object',
           properties: {
             path: {
               type: 'string',
-              description: 'PDF 文件路径',
+              description: 'Absolute path to the PDF file',
             },
           },
           required: ['path'],
@@ -130,22 +130,22 @@ export class ToolHandler {
       },
       {
         name: 'extract_images',
-        description: '提取 PDF 中的图片',
+        description: 'Extract images from a PDF file and save them to disk. Use this tool when the user wants to export, save, or extract images, figures, or graphics from a PDF. Note: This feature is currently a placeholder and requires pdfjs-dist implementation.',
         inputSchema: {
           type: 'object',
           properties: {
             path: {
               type: 'string',
-              description: 'PDF 文件路径',
+              description: 'Absolute path to the PDF file',
             },
             outputDir: {
               type: 'string',
-              description: '输出目录',
+              description: 'Directory path where extracted images will be saved',
             },
             format: {
               type: 'string',
               enum: ['png', 'jpg'],
-              description: '图片格式',
+              description: 'Output image format (png or jpg). Default is png.',
               default: 'png',
             },
           },
@@ -154,13 +154,13 @@ export class ToolHandler {
       },
       {
         name: 'get_toc',
-        description: '获取 PDF 目录结构',
+        description: 'Get the table of contents (TOC) or bookmarks from a PDF file. Use this tool when the user wants to see the document structure, chapters, sections, or bookmarks. Useful for navigating large PDFs. Note: This feature is currently a placeholder and requires pdfjs-dist implementation.',
         inputSchema: {
           type: 'object',
           properties: {
             path: {
               type: 'string',
-              description: 'PDF 文件路径',
+              description: 'Absolute path to the PDF file',
             },
           },
           required: ['path'],
@@ -237,17 +237,48 @@ export class ToolHandler {
     const path = this.pathResolver.resolve(args.path as string);
     const metadata = await this.parser.getMetadata(path);
 
-    const text = `PDF 元数据：
+    // Helper function to safely format dates
+    const formatDate = (date: Date | undefined | null): string => {
+      if (!date) return 'N/A';
+      try {
+        // Check if date is valid
+        if (isNaN(date.getTime())) return 'Invalid Date';
+        return date.toISOString();
+      } catch (error) {
+        return 'Invalid Date';
+      }
+    };
 
-标题: ${metadata.info.Title ?? 'N/A'}
-作者: ${metadata.info.Author ?? 'N/A'}
-主题: ${metadata.info.Subject ?? 'N/A'}
-创建日期: ${metadata.info.CreationDate?.toISOString() ?? 'N/A'}
-修改日期: ${metadata.info.ModDate?.toISOString() ?? 'N/A'}
-页数: ${metadata.metadata.pageCount}
-文件大小: ${(metadata.metadata.fileSize / 1024 / 1024).toFixed(2)} MB
-PDF 版本: ${metadata.metadata.pdfVersion}
-加密: ${metadata.metadata.isEncrypted ? '是' : '否'}`;
+    // Structured data for easy parsing
+    const structuredData = {
+      title: metadata.info.Title ?? 'N/A',
+      author: metadata.info.Author ?? 'N/A',
+      subject: metadata.info.Subject ?? 'N/A',
+      creationDate: formatDate(metadata.info.CreationDate),
+      modificationDate: formatDate(metadata.info.ModDate),
+      pages: metadata.metadata.pageCount,
+      fileSize: metadata.metadata.fileSize,
+      fileSizeMB: parseFloat((metadata.metadata.fileSize / 1024 / 1024).toFixed(2)),
+      pdfVersion: metadata.metadata.pdfVersion,
+      isEncrypted: metadata.metadata.isEncrypted,
+    };
+
+    // Human-readable text
+    const text = `PDF Metadata:
+
+Title: ${structuredData.title}
+Author: ${structuredData.author}
+Subject: ${structuredData.subject}
+Created: ${structuredData.creationDate}
+Modified: ${structuredData.modificationDate}
+Pages: ${structuredData.pages}
+File Size: ${structuredData.fileSizeMB} MB
+PDF Version: ${structuredData.pdfVersion}
+Encrypted: ${structuredData.isEncrypted ? 'Yes' : 'No'}
+
+---
+Structured Data (JSON):
+${JSON.stringify(structuredData, null, 2)}`;
 
     return {
       content: [
