@@ -13,9 +13,7 @@ export class ResourceHandler {
   private pathResolver: PathResolver;
 
   constructor(private parser: PDFParser) {
-    this.pathResolver = new PathResolver(
-      process.env.PARSEFLOW_ALLOWED_PATHS?.split(';')
-    );
+    this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
   }
 
   /**
@@ -24,7 +22,7 @@ export class ResourceHandler {
   async list(): Promise<{ resources: Resource[] }> {
     try {
       logger.info('Listing PDF resources');
-      
+
       // 暂时返回空列表，实际使用时由客户端通过 URI 直接访问
       // 未来可以实现扫描特定目录下的所有 PDF 文件
       return { resources: [] };
@@ -36,7 +34,9 @@ export class ResourceHandler {
   /**
    * 读取 PDF 资源
    */
-  async read(uri: string): Promise<{ contents: Array<{ uri: string; mimeType: string; text: string }> }> {
+  async read(
+    uri: string
+  ): Promise<{ contents: Array<{ uri: string; mimeType: string; text: string }> }> {
     try {
       logger.info('Reading PDF resource', { uri });
 
@@ -97,7 +97,7 @@ export class ResourceHandler {
 
     if (queryString) {
       const params = new URLSearchParams(queryString);
-      
+
       if (params.has('page')) {
         query.page = parseInt(params.get('page')!);
       }

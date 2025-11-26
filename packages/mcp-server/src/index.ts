@@ -2,7 +2,7 @@
 
 /**
  * ParseFlow MCP Server
- * 
+ *
  * 为 Windsurf 和其他 MCP 客户端提供 PDF 解析能力的服务器入口
  */
 

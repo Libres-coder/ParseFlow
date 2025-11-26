@@ -13,7 +13,7 @@ export class TextExtractor {
    */
   async extract(buffer: Buffer, options?: ExtractOptions): Promise<string> {
     const data = await pdf(buffer);
-    let text = data.text;
+    const text = data.text;
 
     const strategy = options?.strategy || 'formatted';
 

@@ -13,9 +13,7 @@ export class ToolHandler {
   private tools: Tool[];
 
   constructor(private parser: PDFParser) {
-    this.pathResolver = new PathResolver(
-      process.env.PARSEFLOW_ALLOWED_PATHS?.split(';')
-    );
+    this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
     this.tools = this.defineTools();
   }
 
@@ -60,26 +58,31 @@ export class ToolHandler {
     return [
       {
         name: 'extract_text',
-        description: 'Extract text content from PDF files. Use this tool when the user asks to read, analyze, summarize, or extract content from a PDF file. Supports extracting specific pages or page ranges. This is the primary tool for accessing PDF content.',
+        description:
+          'Extract text content from PDF files. Use this tool when the user asks to read, analyze, summarize, or extract content from a PDF file. Supports extracting specific pages or page ranges. This is the primary tool for accessing PDF content.',
         inputSchema: {
           type: 'object',
           properties: {
             path: {
               type: 'string',
-              description: 'Absolute path to the PDF file (e.g., D:\\documents\\file.pdf or C:\\Users\\username\\file.pdf)',
+              description:
+                'Absolute path to the PDF file (e.g., D:\\documents\\file.pdf or C:\\Users\\username\\file.pdf)',
             },
             page: {
               type: 'number',
-              description: 'Optional: Extract a specific page number (1-indexed). Use when user asks for a specific page.',
+              description:
+                'Optional: Extract a specific page number (1-indexed). Use when user asks for a specific page.',
             },
             range: {
               type: 'string',
-              description: 'Optional: Extract a page range in format "start-end" (e.g., "1-10", "5-20"). Use when user wants multiple pages.',
+              description:
+                'Optional: Extract a page range in format "start-end" (e.g., "1-10", "5-20"). Use when user wants multiple pages.',
             },
             strategy: {
               type: 'string',
               enum: ['raw', 'formatted', 'clean'],
-              description: 'Text extraction strategy: "raw" for unprocessed text, "formatted" (default) for cleaned and structured text, "clean" for minimal whitespace',
+              description:
+                'Text extraction strategy: "raw" for unprocessed text, "formatted" (default) for cleaned and structured text, "clean" for minimal whitespace',
               default: 'formatted',
             },
           },
@@ -88,7 +91,8 @@ export class ToolHandler {
       },
       {
         name: 'search_pdf',
-        description: 'Search for keywords or phrases within a PDF file. Use this tool when the user wants to find specific text, locate information, or search for keywords in a PDF. Returns matching results with page numbers and context snippets.',
+        description:
+          'Search for keywords or phrases within a PDF file. Use this tool when the user wants to find specific text, locate information, or search for keywords in a PDF. Returns matching results with page numbers and context snippets.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -102,7 +106,8 @@ export class ToolHandler {
             },
             caseSensitive: {
               type: 'boolean',
-              description: 'Whether the search should be case-sensitive. Default is false (case-insensitive)',
+              description:
+                'Whether the search should be case-sensitive. Default is false (case-insensitive)',
               default: false,
             },
             maxResults: {
@@ -116,7 +121,8 @@ export class ToolHandler {
       },
       {
         name: 'get_metadata',
-        description: 'Get metadata and information about a PDF file without reading its content. Use this tool when the user asks about PDF properties like: number of pages, file size, title, author, creation date, PDF version, or other document information. This is faster than extract_text for just getting file info.',
+        description:
+          'Get metadata and information about a PDF file without reading its content. Use this tool when the user asks about PDF properties like: number of pages, file size, title, author, creation date, PDF version, or other document information. This is faster than extract_text for just getting file info.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -130,7 +136,8 @@ export class ToolHandler {
       },
       {
         name: 'extract_images',
-        description: 'Extract images from a PDF file and save them to disk. Use this tool when the user wants to export, save, or extract images, figures, or graphics from a PDF. Note: This feature is currently a placeholder and requires pdfjs-dist implementation.',
+        description:
+          'Extract images from a PDF file and save them to disk. Use this tool when the user wants to export, save, or extract images, figures, or graphics from a PDF. Note: This feature is currently a placeholder and requires pdfjs-dist implementation.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -154,7 +161,8 @@ export class ToolHandler {
       },
       {
         name: 'get_toc',
-        description: 'Get the table of contents (TOC) or bookmarks from a PDF file. Use this tool when the user wants to see the document structure, chapters, sections, or bookmarks. Useful for navigating large PDFs. Note: This feature is currently a placeholder and requires pdfjs-dist implementation.',
+        description:
+          'Get the table of contents (TOC) or bookmarks from a PDF file. Use this tool when the user wants to see the document structure, chapters, sections, or bookmarks. Useful for navigating large PDFs. Note: This feature is currently a placeholder and requires pdfjs-dist implementation.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -211,14 +219,12 @@ export class ToolHandler {
       maxResults,
     });
 
-    const text = results.length === 0
-      ? '未找到匹配结果'
-      : `找到 ${results.length} 个结果：\n\n${results
-          .map(
-            (r, i) =>
-              `[${i + 1}] 第 ${r.page} 页\n${r.context}\n`
-          )
-          .join('\n')}`;
+    const text =
+      results.length === 0
+        ? '未找到匹配结果'
+        : `找到 ${results.length} 个结果：\n\n${results
+            .map((r, i) => `[${i + 1}] 第 ${r.page} 页\n${r.context}\n`)
+            .join('\n')}`;
 
     return {
       content: [
@@ -299,9 +305,10 @@ ${JSON.stringify(structuredData, null, 2)}`;
 
     const imagePaths = await this.parser.extractImages(path, outputDir);
 
-    const text = imagePaths.length === 0
-      ? '未找到图片'
-      : `提取了 ${imagePaths.length} 张图片：\n\n${imagePaths.join('\n')}`;
+    const text =
+      imagePaths.length === 0
+        ? '未找到图片'
+        : `提取了 ${imagePaths.length} 张图片：\n\n${imagePaths.join('\n')}`;
 
     return {
       content: [

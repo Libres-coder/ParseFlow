@@ -100,11 +100,7 @@ export class PDFParser {
   /**
    * 搜索关键词
    */
-  async search(
-    path: string,
-    query: string,
-    options?: SearchOptions
-  ): Promise<SearchResult[]> {
+  async search(path: string, query: string, options?: SearchOptions): Promise<SearchResult[]> {
     const text = await this.extractText(path);
     return this.searchEngine.search(text, query, options);
   }
@@ -119,7 +115,9 @@ export class PDFParser {
   ): Promise<string[]> {
     // 提取图片需要使用 pdfjs-dist，这里返回占位符
     // 实际实现见 ImageExtractor 类
-    throw new Error('Image extraction not implemented yet. Use pdfjs-dist for full implementation.');
+    throw new Error(
+      'Image extraction not implemented yet. Use pdfjs-dist for full implementation.'
+    );
   }
 
   /**
@@ -140,9 +138,7 @@ export class PDFParser {
     const maxSize = this.config.security.maxFileSize || 52428800; // 50MB
 
     if (stats.size > maxSize) {
-      throw new Error(
-        `File too large: ${stats.size} bytes (max ${maxSize} bytes)`
-      );
+      throw new Error(`File too large: ${stats.size} bytes (max ${maxSize} bytes)`);
     }
 
     return readFileSync(path);
