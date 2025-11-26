@@ -1,37 +1,39 @@
-# ParseFlow Documentation Center
+# ParseFlow 文档中心
 
-Welcome to the ParseFlow documentation!
+**中文** | [English](en/README.md)
 
-## 📖 User Guides
+欢迎查阅 ParseFlow 文档！
 
-- [Quick Start](guides/quick-start.md) - Get started with ParseFlow in 5 minutes
-- [FAQ](guides/faq.md) - Frequently asked questions
-- [Examples](guides/examples.md) - Code examples and best practices
+## 📖 用户指南
 
-## ⚙️ Setup Guides
+- [快速开始](guides/quick-start.md) - 5 分钟上手 ParseFlow
+- [常见问题](guides/faq.md) - FAQ 和故障排除
+- [使用示例](guides/examples.md) - 代码示例和最佳实践
 
-- [Windsurf Setup](setup/windsurf.md) - Configure ParseFlow for Windsurf IDE
-- [Cursor Setup](setup/cursor.md) - Configure ParseFlow for Cursor IDE
+## ⚙️ 环境配置
 
-## 🛠️ Development Documentation
+- [Windsurf 配置](setup/windsurf.md) - Windsurf IDE 配置指南（推荐）
+- [Cursor 配置](setup/cursor.md) - Cursor IDE 配置指南
 
-- [Development Guide](development/development.md) - How to contribute
-- [Architecture](development/architecture.md) - System architecture
-- [API Reference](development/api.md) - API documentation
-- [Naming Conventions](development/naming-conventions.md) - Code and file naming standards
+## 🛠️ 开发文档
 
-## 📋 Project Planning
+- [开发指南](development/development.md) - 如何参与开发
+- [架构设计](development/architecture.md) - 系统架构说明
+- [API 文档](development/api.md) - API 参考文档
+- [命名规范](development/naming-conventions.md) - 代码和文件命名规范
 
-- [TODO](planning/todo.md) - Feature roadmap and task list
-- [Distribution Analysis](planning/distribution-analysis.md) - Release and distribution plans
+## 📋 项目规划
 
-## 🔗 Other Resources
+- [待办事项](planning/todo.md) - 功能路线图和待办清单
+- [分发分析](planning/distribution-analysis.md) - 发布和分发计划
 
-- [Project Homepage](../README.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Changelog](../CHANGELOG.md)
-- [License](../LICENSE)
+## 🔗 其他资源
+
+- [项目主页](../README.md)
+- [贡献指南](../CONTRIBUTING.md)
+- [变更日志](../CHANGELOG.md)
+- [许可证](../LICENSE)
 
 ---
 
-**Tip**: If you're new to ParseFlow, start with the [Quick Start](guides/quick-start.md) guide.
+**提示**: 如果你是新用户，建议从 [快速开始](guides/quick-start.md) 开始。

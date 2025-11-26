@@ -1,7 +1,7 @@
 {
   "name": "parseflow",
   "version": "1.0.0",
-  "description": "MCP Server for PDF parsing and analysis in Windsurf IDE",
+  "description": "High-performance MCP Server for PDF parsing and analysis - Compatible with Windsurf and Cursor IDEs",
   "type": "module",
   "private": true,
   "author": "ParseFlow Contributors",

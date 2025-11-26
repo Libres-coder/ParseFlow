@@ -9,6 +9,8 @@
 [![MCP](https://img.shields.io/badge/MCP-1.0-purple.svg)](https://modelcontextprotocol.io)
 [![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](CHANGELOG.md)
 
+**中文** | [English](README_EN.md)
+
 </div>
 
 ---
