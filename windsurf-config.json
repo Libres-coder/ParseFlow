@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "parseflow": {
+      "command": "node",
+      "args": ["D:\\ParseFlow\\packages\\mcp-server\\dist\\index.js"],
+      "env": {
+        "PARSEFLOW_CACHE_DIR": "D:\\ParseFlow\\.cache",
+        "PARSEFLOW_MAX_FILE_SIZE": "52428800",
+        "PARSEFLOW_ALLOWED_PATHS": "D:\\;C:\\Users",
+        "LOG_LEVEL": "info",
+        "PARSEFLOW_LOG_FILE": "D:\\ParseFlow\\logs\\parseflow.log",
+        "PARSEFLOW_ERROR_LOG_FILE": "D:\\ParseFlow\\logs\\error.log"
+      }
+    }
+  }
+}

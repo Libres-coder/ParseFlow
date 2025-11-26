@@ -1,0 +1,45 @@
+# 源代码
+src/
+*.ts
+!*.d.ts
+
+# 测试
+tests/
+*.test.*
+*.spec.*
+__tests__/
+
+# 文档（保留 README）
+docs/
+*.md
+!README.md
+!LICENSE
+!CHANGELOG.md
+
+# 配置文件
+.eslintrc.js
+.prettierrc
+tsconfig*.json
+jest.config.js
+.windsurfrules
+
+# 开发文件
+.vscode/
+.idea/
+*.log
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# 其他
+examples/
+scripts/
+*.cache
+.DS_Store

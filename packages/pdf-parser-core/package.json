@@ -1,0 +1,24 @@
+{
+  "name": "@parseflow/core",
+  "version": "1.0.0",
+  "description": "Core PDF parsing library for ParseFlow",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "test": "jest"
+  },
+  "dependencies": {
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.0.379"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@types/pdf-parse": "^1.1.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
