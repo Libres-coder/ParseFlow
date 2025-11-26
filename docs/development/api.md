@@ -22,41 +22,41 @@ pdf://[path][?options]
 
 **参数说明：**
 
-| 部分 | 说明 | 必需 | 示例 |
-|------|------|------|------|
-| `pdf://` | 协议标识符 | 是 | - |
-| `path` | PDF 文件的绝对路径 | 是 | `D:/docs/manual.pdf` |
-| `options` | 查询参数（可选） | 否 | `?page=5&format=markdown` |
+| 部分      | 说明               | 必需 | 示例                      |
+| --------- | ------------------ | ---- | ------------------------- |
+| `pdf://`  | 协议标识符         | 是   | -                         |
+| `path`    | PDF 文件的绝对路径 | 是   | `D:/docs/manual.pdf`      |
+| `options` | 查询参数（可选）   | 否   | `?page=5&format=markdown` |
 
 **查询参数：**
 
-| 参数 | 类型 | 说明 | 示例 |
-|------|------|------|------|
-| `page` | number | 提取指定页码 | `?page=5` |
-| `range` | string | 提取页码范围 | `?range=1-10` |
-| `section` | string | 提取指定章节（根据书签） | `?section=chapter-1` |
-| `format` | string | 输出格式（`text`/`markdown`/`json`） | `?format=markdown` |
+| 参数      | 类型   | 说明                                 | 示例                 |
+| --------- | ------ | ------------------------------------ | -------------------- |
+| `page`    | number | 提取指定页码                         | `?page=5`            |
+| `range`   | string | 提取页码范围                         | `?range=1-10`        |
+| `section` | string | 提取指定章节（根据书签）             | `?section=chapter-1` |
+| `format`  | string | 输出格式（`text`/`markdown`/`json`） | `?format=markdown`   |
 
 **URI 示例：**
 
 ```typescript
 // 完整 PDF 内容
-"pdf://D:/documents/report.pdf"
+'pdf://D:/documents/report.pdf';
 
 // 第 5 页
-"pdf://D:/documents/report.pdf?page=5"
+'pdf://D:/documents/report.pdf?page=5';
 
 // 第 1-10 页
-"pdf://D:/documents/report.pdf?range=1-10"
+'pdf://D:/documents/report.pdf?range=1-10';
 
 // 指定章节
-"pdf://D:/documents/report.pdf?section=introduction"
+'pdf://D:/documents/report.pdf?section=introduction';
 
 // Markdown 格式输出
-"pdf://D:/documents/report.pdf?format=markdown"
+'pdf://D:/documents/report.pdf?format=markdown';
 
 // 组合参数
-"pdf://D:/documents/report.pdf?range=1-5&format=json"
+'pdf://D:/documents/report.pdf?range=1-5&format=json';
 ```
 
 ### 1.2 List Resources
@@ -267,10 +267,10 @@ pdf://[path][?options]
 
 ```typescript
 interface ExtractTextInput {
-  path: string;                    // PDF 文件路径
-  page?: number;                   // 页码（可选）
-  range?: string;                  // 页码范围（可选，如 "1-10"）
-  strategy?: "raw" | "formatted" | "clean";  // 提取策略
+  path: string; // PDF 文件路径
+  page?: number; // 页码（可选）
+  range?: string; // 页码范围（可选，如 "1-10"）
+  strategy?: 'raw' | 'formatted' | 'clean'; // 提取策略
 }
 ```
 
@@ -323,11 +323,11 @@ interface ExtractTextInput {
 
 ```typescript
 interface SearchPdfInput {
-  path: string;              // PDF 文件路径
-  query: string;             // 搜索关键词
-  caseSensitive?: boolean;   // 是否区分大小写（默认 false）
-  maxResults?: number;       // 最大结果数（默认 10）
-  contextLength?: number;    // 上下文长度（默认 50 字符）
+  path: string; // PDF 文件路径
+  query: string; // 搜索关键词
+  caseSensitive?: boolean; // 是否区分大小写（默认 false）
+  maxResults?: number; // 最大结果数（默认 10）
+  contextLength?: number; // 上下文长度（默认 50 字符）
 }
 ```
 
@@ -375,7 +375,7 @@ interface SearchPdfInput {
 
 ```typescript
 interface GetMetadataInput {
-  path: string;  // PDF 文件路径
+  path: string; // PDF 文件路径
 }
 ```
 
@@ -420,11 +420,11 @@ interface GetMetadataInput {
 
 ```typescript
 interface ExtractImagesInput {
-  path: string;                // PDF 文件路径
-  outputDir: string;           // 输出目录
-  format?: "png" | "jpg";      // 图片格式（默认 png）
-  minWidth?: number;           // 最小宽度（过滤小图标）
-  minHeight?: number;          // 最小高度
+  path: string; // PDF 文件路径
+  outputDir: string; // 输出目录
+  format?: 'png' | 'jpg'; // 图片格式（默认 png）
+  minWidth?: number; // 最小宽度（过滤小图标）
+  minHeight?: number; // 最小高度
 }
 ```
 
@@ -473,7 +473,7 @@ interface ExtractImagesInput {
 
 ```typescript
 interface GetTocInput {
-  path: string;  // PDF 文件路径
+  path: string; // PDF 文件路径
 }
 ```
 
@@ -530,8 +530,8 @@ import { PDFParser } from '@parseflow/core';
 const parser = new PDFParser({
   cache: {
     enabled: true,
-    ttl: 3600000  // 1 小时
-  }
+    ttl: 3600000, // 1 小时
+  },
 });
 
 // 提取文本
@@ -551,10 +551,7 @@ const results = await parser.search('path/to/file.pdf', 'keyword');
 const metadata = await parser.getMetadata('path/to/file.pdf');
 
 // 提取图片
-const imagePaths = await parser.extractImages(
-  'path/to/file.pdf',
-  'output/dir'
-);
+const imagePaths = await parser.extractImages('path/to/file.pdf', 'output/dir');
 
 // 获取目录
 const toc = await parser.getTOC('path/to/file.pdf');
@@ -574,9 +571,9 @@ constructor(config?: ParserConfig)
 interface ParserConfig {
   cache?: {
     enabled: boolean;
-    ttl?: number;              // 缓存过期时间（毫秒）
-    maxSize?: number;          // 最大缓存大小（字节）
-    directory?: string;        // 缓存目录
+    ttl?: number; // 缓存过期时间（毫秒）
+    maxSize?: number; // 最大缓存大小（字节）
+    directory?: string; // 缓存目录
   };
   parser?: {
     preserveFormatting?: boolean;
@@ -584,12 +581,12 @@ interface ParserConfig {
     includeFooters?: boolean;
   };
   security?: {
-    maxFileSize?: number;      // 最大文件大小（字节）
-    allowedPaths?: string[];   // 允许的路径列表
+    maxFileSize?: number; // 最大文件大小（字节）
+    allowedPaths?: string[]; // 允许的路径列表
   };
   ocr?: {
     enabled?: boolean;
-    language?: string;         // 语言代码（如 'eng+chi_sim'）
+    language?: string; // 语言代码（如 'eng+chi_sim'）
   };
 }
 ```
@@ -609,7 +606,7 @@ async extractText(
 
 ```typescript
 interface ExtractOptions {
-  strategy?: "raw" | "formatted" | "clean";
+  strategy?: 'raw' | 'formatted' | 'clean';
   preserveFormatting?: boolean;
   includeHeaders?: boolean;
   includeFooters?: boolean;
@@ -708,7 +705,7 @@ async extractImages(
 
 ```typescript
 interface ImageExtractOptions {
-  format?: "png" | "jpg";
+  format?: 'png' | 'jpg';
   minWidth?: number;
   minHeight?: number;
 }
@@ -737,14 +734,14 @@ interface TOCItem {
 
 ### 4.1 环境变量
 
-| 变量名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `PARSEFLOW_CACHE_DIR` | string | `~/.parseflow/cache` | 缓存目录 |
-| `PARSEFLOW_MAX_FILE_SIZE` | number | `50` | 最大文件大小（MB） |
-| `PARSEFLOW_ENABLE_OCR` | boolean | `false` | 是否启用 OCR |
-| `PARSEFLOW_OCR_LANGUAGE` | string | `eng` | OCR 语言 |
-| `PARSEFLOW_LOG_LEVEL` | string | `info` | 日志级别 |
-| `PARSEFLOW_ALLOWED_PATHS` | string | - | 允许的路径（用`;`分隔） |
+| 变量名                    | 类型    | 默认值               | 说明                    |
+| ------------------------- | ------- | -------------------- | ----------------------- |
+| `PARSEFLOW_CACHE_DIR`     | string  | `~/.parseflow/cache` | 缓存目录                |
+| `PARSEFLOW_MAX_FILE_SIZE` | number  | `50`                 | 最大文件大小（MB）      |
+| `PARSEFLOW_ENABLE_OCR`    | boolean | `false`              | 是否启用 OCR            |
+| `PARSEFLOW_OCR_LANGUAGE`  | string  | `eng`                | OCR 语言                |
+| `PARSEFLOW_LOG_LEVEL`     | string  | `info`               | 日志级别                |
+| `PARSEFLOW_ALLOWED_PATHS` | string  | -                    | 允许的路径（用`;`分隔） |
 
 ### 4.2 配置文件
 
@@ -765,10 +762,7 @@ interface TOCItem {
   },
   "security": {
     "maxFileSize": 52428800,
-    "allowedPaths": [
-      "D:\\Documents",
-      "C:\\Users\\YourName\\Projects"
-    ]
+    "allowedPaths": ["D:\\Documents", "C:\\Users\\YourName\\Projects"]
   },
   "ocr": {
     "enabled": false,
@@ -787,28 +781,28 @@ interface TOCItem {
 
 ### 5.1 标准 JSON-RPC 错误
 
-| 错误码 | 消息 | 说明 |
-|--------|------|------|
-| `-32700` | Parse error | 无效的 JSON |
-| `-32600` | Invalid Request | 无效的请求对象 |
-| `-32601` | Method not found | 方法不存在 |
-| `-32602` | Invalid params | 无效的参数 |
-| `-32603` | Internal error | 内部错误 |
+| 错误码   | 消息             | 说明           |
+| -------- | ---------------- | -------------- |
+| `-32700` | Parse error      | 无效的 JSON    |
+| `-32600` | Invalid Request  | 无效的请求对象 |
+| `-32601` | Method not found | 方法不存在     |
+| `-32602` | Invalid params   | 无效的参数     |
+| `-32603` | Internal error   | 内部错误       |
 
 ### 5.2 ParseFlow 自定义错误
 
-| 错误码 | 消息 | 说明 |
-|--------|------|------|
-| `-32001` | File not found | 文件不存在 |
-| `-32002` | Invalid PDF | 无效的 PDF 文件 |
-| `-32003` | Parse error | 解析错误 |
-| `-32004` | Permission denied | 权限不足 |
-| `-32005` | File too large | 文件超过大小限制 |
-| `-32006` | Unsupported format | 不支持的格式 |
-| `-32007` | Cache error | 缓存错误 |
-| `-32008` | OCR error | OCR 处理错误 |
-| `-32009` | Invalid page number | 无效的页码 |
-| `-32010` | Invalid range | 无效的页码范围 |
+| 错误码   | 消息                | 说明             |
+| -------- | ------------------- | ---------------- |
+| `-32001` | File not found      | 文件不存在       |
+| `-32002` | Invalid PDF         | 无效的 PDF 文件  |
+| `-32003` | Parse error         | 解析错误         |
+| `-32004` | Permission denied   | 权限不足         |
+| `-32005` | File too large      | 文件超过大小限制 |
+| `-32006` | Unsupported format  | 不支持的格式     |
+| `-32007` | Cache error         | 缓存错误         |
+| `-32008` | OCR error           | OCR 处理错误     |
+| `-32009` | Invalid page number | 无效的页码       |
+| `-32010` | Invalid range       | 无效的页码范围   |
 
 ### 5.3 错误响应示例
 
@@ -836,7 +830,7 @@ interface TOCItem {
 
 ```typescript
 // Windsurf 会自动调用，你只需要问：
-"请帮我分析 D:/reports/annual-report.pdf 的内容"
+'请帮我分析 D:/reports/annual-report.pdf 的内容';
 
 // Windsurf 内部会：
 // 1. 调用 get_metadata 获取基本信息
@@ -852,15 +846,18 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 const transport = new StdioClientTransport({
   command: 'node',
-  args: ['path/to/parseflow/dist/index.js']
+  args: ['path/to/parseflow/dist/index.js'],
 });
 
-const client = new Client({
-  name: 'my-app',
-  version: '1.0.0'
-}, {
-  capabilities: {}
-});
+const client = new Client(
+  {
+    name: 'my-app',
+    version: '1.0.0',
+  },
+  {
+    capabilities: {},
+  }
+);
 
 await client.connect(transport);
 
@@ -869,8 +866,8 @@ const result = await client.callTool({
   name: 'extract_text',
   arguments: {
     path: 'D:/documents/report.pdf',
-    page: 5
-  }
+    page: 5,
+  },
 });
 
 console.log(result.content[0].text);
@@ -920,9 +917,7 @@ for (const file of files) {
 }
 
 // 推荐：并行处理
-await Promise.all(
-  files.map(file => parser.extractText(file))
-);
+await Promise.all(files.map((file) => parser.extractText(file)));
 ```
 
 ### 7.2 错误处理
@@ -952,6 +947,7 @@ try {
 ## 8. 更新日志
 
 ### v1.0.0 (2024-01-20)
+
 - 初始版本
 - 支持文本提取、搜索、元数据读取
 - 实现 MCP Resources 和 Tools

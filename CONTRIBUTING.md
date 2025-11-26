@@ -28,6 +28,7 @@
 #### 开发流程
 
 1. **Fork 项目**
+
    ```bash
    # 在 GitHub 上 Fork 项目
    # 然后克隆到本地
@@ -36,6 +37,7 @@
    ```
 
 2. **创建分支**
+
    ```bash
    git checkout -b feature/your-feature-name
    # 或
@@ -43,28 +45,31 @@
    ```
 
 3. **安装依赖**
+
    ```bash
    pnpm install
    ```
 
 4. **开发并测试**
+
    ```bash
    # 开发模式
    pnpm dev
-   
+
    # 运行测试
    pnpm test
-   
+
    # 代码检查
    pnpm lint
    ```
 
 5. **提交代码**
+
    ```bash
    git add .
    git commit -m "feat: add amazing feature"
    ```
-   
+
    使用 [Conventional Commits](https://www.conventionalcommits.org/) 规范：
    - `feat`: 新功能
    - `fix`: Bug 修复
@@ -75,6 +80,7 @@
    - `chore`: 构建/工具
 
 6. **推送分支**
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -143,31 +149,37 @@ describe('PDFParser', () => {
 我们会从以下方面审查代码：
 
 ### 1. 功能性
+
 - ✅ 实现了预期功能
 - ✅ 处理了边界情况
 - ✅ 错误处理完善
 
 ### 2. 代码质量
+
 - ✅ 代码清晰易读
 - ✅ 适当的注释
 - ✅ 避免重复代码
 
 ### 3. 性能
+
 - ✅ 无明显性能问题
 - ✅ 合理使用资源
 - ✅ 考虑了大文件处理
 
 ### 4. 安全性
+
 - ✅ 输入验证充分
 - ✅ 无明显安全漏洞
 - ✅ 敏感信息处理得当
 
 ### 5. 测试
+
 - ✅ 测试覆盖充分
 - ✅ 测试用例合理
 - ✅ 包含边界测试
 
 ### 6. 文档
+
 - ✅ API 文档完整
 - ✅ 代码注释清晰
 - ✅ README 已更新
@@ -199,18 +211,21 @@ describe('PDFParser', () => {
 我们目前最需要帮助的领域：
 
 ### 高优先级
+
 - ⭐ 完善单元测试和集成测试
 - ⭐ 实现图片提取功能（基于 pdfjs-dist）
 - ⭐ 实现目录（TOC）提取功能
 - ⭐ 添加 OCR 支持（Tesseract.js）
 
 ### 中优先级
+
 - 🔹 性能优化（并行处理、流式处理）
 - 🔹 支持更多文档格式（Word、Excel）
 - 🔹 语义搜索（基于向量嵌入）
 - 🔹 改进缓存机制
 
 ### 低优先级
+
 - 🔸 Web UI 界面
 - 🔸 CLI 工具增强
 - 🔸 插件系统

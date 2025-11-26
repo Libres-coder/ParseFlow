@@ -14,13 +14,13 @@ Starting from Cursor 0.45.x, Cursor introduced MCP (Model Context Protocol) supp
 
 ### Cursor MCP Characteristics
 
-| Feature | Description |
-|---------|-------------|
-| **Supported Version** | Cursor 0.45.x+ (Recommended 1.0+) |
-| **Config File** | `C:\Users\<username>\.cursor\mcp.json` |
-| **Usage Mode** | **Must use in Composer's Agent Mode** |
-| **Tool Limit** | Max ~40 tools supported |
-| **Resource Support** | MCP Resources not yet supported |
+| Feature               | Description                            |
+| --------------------- | -------------------------------------- |
+| **Supported Version** | Cursor 0.45.x+ (Recommended 1.0+)      |
+| **Config File**       | `C:\Users\<username>\.cursor\mcp.json` |
+| **Usage Mode**        | **Must use in Composer's Agent Mode**  |
+| **Tool Limit**        | Max ~40 tools supported                |
+| **Resource Support**  | MCP Resources not yet supported        |
 
 ### Why Must Cursor Use Agent Mode with Explicit Instructions?
 
@@ -29,6 +29,7 @@ Starting from Cursor 0.45.x, Cursor introduced MCP (Model Context Protocol) supp
 #### Technical Reasons
 
 **1. Different MCP Integration Levels**
+
 ```
 Windsurf (Cascade):
 ├── Chat Mode: ✅ Full MCP integration
@@ -40,17 +41,18 @@ Cursor (Current Version):
 ```
 
 **2. Different AI Tool Selection Strategies**
+
 - **Windsurf Cascade**: Uses aggressive automatic tool selection, actively analyzes context and automatically calls appropriate MCP tools
 - **Cursor Agent**: Uses conservative tool selection strategy, requires explicit user instructions to avoid mis-calls
 
 **3. Version Evolution**
 
-| Cursor Version | MCP Functionality |
-|----------------|-------------------|
-| Before 0.44.x | ❌ No MCP support |
-| 0.45.x | ✅ Agent mode introduces MCP |
-| 1.0+ | ✅ Enhanced Agent mode |
-| Future versions? | May extend to Chat mode |
+| Cursor Version   | MCP Functionality            |
+| ---------------- | ---------------------------- |
+| Before 0.44.x    | ❌ No MCP support            |
+| 0.45.x           | ✅ Agent mode introduces MCP |
+| 1.0+             | ✅ Enhanced Agent mode       |
+| Future versions? | May extend to Chat mode      |
 
 #### Why It Cannot Be Changed
 
@@ -81,13 +83,13 @@ But this depends on **Cursor team's development plans**, which users and third-p
 
 ### Key Differences: Cursor vs Windsurf
 
-| Aspect | Cursor | Windsurf |
-|--------|--------|----------|
-| Config File | `.cursor\mcp.json` | `.codeium\windsurf\mcp_config.json` |
-| Usage Method | Must in Agent mode | Works in both Chat and Agent |
-| Tool Invocation | Requires explicit instruction | Automatic recognition |
-| MCP Integration | Basic support | Full integration |
-| User Experience | ⭐⭐⭐ Good | ⭐⭐⭐⭐⭐ Excellent |
+| Aspect          | Cursor                        | Windsurf                            |
+| --------------- | ----------------------------- | ----------------------------------- |
+| Config File     | `.cursor\mcp.json`            | `.codeium\windsurf\mcp_config.json` |
+| Usage Method    | Must in Agent mode            | Works in both Chat and Agent        |
+| Tool Invocation | Requires explicit instruction | Automatic recognition               |
+| MCP Integration | Basic support                 | Full integration                    |
+| User Experience | ⭐⭐⭐ Good                   | ⭐⭐⭐⭐⭐ Excellent                |
 
 ---
 
@@ -104,6 +106,7 @@ pnpm build
 ```
 
 Verify file exists:
+
 ```
 D:\ParseFlow\packages\mcp-server\dist\index.js
 ```
@@ -111,11 +114,13 @@ D:\ParseFlow\packages\mcp-server\dist\index.js
 #### Step 2: Edit Cursor Config File
 
 **Config File Location**:
+
 ```
 C:\Users\<your-username>\.cursor\mcp.json
 ```
 
 **Open Method**:
+
 ```powershell
 # Open with Notepad
 notepad C:\Users\<your-username>\.cursor\mcp.json
@@ -130,9 +135,7 @@ Add to `mcp.json`:
   "mcpServers": {
     "parseflow": {
       "command": "node",
-      "args": [
-        "<project-root>\\packages\\mcp-server\\dist\\index.js"
-      ],
+      "args": ["<project-root>\\packages\\mcp-server\\dist\\index.js"],
       "env": {
         "PARSEFLOW_CACHE_DIR": "<project-root>\\.cache",
         "PARSEFLOW_MAX_FILE_SIZE": "52428800",
@@ -147,6 +150,7 @@ Add to `mcp.json`:
 ```
 
 **Note**:
+
 - Replace `<project-root>` with actual path (e.g., `D:\\ParseFlow`)
 - Use double backslash `\\` or single forward slash `/`
 
@@ -159,6 +163,7 @@ Add to `mcp.json`:
 ⚠️ **Critical**: In Cursor Composer, **must switch to Agent mode**!
 
 **Test Method**:
+
 ```
 1. Open Cursor Composer
 2. Switch to Agent mode (Important!)
@@ -176,6 +181,7 @@ Add to `mcp.json`:
 #### 1. Switch to Agent Mode
 
 In Cursor Composer:
+
 - Find the mode switch button
 - Select "Agent" mode
 - Confirm switch is successful
@@ -199,21 +205,25 @@ Since Cursor won't automatically recognize, you need to explicitly tell the AI:
 #### 3. Available Command Examples
 
 **Extract Text**:
+
 ```
 Please use parseflow's extract_text tool to extract all content from D:\report.pdf
 ```
 
 **Get Metadata**:
+
 ```
 Please use parseflow's get_metadata tool to see how many pages D:\document.pdf has
 ```
 
 **Search Keywords**:
+
 ```
 Use parseflow's search_pdf tool to search for "liability clause" in D:\contract.pdf
 ```
 
 **Extract Specific Page**:
+
 ```
 Use parseflow to extract page 5 content from D:\manual.pdf
 ```
@@ -225,40 +235,49 @@ Use parseflow to extract page 5 content from D:\manual.pdf
 ParseFlow provides the following MCP tools:
 
 ### 1. extract_text
+
 Extract PDF text content
 
 **Parameters**:
+
 - `path` (required): PDF file path
 - `page` (optional): Specific page number
 - `range` (optional): Page range (e.g., "1-5")
 - `strategy` (optional): Extraction strategy - "raw", "formatted", "clean"
 
 **Usage Example**:
+
 ```
 Please use parseflow's extract_text tool to extract D:\document.pdf content
 ```
 
 ### 2. get_metadata
+
 Get PDF metadata
 
 **Parameters**:
+
 - `path` (required): PDF file path
 
 **Usage Example**:
+
 ```
 Use parseflow's get_metadata tool to view D:\report.pdf info
 ```
 
 ### 3. search_pdf
+
 Search for keywords in PDF
 
 **Parameters**:
+
 - `path` (required): PDF file path
 - `query` (required): Search keyword
 - `caseSensitive` (optional): Case sensitive or not
 - `maxResults` (optional): Maximum results
 
 **Usage Example**:
+
 ```
 Use parseflow to search for "important clause" in D:\contract.pdf
 ```
@@ -270,11 +289,13 @@ Use parseflow to search for "important clause" in D:\contract.pdf
 ### Issue 1: Agent Mode Cannot Find parseflow Tool
 
 **Causes**:
+
 - Cursor not restarted
 - Config file format error
 - Not in Agent mode
 
 **Solutions**:
+
 1. Completely exit and restart Cursor
 2. Check `mcp.json` format (use jsonlint.com)
 3. Confirm in Composer's Agent mode
@@ -284,6 +305,7 @@ Use parseflow to search for "important clause" in D:\contract.pdf
 **Cause**: MCP Server not built or path incorrect
 
 **Solution**:
+
 ```bash
 cd D:\ParseFlow
 pnpm install
@@ -297,6 +319,7 @@ dir packages\mcp-server\dist\index.js
 **Cause**: Question not explicit enough
 
 **Solution**: Use explicit instructions:
+
 ```
 ❌ "Analyze this PDF"
 ✅ "Please use parseflow tool to read D:\report.pdf"
@@ -350,17 +373,18 @@ Step 3: "Search for keywords"
 
 ## 📊 Cursor vs Windsurf Comparison
 
-| Feature | Cursor | Windsurf |
-|---------|--------|----------|
-| **Config File** | `.cursor\mcp.json` | `.codeium\windsurf\mcp_config.json` |
-| **Configuration** | Manual editing | Manual + Auto script |
-| **Usage Mode** | Agent mode only | Chat and Agent both |
-| **Tool Invocation** | Explicit instruction needed | Auto-recognition (Recommended) |
-| **Tool Quantity Limit** | ~40 tools | Unlimited |
-| **Resource Support** | Not supported | Supported |
-| **User Experience** | Requires explicit commands | High automation |
+| Feature                 | Cursor                      | Windsurf                            |
+| ----------------------- | --------------------------- | ----------------------------------- |
+| **Config File**         | `.cursor\mcp.json`          | `.codeium\windsurf\mcp_config.json` |
+| **Configuration**       | Manual editing              | Manual + Auto script                |
+| **Usage Mode**          | Agent mode only             | Chat and Agent both                 |
+| **Tool Invocation**     | Explicit instruction needed | Auto-recognition (Recommended)      |
+| **Tool Quantity Limit** | ~40 tools                   | Unlimited                           |
+| **Resource Support**    | Not supported               | Supported                           |
+| **User Experience**     | Requires explicit commands  | High automation                     |
 
 **Recommendations**:
+
 - If using **Cursor**: Configure per this guide, explicitly instruct in Agent mode
 - If using **Windsurf**: Recommended, better experience (see windsurf.md)
 
@@ -378,6 +402,7 @@ Step 3: "Search for keywords"
 ## ⚙️ Configuration File Examples
 
 ### Minimal Configuration
+
 ```json
 {
   "mcpServers": {
@@ -390,14 +415,13 @@ Step 3: "Search for keywords"
 ```
 
 ### Full Configuration
+
 ```json
 {
   "mcpServers": {
     "parseflow": {
       "command": "node",
-      "args": [
-        "D:\\ParseFlow\\packages\\mcp-server\\dist\\index.js"
-      ],
+      "args": ["D:\\ParseFlow\\packages\\mcp-server\\dist\\index.js"],
       "env": {
         "PARSEFLOW_CACHE_DIR": "D:\\ParseFlow\\.cache",
         "PARSEFLOW_MAX_FILE_SIZE": "52428800",
@@ -412,6 +436,7 @@ Step 3: "Search for keywords"
 ```
 
 ### Multi-Server Configuration
+
 ```json
 {
   "mcpServers": {
@@ -432,18 +457,21 @@ Step 3: "Search for keywords"
 ## 🎯 Quick Reference
 
 ### Configuration Paths
+
 ```
 Cursor: C:\Users\<username>\.cursor\mcp.json
 Windsurf: C:\Users\<username>\.codeium\windsurf\mcp_config.json
 ```
 
 ### Key Points
+
 - ✅ Must in **Agent Mode**
 - ✅ Must **explicitly instruct** to use parseflow
 - ✅ Use **full paths**
 - ✅ Takes effect after restarting Cursor
 
 ### Test Command
+
 ```
 Please use parseflow's get_metadata tool to view info of D:\test.pdf
 ```

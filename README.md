@@ -24,6 +24,7 @@
 ✅ **本地部署使用** - 通过配置文件本地部署，完全掌控数据
 
 **使用示例**：
+
 ```
 在 Windsurf 中直接说：
 "分析 D:\report.pdf"
@@ -114,6 +115,7 @@ pnpm build
 ```
 
 构建完成后，MCP Server 文件位于：
+
 ```
 packages/mcp-server/dist/index.js
 ```
@@ -123,9 +125,11 @@ packages/mcp-server/dist/index.js
 **支持两种 IDE**：
 
 ##### 选项 A：Windsurf（推荐，自动识别）
+
 **配置文件**：`C:\Users\<用户名>\.codeium\windsurf\mcp_config.json`
 
 ##### 选项 B：Cursor（需在 Agent 模式明确指示）
+
 **配置文件**：`C:\Users\<用户名>\.cursor\mcp.json`
 
 ---
@@ -139,9 +143,7 @@ packages/mcp-server/dist/index.js
   "mcpServers": {
     "parseflow": {
       "command": "node",
-      "args": [
-        "<项目根目录>\\packages\\mcp-server\\dist\\index.js"
-      ],
+      "args": ["<项目根目录>\\packages\\mcp-server\\dist\\index.js"],
       "env": {
         "PARSEFLOW_CACHE_DIR": "<项目根目录>\\.cache",
         "PARSEFLOW_MAX_FILE_SIZE": "52428800",
@@ -154,6 +156,7 @@ packages/mcp-server/dist/index.js
 ```
 
 **注意**：
+
 - 将 `<项目根目录>` 替换为你的实际项目路径（例如 `D:\\ParseFlow` 或 `E:\\Projects\\ParseFlow`）
 - 使用双反斜杠 `\\` 或单斜杠 `/`
 - `PARSEFLOW_ALLOWED_PATHS` 设置允许访问的目录
@@ -212,25 +215,30 @@ D:\example.pdf 有多少页？
 ## 📚 文档
 
 ### 📖 用户指南
+
 - [快速开始](docs/guides/quick-start.md) - 5 分钟上手 ParseFlow
 - [常见问题](docs/guides/faq.md) - FAQ 和故障排除
 - [使用示例](docs/guides/examples.md) - 代码示例和最佳实践
 
 ### ⚙️ 环境配置
+
 - [Windsurf 配置](docs/setup/windsurf.md) - Windsurf IDE 配置指南（推荐）
 - [Cursor 配置](docs/setup/cursor.md) - Cursor IDE 配置指南
 
 ### 🛠️ 开发文档
+
 - [API 文档](docs/development/api.md) - 完整 API 参考
 - [架构设计](docs/development/architecture.md) - 系统架构说明
 - [开发指南](docs/development/development.md) - 如何参与开发
 - [命名规范](docs/development/naming-conventions.md) - 代码规范
 
 ### 📋 项目规划
+
 - [待办事项](docs/planning/todo.md) - 功能路线图
 - [分发分析](docs/planning/distribution-analysis.md) - 发布计划
 
 ### 📂 文档索引
+
 - [完整文档目录](docs/README.md) - 所有文档的索引
 
 ---
@@ -267,13 +275,13 @@ ParseFlow/
 
 ### 环境变量
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `PARSEFLOW_CACHE_DIR` | 缓存目录 | `.cache` |
-| `PARSEFLOW_MAX_FILE_SIZE` | 最大文件大小（字节） | `52428800` (50MB) |
-| `PARSEFLOW_ALLOWED_PATHS` | 允许访问的路径（`;` 分隔） | 无 |
-| `LOG_LEVEL` | 日志级别 | `info` |
-| `PARSEFLOW_LOG_FILE` | 日志文件路径 | 可选 |
+| 变量名                    | 说明                       | 默认值            |
+| ------------------------- | -------------------------- | ----------------- |
+| `PARSEFLOW_CACHE_DIR`     | 缓存目录                   | `.cache`          |
+| `PARSEFLOW_MAX_FILE_SIZE` | 最大文件大小（字节）       | `52428800` (50MB) |
+| `PARSEFLOW_ALLOWED_PATHS` | 允许访问的路径（`;` 分隔） | 无                |
+| `LOG_LEVEL`               | 日志级别                   | `info`            |
+| `PARSEFLOW_LOG_FILE`      | 日志文件路径               | 可选              |
 
 ### 配置示例
 
@@ -343,6 +351,7 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 提取 PDF 文本内容。
 
 **参数**：
+
 - `path` (string): PDF 文件路径
 - `page` (number, 可选): 提取特定页
 - `range` (string, 可选): 页码范围，如 "1-5"
@@ -355,6 +364,7 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 在 PDF 中搜索关键词。
 
 **参数**：
+
 - `path` (string): PDF 文件路径
 - `query` (string): 搜索关键词
 - `caseSensitive` (boolean, 可选): 是否区分大小写
@@ -367,6 +377,7 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 获取 PDF 元数据。
 
 **参数**：
+
 - `path` (string): PDF 文件路径
 
 **返回**：元数据对象（标题、作者、页数、创建日期等）
@@ -378,9 +389,11 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 ### 高优先级
 
 #### ⭐ MCP Marketplace 发布
+
 让用户一键安装 ParseFlow！
 
 **计划**：
+
 - 发布到 npm
 - 提交到官方 MCP Registry
 - 自动安装和配置
@@ -388,9 +401,11 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 **优先级**: ⭐⭐⭐⭐⭐
 
 #### ⭐ VSCode 扩展
+
 改善安装和使用体验
 
 **功能**：
+
 - 一键安装配置
 - 自动版本管理
 - 状态监控 UI

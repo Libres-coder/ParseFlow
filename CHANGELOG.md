@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
+
 - Image extraction using pdfjs-dist
 - Table of Contents (TOC) extraction
 - OCR support with Tesseract.js
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-11-26
 
 ### Added
+
 - Initial release of ParseFlow MCP Server
 - **Local deployment only** - Configure via `mcp_config.json`, not available in public registries
 - MCP Server implementation for Windsurf IDE integration
@@ -34,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Monorepo structure with pnpm workspaces
 
 ### Features
+
 - **Text Extraction**: Extract text from PDF files with preservation options
 - **Metadata Reading**: Get PDF information like title, author, creation date
 - **Search**: Find keywords in PDF documents with context
@@ -44,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Error Handling**: Comprehensive error handling with custom error codes
 
 ### Technical Details
+
 - Node.js >= 18.0.0
 - TypeScript 5.3+
 - MCP Protocol 1.0
@@ -51,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pdfjs-dist for advanced features (planned)
 
 ### Documentation
+
 - README with quick start guide
 - Architecture design document
 - Complete API documentation

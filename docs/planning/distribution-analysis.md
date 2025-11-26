@@ -22,12 +22,12 @@ AI 调用工具
 
 ### 优缺点
 
-| 优点 | 缺点 |
-|------|------|
-| ✅ 完全控制 | ❌ 手动配置复杂 |
-| ✅ 灵活性高 | ❌ 用户体验不佳 |
+| 优点        | 缺点              |
+| ----------- | ----------------- |
+| ✅ 完全控制 | ❌ 手动配置复杂   |
+| ✅ 灵活性高 | ❌ 用户体验不佳   |
 | ✅ 适合开发 | ❌ 路径硬编码问题 |
-| ✅ 无依赖 | ❌ 更新不便 |
+| ✅ 无依赖   | ❌ 更新不便       |
 
 ### Cursor Agent 模式要求分析
 
@@ -38,21 +38,23 @@ AI 调用工具
 #### 技术原因
 
 1. **MCP 集成层级不同**
+
    ```
    Windsurf:
    ├── Chat Mode: ✅ MCP 集成
    └── Agent Mode: ✅ MCP 集成
-   
+
    Cursor (当前版本):
    ├── Chat Mode: ❌ 无 MCP 集成
    └── Agent Mode: ✅ MCP 集成
    ```
 
 2. **工具调用机制**
+
    ```
    Windsurf Cascade:
    - 上下文分析 → 自动工具选择 → 调用 MCP
-   
+
    Cursor Agent:
    - 明确指示 → 工具匹配 → 调用 MCP
    ```
@@ -63,12 +65,12 @@ AI 调用工具
 
 #### 版本演进
 
-| Cursor 版本 | MCP 支持 |
-|------------|---------|
-| 0.44.x 及之前 | ❌ 不支持 |
-| 0.45.x | ✅ Agent 模式支持 |
-| 1.0+ | ✅ 增强 Agent 模式 |
-| 未来版本？ | 可能支持 Chat 模式 |
+| Cursor 版本   | MCP 支持           |
+| ------------- | ------------------ |
+| 0.44.x 及之前 | ❌ 不支持          |
+| 0.45.x        | ✅ Agent 模式支持  |
+| 1.0+          | ✅ 增强 Agent 模式 |
+| 未来版本？    | 可能支持 Chat 模式 |
 
 **结论**：这是实现差异，不是技术限制。未来 Cursor 可能会改进。
 
@@ -97,6 +99,7 @@ ParseFlow MCP Server
 #### 1. 准备工作
 
 **必需**：
+
 - [ ] 发布到 npm（公开包）
 - [ ] 完整的 package.json
 - [ ] README.md（英文）
@@ -104,6 +107,7 @@ ParseFlow MCP Server
 - [ ] 运行示例
 
 **示例 package.json**：
+
 ```json
 {
   "name": "@parseflow/mcp-server",
@@ -142,6 +146,7 @@ npm info @parseflow/mcp-server
 创建 PR 到 [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)：
 
 **servers/src/parseflow/index.json**：
+
 ```json
 {
   "name": "parseflow",
@@ -185,12 +190,12 @@ npm info @parseflow/mcp-server
 
 ### 优缺点
 
-| 优点 | 缺点 |
-|------|------|
-| ✅ 一键安装 | ❌ 需要发布到 npm |
-| ✅ 自动更新 | ❌ 审核流程 |
-| ✅ 官方支持 | ❌ 需要英文文档 |
-| ✅ 用户体验好 | ❌ 版本管理复杂 |
+| 优点          | 缺点              |
+| ------------- | ----------------- |
+| ✅ 一键安装   | ❌ 需要发布到 npm |
+| ✅ 自动更新   | ❌ 审核流程       |
+| ✅ 官方支持   | ❌ 需要英文文档   |
+| ✅ 用户体验好 | ❌ 版本管理复杂   |
 
 ---
 
@@ -203,6 +208,7 @@ VSIX 是 VSCode 扩展格式。Windsurf 和 Cursor 都基于 VSCode，理论上�
 ### 架构分析
 
 #### 当前 MCP 架构
+
 ```
 ┌─────────────────┐
 │   Windsurf/     │
@@ -227,6 +233,7 @@ VSIX 是 VSCode 扩展格式。Windsurf 和 Cursor 都基于 VSCode，理论上�
 ```
 
 #### VSCode 扩展架构
+
 ```
 ┌─────────────────┐
 │   Windsurf/     │
@@ -256,11 +263,13 @@ VSIX 是 VSCode 扩展格式。Windsurf 和 Cursor 都基于 VSCode，理论上�
 #### ✅ 技术上可行
 
 **原因**：
+
 1. Windsurf 和 Cursor 都基于 VSCode
 2. 支持加载 VSCode 扩展
 3. 可以通过扩展 API 启动子进程
 
 **实现方式**：
+
 ```typescript
 // extension.ts
 import * as vscode from 'vscode';
@@ -269,21 +278,21 @@ import { spawn } from 'child_process';
 export function activate(context: vscode.ExtensionContext) {
   // 1. 获取扩展安装路径
   const serverPath = context.asAbsolutePath('dist/mcp-server/index.js');
-  
+
   // 2. 更新 MCP 配置
   const config = vscode.workspace.getConfiguration();
   const mcpServers = config.get('mcp.servers', {});
-  
+
   mcpServers['parseflow'] = {
     command: 'node',
-    args: [serverPath]
+    args: [serverPath],
   };
-  
+
   config.update('mcp.servers', mcpServers, true);
-  
+
   // 3. 可选：直接启动 MCP Server
   const server = spawn('node', [serverPath]);
-  
+
   // 4. 注册命令
   context.subscriptions.push(
     vscode.commands.registerCommand('parseflow.restart', () => {
@@ -296,6 +305,7 @@ export function activate(context: vscode.ExtensionContext) {
 #### ⚠️ 但有限制
 
 **限制 1：MCP 配置位置**
+
 ```
 问题：VSCode 配置 vs MCP 配置文件
 - VSCode: settings.json
@@ -306,6 +316,7 @@ export function activate(context: vscode.ExtensionContext) {
 ```
 
 **限制 2：自动调用问题**
+
 ```
 问题：扩展不能改变 AI 的工具选择行为
 - Windsurf Cascade: 由 Codeium 控制
@@ -315,6 +326,7 @@ export function activate(context: vscode.ExtensionContext) {
 ```
 
 **限制 3：IDE 兼容性**
+
 ```
 问题：不同 IDE 的扩展 API 差异
 - Windsurf: 基于 VSCode，但有定制
@@ -328,6 +340,7 @@ export function activate(context: vscode.ExtensionContext) {
 #### 方案 A：纯配置管理扩展（推荐）
 
 **功能**：
+
 - ✅ 一键安装
 - ✅ 自动配置 MCP
 - ✅ 版本管理
@@ -335,6 +348,7 @@ export function activate(context: vscode.ExtensionContext) {
 - ❌ **不能**让 AI 自动调用（这由 IDE 决定）
 
 **用户体验**：
+
 ```
 1. 在扩展市场搜索 "ParseFlow"
 2. 点击 "安装"
@@ -346,22 +360,26 @@ export function activate(context: vscode.ExtensionContext) {
 ```
 
 **优点**：
+
 - ✅ 显著改善安装体验
 - ✅ 自动路径管理
 - ✅ 版本更新简单
 
 **缺点**：
+
 - ❌ 不改变使用方式
 - ❌ Cursor 仍需明确指示
 
 #### 方案 B：Language Server Protocol (LSP)
 
 **说明**：
+
 - 这是另一种协议（不是 MCP）
 - VSCode 原生支持
 - 可以作为扩展分发
 
 **但是**：
+
 ```
 ❌ 这不是 MCP
 ❌ 需要重写所有工具
@@ -372,6 +390,7 @@ export function activate(context: vscode.ExtensionContext) {
 ### 开发任务
 
 **主要任务**：
+
 - 创建扩展骨架
 - 实现配置管理
 - 实现 MCP Server 启动
@@ -383,15 +402,15 @@ export function activate(context: vscode.ExtensionContext) {
 
 ## 📊 方案对比
 
-| 方面 | 手动配置 | MCP Marketplace | VSCode 扩展 |
-|------|---------|----------------|------------|
-| **安装难度** | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **用户体验** | ❌ 复杂 | ✅ 优秀 | ✅ 良好 |
-| **维护成本** | ✅ 低 | ⚠️ 中等 | ⚠️ 较高 |
-| **自动调用** | 取决于 IDE | 取决于 IDE | ❌ 无改善 |
-| **更新便利** | ❌ 手动 | ✅ 自动 | ✅ 自动 |
-| **官方支持** | N/A | ✅ 是 | ⚠️ 社区 |
-| **开发难度** | 无需开发 | 需准备发布 | 需完整开发 |
+| 方面         | 手动配置   | MCP Marketplace | VSCode 扩展 |
+| ------------ | ---------- | --------------- | ----------- |
+| **安装难度** | ⭐⭐       | ⭐⭐⭐⭐⭐      | ⭐⭐⭐⭐    |
+| **用户体验** | ❌ 复杂    | ✅ 优秀         | ✅ 良好     |
+| **维护成本** | ✅ 低      | ⚠️ 中等         | ⚠️ 较高     |
+| **自动调用** | 取决于 IDE | 取决于 IDE      | ❌ 无改善   |
+| **更新便利** | ❌ 手动    | ✅ 自动         | ✅ 自动     |
+| **官方支持** | N/A        | ✅ 是           | ⚠️ 社区     |
+| **开发难度** | 无需开发   | 需准备发布      | 需完整开发  |
 
 ---
 
@@ -405,6 +424,7 @@ export function activate(context: vscode.ExtensionContext) {
 ```
 
 **原因**：
+
 1. **AI 工具选择**由 IDE 的 AI 层控制
 2. **扩展无权**改变 AI 的决策逻辑
 3. **MCP 协议**本身不决定何时调用工具
@@ -427,50 +447,58 @@ Cursor Agent:
 
 ### 💡 可以改善的
 
-| 方面 | 可以改善 |
-|------|---------|
-| 安装体验 | ✅ VSIX 扩展 |
-| 配置复杂度 | ✅ 自动配置 |
-| 更新便利性 | ✅ 自动更新 |
-| 工具发现 | ✅ 文档和提示 |
-| 使用方式 | ❌ **由 IDE 决定** |
+| 方面       | 可以改善           |
+| ---------- | ------------------ |
+| 安装体验   | ✅ VSIX 扩展       |
+| 配置复杂度 | ✅ 自动配置        |
+| 更新便利性 | ✅ 自动更新        |
+| 工具发现   | ✅ 文档和提示      |
+| 使用方式   | ❌ **由 IDE 决定** |
 
 ---
 
 ## 🚀 推荐路线图
 
 ### 阶段 1：当前（v1.0）✅
+
 - 手动配置
 - 完整文档
 - 脚本辅助
 
 ### 阶段 2：社区分发
+
 **优先级**: ⭐⭐⭐⭐⭐
 
 **任务**：
+
 1. 发布到 npm
 2. 提交到 MCP Marketplace
 3. 等待审核
 
 **收益**：
+
 - ✅ 一键安装
 - ✅ 官方认可
 - ✅ 更广传播
 
 ### 阶段 3：扩展增强
+
 **优先级**: ⭐⭐⭐⭐
 
 **任务**：
+
 1. 开发 VSCode 扩展
 2. 自动配置管理
 3. 状态监控 UI
 
 **收益**：
+
 - ✅ 最佳安装体验
 - ✅ 自动版本管理
 - ✅ 专业形象
 
 ### 阶段 4：未来考虑
+
 - Claude Desktop 支持
 - 其他 AI IDE 集成
 - 企业版功能
@@ -480,6 +508,7 @@ Cursor Agent:
 ## 💡 对用户的建议
 
 ### 使用 Windsurf（推荐）
+
 ```
 如果你想要：
 ✅ 自动工具选择
@@ -490,6 +519,7 @@ Cursor Agent:
 ```
 
 ### 使用 Cursor
+
 ```
 当前状态：
 - ⚠️ 需在 Agent 模式

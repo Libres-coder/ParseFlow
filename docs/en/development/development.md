@@ -140,7 +140,7 @@ Located in `tests/integration/`
 describe('MCP Server Integration', () => {
   it('should handle extract_text request', async () => {
     const response = await mcpClient.request('extract_text', {
-      path: 'test.pdf'
+      path: 'test.pdf',
     });
     expect(response.success).toBe(true);
   });
@@ -232,11 +232,13 @@ chore: update dependencies
 ### 6.3 Pull Request Process
 
 1. **Fork & Clone**
+
    ```bash
    git clone https://github.com/your-username/ParseFlow.git
    ```
 
 2. **Create Branch**
+
    ```bash
    git checkout -b feature/your-feature
    ```
@@ -247,12 +249,14 @@ chore: update dependencies
    - Update documentation
 
 4. **Test**
+
    ```bash
    pnpm test
    pnpm lint
    ```
 
 5. **Commit**
+
    ```bash
    git add .
    git commit -m "feat: your feature description"
@@ -337,16 +341,19 @@ pnpm install
 ## 9. Resources
 
 ### Documentation
+
 - [Architecture](architecture.md) - System architecture
 - [API Reference](api.md) - Complete API docs
 - [Contributing](../../CONTRIBUTING.md) - Contribution guidelines
 
 ### Tools
+
 - [MCP Inspector](https://github.com/modelcontextprotocol/inspector) - MCP debugging
 - [TypeDoc](https://typedoc.org/) - API documentation generator
 - [Jest](https://jestjs.io/) - Testing framework
 
 ### Community
+
 - [GitHub Issues](https://github.com/Libres-coder/ParseFlow/issues)
 - [GitHub Discussions](https://github.com/Libres-coder/ParseFlow/discussions)
 

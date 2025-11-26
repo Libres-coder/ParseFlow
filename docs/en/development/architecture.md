@@ -108,15 +108,15 @@ class ParseFlowServer {
   private server: Server;
   private resourceManager: ResourceManager;
   private toolManager: ToolManager;
-  
+
   constructor(config: ServerConfig) {
     this.server = new Server(
-      { name: "parseflow", version: "1.0.0" },
+      { name: 'parseflow', version: '1.0.0' },
       { capabilities: { resources: {}, tools: {} } }
     );
     this.setupHandlers();
   }
-  
+
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
@@ -138,21 +138,18 @@ class PDFParser {
   private textExtractor: TextExtractor;
   private metadataExtractor: MetadataExtractor;
   private searchEngine: SearchEngine;
-  
-  async extractText(
-    path: string, 
-    options?: ExtractOptions
-  ): Promise<string> {
+
+  async extractText(path: string, options?: ExtractOptions): Promise<string> {
     // Check cache
     const cached = await this.cache.get(path);
     if (cached) return cached;
-    
+
     // Extract text
     const text = await this.textExtractor.extract(path, options);
-    
+
     // Cache result
     await this.cache.set(path, text);
-    
+
     return text;
   }
 }
@@ -170,19 +167,19 @@ class CacheManager {
   private diskCache?: DiskCache;
   private maxSize: number;
   private ttl: number;
-  
+
   async get(key: string): Promise<any | null> {
     // Try memory cache first
     const memCache = this.memoryCache.get(key);
     if (memCache && !this.isExpired(memCache)) {
       return memCache.value;
     }
-    
+
     // Try disk cache
     if (this.diskCache) {
       return await this.diskCache.get(key);
     }
-    
+
     return null;
   }
 }
@@ -217,6 +214,7 @@ class CacheManager {
 ### 3.2 Supported Capabilities
 
 **Tools** (5 total):
+
 1. `extract_text` - Extract PDF text
 2. `get_metadata` - Get PDF metadata
 3. `search_pdf` - Search keywords
@@ -224,6 +222,7 @@ class CacheManager {
 5. `get_toc` - Get table of contents (planned)
 
 **Resources**:
+
 - PDF file resources
 - URI scheme: `pdf://`
 
@@ -241,11 +240,8 @@ class CacheManager {
 
 ```typescript
 interface TextExtractor {
-  extract(
-    path: string, 
-    strategy: 'raw' | 'formatted' | 'clean'
-  ): Promise<string>;
-  
+  extract(path: string, strategy: 'raw' | 'formatted' | 'clean'): Promise<string>;
+
   extractPage(path: string, page: number): Promise<string>;
   extractRange(path: string, start: number, end: number): Promise<string>;
 }
@@ -254,6 +250,7 @@ interface TextExtractor {
 ### 4.2 Metadata Extraction
 
 **Extracted Information**:
+
 - Title, Author, Subject
 - Creation/Modification dates
 - Page count, PDF version
@@ -262,6 +259,7 @@ interface TextExtractor {
 ### 4.3 Search Engine
 
 **Features**:
+
 - Keyword search
 - Case-sensitive/insensitive
 - Page-level results
@@ -352,14 +350,14 @@ Return to Client
 class ResourcePool<T> {
   private pool: T[];
   private maxSize: number;
-  
+
   async acquire(): Promise<T> {
     if (this.pool.length > 0) {
       return this.pool.pop()!;
     }
     return this.create();
   }
-  
+
   release(resource: T): void {
     if (this.pool.length < this.maxSize) {
       this.pool.push(resource);
@@ -375,6 +373,7 @@ class ResourcePool<T> {
 ### 7.1 Path Validation
 
 **Prevent**:
+
 - Path traversal attacks
 - Access to unauthorized directories
 
@@ -382,7 +381,7 @@ class ResourcePool<T> {
 function validatePath(path: string): boolean {
   // Check for path traversal
   if (path.includes('..')) return false;
-  
+
   // Check against allowed paths
   return isPathAllowed(path);
 }
@@ -412,7 +411,7 @@ function validatePath(path: string): boolean {
 interface Extractor {
   name: string;
   version: string;
-  
+
   canHandle(file: File): boolean;
   extract(file: File, options?: any): Promise<Result>;
 }
@@ -432,7 +431,7 @@ enum ParserEvent {
   PARSE_END = 'parse:end',
   PARSE_ERROR = 'parse:error',
   CACHE_HIT = 'cache:hit',
-  CACHE_MISS = 'cache:miss'
+  CACHE_MISS = 'cache:miss',
 }
 
 parser.on(ParserEvent.PARSE_START, (file: string) => {
@@ -445,6 +444,7 @@ parser.on(ParserEvent.PARSE_START, (file: string) => {
 **Current**: PDF only
 
 **Extensible to**:
+
 - Word documents (.docx)
 - Excel spreadsheets (.xlsx)
 - PowerPoint presentations (.pptx)
@@ -456,20 +456,20 @@ parser.on(ParserEvent.PARSE_START, (file: string) => {
 
 ### Core Libraries
 
-| Library | Purpose | Version |
-|---------|---------|---------|
-| `pdf-parse` | PDF parsing | ^1.1.1 |
-| `@modelcontextprotocol/sdk` | MCP protocol | ^1.0.0 |
-| `TypeScript` | Type safety | ^5.3.3 |
+| Library                     | Purpose      | Version |
+| --------------------------- | ------------ | ------- |
+| `pdf-parse`                 | PDF parsing  | ^1.1.1  |
+| `@modelcontextprotocol/sdk` | MCP protocol | ^1.0.0  |
+| `TypeScript`                | Type safety  | ^5.3.3  |
 
 ### Development Tools
 
-| Tool | Purpose |
-|------|---------|
-| `Jest` | Testing framework |
-| `ESLint` | Code linting |
-| `Prettier` | Code formatting |
-| `TypeDoc` | Documentation generation |
+| Tool       | Purpose                  |
+| ---------- | ------------------------ |
+| `Jest`     | Testing framework        |
+| `ESLint`   | Code linting             |
+| `Prettier` | Code formatting          |
+| `TypeDoc`  | Documentation generation |
 
 ---
 
@@ -525,10 +525,12 @@ IDE <---> MCP Server
 ## 12. References
 
 ### Documentation
+
 - [MCP Protocol Specification](https://modelcontextprotocol.io)
 - [pdf-parse Documentation](https://www.npmjs.com/package/pdf-parse)
 
 ### Related Docs
+
 - [API Reference](api.md) - Complete API documentation
 - [Development Guide](development.md) - Development setup
 - [Contributing](../../CONTRIBUTING.md) - Contribution guidelines

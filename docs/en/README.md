@@ -42,16 +42,16 @@ Welcome to the ParseFlow documentation!
 
 ## 📝 Documentation Status
 
-| Document | Status | Language |
-|----------|--------|----------|
-| Quick Start | 🚧 In Progress | English |
-| FAQ | 🚧 In Progress | English |
-| Windsurf Setup | 🚧 In Progress | English |
-| Cursor Setup | 🚧 In Progress | English |
-| API Reference | 🚧 In Progress | English |
-| Examples | 🚧 In Progress | English |
-| Architecture | 🚧 In Progress | English |
-| Development Guide | 🚧 In Progress | English |
+| Document          | Status         | Language |
+| ----------------- | -------------- | -------- |
+| Quick Start       | 🚧 In Progress | English  |
+| FAQ               | 🚧 In Progress | English  |
+| Windsurf Setup    | 🚧 In Progress | English  |
+| Cursor Setup      | 🚧 In Progress | English  |
+| API Reference     | 🚧 In Progress | English  |
+| Examples          | 🚧 In Progress | English  |
+| Architecture      | 🚧 In Progress | English  |
+| Development Guide | 🚧 In Progress | English  |
 
 **Note**: English documentation is currently being translated. Chinese versions are available in [docs/](../README.md).
 

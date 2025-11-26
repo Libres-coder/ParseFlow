@@ -5,10 +5,12 @@
 ### Q1: ParseFlow 支持哪些 IDE？
 
 **A:** ParseFlow 支持两种 IDE：
+
 - ✅ **Windsurf**（推荐）- 自动识别，无需明确指示
 - ✅ **Cursor**（0.45.x+）- 需在 Agent 模式明确指示
 
 详细配置参考：
+
 - Windsurf: [WINDSURF_SETUP.md](WINDSURF_SETUP.md)
 - Cursor: [CURSOR_SETUP.md](CURSOR_SETUP.md)
 
@@ -17,16 +19,19 @@
 **A:** 根据你的 IDE 选择配置文件：
 
 **Windsurf**（推荐）：
+
 - 配置文件: `C:\Users\<用户名>\.codeium\windsurf\mcp_config.json`
 - 参考: [QUICK_START.md](QUICK_START.md)
 
 **Cursor**：
+
 - 配置文件: `C:\Users\<用户名>\.cursor\mcp.json`
 - 参考: [CURSOR_SETUP.md](CURSOR_SETUP.md)
 
 ### Q2: 配置后 Windsurf 没有调用 ParseFlow？
 
 **A:** 检查以下几点：
+
 - [ ] 配置文件 JSON 格式正确（使用 jsonlint.com 验证）
 - [ ] `args` 中的路径指向正确的 `dist/index.js`
 - [ ] 已完全重启 Windsurf（检查任务管理器）
@@ -35,6 +40,7 @@
 ### Q3: 提示 "Cannot find module"？
 
 **A:** 运行以下命令重新构建：
+
 ```powershell
 cd D:\ParseFlow
 pnpm install
@@ -60,23 +66,27 @@ pnpm build
 ### Q5: Windsurf 和 Cursor 哪个更好用？
 
 **A:** **推荐使用 Windsurf**，原因：
+
 - ✅ 自动识别 MCP 工具，无需明确指示
 - ✅ Chat 和 Agent 模式都可用
 - ✅ 更智能的工具调用
 - ✅ 无工具数量限制
 
 Cursor 也可用，但需要：
+
 - ⚠️ 必须在 Agent 模式
 - ⚠️ 必须明确指示工具名称
 
 ### Q6: 如何更新到最新版本？
 
-**A:** 
+**A:**
+
 ```powershell
 git pull origin main
 pnpm install
 pnpm build
 ```
+
 然后重启你的 IDE。
 
 ---
@@ -85,7 +95,8 @@ pnpm build
 
 ### Q7: 支持哪些 PDF 格式？
 
-**A:** 
+**A:**
+
 - ✅ 标准 PDF（文本类型）
 - ✅ PDF 1.0 - 1.7 版本
 - ⚠️ 扫描版 PDF（需要 OCR，未实现）
@@ -93,7 +104,8 @@ pnpm build
 
 ### Q8: 能处理多大的 PDF 文件？
 
-**A:** 
+**A:**
+
 - 默认限制：50MB
 - 可在 `.env` 中修改：`PARSEFLOW_MAX_FILE_SIZE=104857600` (100MB)
 - 建议：超大文件（>100MB）可能导致内存问题
@@ -101,6 +113,7 @@ pnpm build
 ### Q9: 文本提取乱码怎么办？
 
 **A:** 尝试不同的提取策略：
+
 ```javascript
 // 策略 1: raw（原始）
 await parser.extractText(path, { strategy: 'raw' });
@@ -115,6 +128,7 @@ await parser.extractText(path, { strategy: 'clean' });
 ### Q8: 如何提取 PDF 中的图片？
 
 **A:** 当前版本不支持图片提取，这是计划中的功能。
+
 - 需要实现：基于 `pdfjs-dist` 的图片提取器
 - 预计工作量：2-3 天
 - 可以提交 Feature Request
@@ -134,11 +148,13 @@ await parser.extractText(path, { strategy: 'clean' });
 ### Q11: 如何限制 ParseFlow 访问的目录？
 
 **A:** 在配置中设置 `PARSEFLOW_ALLOWED_PATHS`：
+
 ```json
 "env": {
   "PARSEFLOW_ALLOWED_PATHS": "D:\\Documents;D:\\Projects"
 }
 ```
+
 只允许访问列出的目录。
 
 ### Q12: ParseFlow 会上传我的 PDF 吗？
@@ -147,7 +163,8 @@ await parser.extractText(path, { strategy: 'clean' });
 
 ### Q13: 如何处理敏感文档？
 
-**A:** 
+**A:**
+
 - ParseFlow 不记录文档内容
 - 可以禁用缓存：`cache: { enabled: false }`
 - 查看日志确认无内容泄露
@@ -158,7 +175,8 @@ await parser.extractText(path, { strategy: 'clean' });
 
 ### Q14: 解析速度慢怎么办？
 
-**A:** 
+**A:**
+
 1. **启用缓存**：重复解析同一文件会更快
 2. **只提取需要的部分**：使用 `extractPage()` 而不是 `extractText()`
 3. **调整缓存大小**：
@@ -168,7 +186,8 @@ await parser.extractText(path, { strategy: 'clean' });
 
 ### Q15: 内存占用太高？
 
-**A:** 
+**A:**
+
 1. 限制文件大小：`PARSEFLOW_MAX_FILE_SIZE`
 2. 减少缓存：`PARSEFLOW_CACHE_MAX_SIZE`
 3. 处理完后清理缓存：
@@ -179,6 +198,7 @@ await parser.extractText(path, { strategy: 'clean' });
 ### Q16: 能并行处理多个 PDF 吗？
 
 **A:** 当前设计支持并发请求，但受 Node.js 单线程限制。
+
 - 未来可能支持 Worker Threads
 - 目前建议：逐个处理或使用多个 MCP Server 实例
 
@@ -189,22 +209,27 @@ await parser.extractText(path, { strategy: 'clean' });
 ### Q17: 如何参与开发？
 
 **A:** 参考 [CONTRIBUTING.md](../CONTRIBUTING.md)：
+
 1. Fork 项目
 2. 创建功能分支
 3. 提交 Pull Request
 
 ### Q18: 如何调试 MCP Server？
 
-**A:** 
+**A:**
+
 1. **直接运行**：
+
    ```powershell
    node packages\mcp-server\dist\index.js
    ```
 
 2. **使用 MCP Inspector**：
+
    ```powershell
    npx @modelcontextprotocol/inspector node packages\mcp-server\dist\index.js
    ```
+
    浏览器打开 http://localhost:5173
 
 3. **查看日志**：
@@ -214,7 +239,8 @@ await parser.extractText(path, { strategy: 'clean' });
 
 ### Q19: 如何添加新功能？
 
-**A:** 
+**A:**
+
 1. 在 `packages/pdf-parser-core/src/` 实现核心功能
 2. 在 `packages/mcp-server/src/tools/` 添加 MCP Tool
 3. 编写测试
@@ -222,7 +248,8 @@ await parser.extractText(path, { strategy: 'clean' });
 
 ### Q20: 测试覆盖率要求？
 
-**A:** 
+**A:**
+
 - 目标：> 80%
 - 运行：`pnpm test:coverage`
 - 查看：`coverage/lcov-report/index.html`
@@ -233,7 +260,8 @@ await parser.extractText(path, { strategy: 'clean' });
 
 ### Q21: 遇到 "EACCES: permission denied" 错误？
 
-**A:** 
+**A:**
+
 - 检查文件权限
 - 确认目录在 `PARSEFLOW_ALLOWED_PATHS` 中
 - 尝试以管理员身份运行 Windsurf
@@ -241,13 +269,15 @@ await parser.extractText(path, { strategy: 'clean' });
 ### Q22: 日志显示 "Path traversal attempt detected"？
 
 **A:** 这是安全保护机制。确保：
+
 - 使用绝对路径
 - 不使用 `..` 等路径遍历符
 - 路径在允许列表中
 
 ### Q23: "Invalid PDF" 错误？
 
-**A:** 
+**A:**
+
 - 确认文件是有效的 PDF
 - 尝试用 Adobe Reader 打开验证
 - 检查文件是否损坏
@@ -255,7 +285,8 @@ await parser.extractText(path, { strategy: 'clean' });
 
 ### Q24: 如何清除缓存？
 
-**A:** 
+**A:**
+
 ```powershell
 # Windows
 Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
@@ -269,6 +300,7 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 ### Q25: 如何查看详细日志？
 
 **A:** 设置日志级别为 debug：
+
 ```json
 "env": {
   "LOG_LEVEL": "debug",
@@ -282,7 +314,8 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 
 ### Q26: 支持哪些操作系统？
 
-**A:** 
+**A:**
+
 - ✅ Windows 10/11
 - ✅ macOS (未测试)
 - ✅ Linux (未测试)
@@ -296,20 +329,23 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 ### Q28: 有 Web 界面吗？
 
 **A:** 当前没有，但在计划中。可以：
+
 - 使用 MCP Inspector 作为临时界面
 - 通过 Windsurf 交互
 - 等待 Web UI 功能
 
 ### Q29: 能集成到其他 IDE 吗？
 
-**A:** 
+**A:**
+
 - ✅ 任何支持 MCP 的 IDE
 - ✅ 作为 npm 包集成到自己的项目
 - ❓ VSCode 插件（需要单独开发）
 
 ### Q30: 如何报告 Bug？
 
-**A:** 
+**A:**
+
 1. 在 GitHub Issues 创建新 Issue
 2. 提供：
    - 错误描述
@@ -326,11 +362,13 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 **A:** ✅ **是的！这是高优先级计划**
 
 **计划内容**：
+
 - 发布到 npm 公开包
 - 提交到官方 MCP Registry
 - 用户可以一键安装 ParseFlow
 
 **收益**：
+
 - ✅ 无需手动配置
 - ✅ 自动版本管理
 - ✅ 官方认可
@@ -344,17 +382,20 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 **A:** ✅ **可以，已列入计划**
 
 **技术上完全可行**：
+
 - Windsurf 和 Cursor 都基于 VSCode
 - 支持加载 VSCode 扩展
 - 扩展可以自动管理 MCP 配置
 
 **功能设计**：
+
 - ✅ 一键安装配置
 - ✅ 自动管理 MCP 配置文件
 - ✅ MCP Server 启停控制
 - ✅ 版本更新管理
 
 **⚠️ 重要说明**：
+
 ```
 ✅ 可以改善：安装和配置体验
 ❌ 不能改变：AI 的工具选择行为
@@ -379,6 +420,7 @@ Remove-Item D:\ParseFlow\.cache\* -Recurse -Force
 **原因解释**：
 
 **1. AI 工具选择由 IDE 决定**
+
 ```
 AI 如何选择工具 = IDE 内部的 AI 层逻辑
 
@@ -391,16 +433,19 @@ AI 如何选择工具 = IDE 内部的 AI 层逻辑
 ```
 
 **2. Cursor Agent 模式是设计**
+
 - 这是 Cursor 团队的产品设计
 - 采用保守的工具选择策略
 - 需要明确指示避免误调用
 
 **3. 只有 Cursor 自己能改变**
+
 - ✅ 未来 Cursor 可能改进
 - ✅ 可能扩展到 Chat 模式
 - ✅ 可能更智能的自动选择
 
 **结论**：
+
 ```
 VSCode 扩展能做的：
 ✅ 改善安装体验
@@ -414,6 +459,7 @@ VSCode 扩展不能做的：
 ```
 
 **建议**：
+
 - 如果希望自动调用，使用 Windsurf
 - 如果使用 Cursor，接受需要明确指示
 - 或等待 Cursor 团队未来改进
@@ -425,10 +471,12 @@ VSCode 扩展不能做的：
 **A:** 查看完整路线图：[TODO.md](../TODO.md)
 
 **高优先级**：
+
 - ⭐⭐⭐⭐⭐ MCP Marketplace 发布
 - ⭐⭐⭐⭐ VSCode 扩展开发
 
 **计划中**：
+
 - 目录（TOC）提取
 - 图像导出
 - 高级搜索功能
@@ -436,6 +484,7 @@ VSCode 扩展不能做的：
 - 错误处理改进
 
 **未来考虑**：
+
 - OCR 支持（扫描件）
 - AI 文档分析
 - Web 界面（可选）

@@ -11,6 +11,7 @@
 ## 📋 前提条件
 
 ### 1. 确保项目已构建
+
 ```powershell
 cd D:\ParseFlow
 pnpm install
@@ -18,7 +19,9 @@ pnpm build
 ```
 
 ### 2. 确认文件存在
+
 检查 MCP Server 是否已编译：
+
 ```powershell
 dir D:\ParseFlow\packages\mcp-server\dist\index.js
 ```
@@ -39,6 +42,7 @@ cd D:\ParseFlow
 ```
 
 脚本会自动：
+
 1. 检查环境
 2. 构建项目
 3. 找到 Windsurf 配置文件
@@ -54,6 +58,7 @@ cd D:\ParseFlow
 #### 1. 找到配置文件
 
 Windsurf 的 MCP 配置文件位置：
+
 ```
 C:\Users\你的用户名\.codeium\windsurf\mcp_config.json
 ```
@@ -78,9 +83,7 @@ notepad C:\Users\<你的用户名>\.codeium\windsurf\mcp_config.json
   "mcpServers": {
     "parseflow": {
       "command": "node",
-      "args": [
-        "<项目根目录>\\packages\\mcp-server\\dist\\index.js"
-      ],
+      "args": ["<项目根目录>\\packages\\mcp-server\\dist\\index.js"],
       "env": {
         "PARSEFLOW_CACHE_DIR": "<项目根目录>\\.cache",
         "PARSEFLOW_MAX_FILE_SIZE": "52428800",
@@ -134,9 +137,7 @@ notepad C:\Users\<你的用户名>\.codeium\windsurf\mcp_config.json
 ```json
 {
   "command": "node",
-  "args": [
-    "E:\\MyProjects\\ParseFlow\\packages\\mcp-server\\dist\\index.js"
-  ],
+  "args": ["E:\\MyProjects\\ParseFlow\\packages\\mcp-server\\dist\\index.js"],
   "env": {
     "PARSEFLOW_CACHE_DIR": "E:\\MyProjects\\ParseFlow\\.cache",
     "PARSEFLOW_ALLOWED_PATHS": "E:\\;D:\\;C:\\Users",
@@ -187,6 +188,7 @@ Get-Content D:\ParseFlow\logs\parseflow.log -Tail 20
 ```
 
 应该看到：
+
 ```
 [info] Starting ParseFlow MCP Server...
 [info] ParseFlow MCP Server started successfully
@@ -210,6 +212,7 @@ Get-Content D:\ParseFlow\logs\parseflow.log -Tail 20
 ### 3. 查看 Cascade 的思考过程
 
 成功的标志：
+
 - ✅ 看到 "MCP Tool: parseflow / get_metadata" 或类似
 - ✅ 直接返回结果，不写脚本
 - ✅ 3-10 秒内完成
@@ -221,12 +224,14 @@ Get-Content D:\ParseFlow\logs\parseflow.log -Tail 20
 ### 问题 1：Windsurf 没有调用 ParseFlow
 
 **可能原因**：
+
 1. 没有完全重启 Windsurf
 2. 配置文件路径错误
 3. MCP Server 构建失败
 4. 路径中包含特殊字符
 
 **解决方法**：
+
 ```powershell
 # 1. 检查配置文件
 cat C:\Users\<你的用户名>\.codeium\windsurf\mcp_config.json
@@ -246,6 +251,7 @@ cat D:\ParseFlow\logs\parseflow.log
 **原因**：MCP Server 未构建或路径错误
 
 **解决**：
+
 ```powershell
 cd D:\ParseFlow
 pnpm install
@@ -257,6 +263,7 @@ pnpm build
 **原因**：MCP Server 从未被 Windsurf 启动
 
 **检查**：
+
 1. 配置文件路径是否正确（`.codeium\windsurf\mcp_config.json`）
 2. 配置文件 JSON 格式是否正确
 3. 是否完全重启了 Windsurf
@@ -266,6 +273,7 @@ pnpm build
 **原因**：没有访问指定路径的权限
 
 **解决**：
+
 - 确保 `PARSEFLOW_ALLOWED_PATHS` 包含您要访问的目录
 - 确保 ParseFlow 目录有读写权限
 
@@ -275,18 +283,19 @@ pnpm build
 
 ### 环境变量说明
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `PARSEFLOW_CACHE_DIR` | `.cache` | 缓存目录 |
-| `PARSEFLOW_MAX_FILE_SIZE` | `52428800` | 最大文件 50MB |
-| `PARSEFLOW_ALLOWED_PATHS` | 无 | 允许访问的路径，用 `;` 分隔 |
-| `LOG_LEVEL` | `info` | 日志级别：`error`, `warn`, `info`, `debug` |
-| `PARSEFLOW_LOG_FILE` | 无 | 日志文件路径 |
-| `PARSEFLOW_ERROR_LOG_FILE` | 无 | 错误日志文件路径 |
+| 变量                       | 默认值     | 说明                                       |
+| -------------------------- | ---------- | ------------------------------------------ |
+| `PARSEFLOW_CACHE_DIR`      | `.cache`   | 缓存目录                                   |
+| `PARSEFLOW_MAX_FILE_SIZE`  | `52428800` | 最大文件 50MB                              |
+| `PARSEFLOW_ALLOWED_PATHS`  | 无         | 允许访问的路径，用 `;` 分隔                |
+| `LOG_LEVEL`                | `info`     | 日志级别：`error`, `warn`, `info`, `debug` |
+| `PARSEFLOW_LOG_FILE`       | 无         | 日志文件路径                               |
+| `PARSEFLOW_ERROR_LOG_FILE` | 无         | 错误日志文件路径                           |
 
 ### 路径格式
 
 **Windows**：使用双反斜杠 `\\` 或单斜杠 `/`
+
 ```json
 "<项目根目录>\\dist\\index.js"
 或
@@ -294,6 +303,7 @@ pnpm build
 ```
 
 **允许的路径**：用分号分隔
+
 ```json
 "PARSEFLOW_ALLOWED_PATHS": "D:\\;E:\\Projects;C:\\Users"
 ```
@@ -303,11 +313,13 @@ pnpm build
 ## 🎯 快速参考
 
 ### 配置文件位置
+
 ```
 C:\Users\你的用户名\.codeium\windsurf\mcp_config.json
 ```
 
 ### 最小配置
+
 ```json
 {
   "mcpServers": {
@@ -320,6 +332,7 @@ C:\Users\你的用户名\.codeium\windsurf\mcp_config.json
 ```
 
 ### 完整配置（模板）
+
 见上面的详细配置示例。
 
 ---

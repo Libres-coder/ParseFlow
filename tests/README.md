@@ -5,6 +5,7 @@
 ### 1. 准备测试 PDF 文件
 
 找一个您系统中的 PDF 文件，例如：
+
 - `D:\documents\report.pdf`
 - `C:\Users\<你的用户名>\Downloads\manual.pdf`
 - 或任何其他 PDF 文件
@@ -22,6 +23,7 @@ node tests/test-basic.js D:\documents\report.pdf
 ### 3. 测试内容
 
 测试脚本会验证以下功能：
+
 - ✅ 获取 PDF 元数据（标题、作者、页数等）
 - ✅ 提取第一页文本
 - ✅ 提取完整文本
@@ -74,6 +76,7 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 ### 2. 浏览器测试
 
 打开 http://localhost:5173，您可以：
+
 - 查看可用的 Tools
 - 测试 extract_text 工具
 - 测试 search_pdf 工具
@@ -96,19 +99,25 @@ pnpm test:coverage
 ## 故障排除
 
 ### 问题 1: 找不到 PDF 文件
+
 ```
 ❌ 错误: ENOENT: no such file or directory
 ```
+
 **解决**: 确保 PDF 文件路径正确，使用绝对路径
 
 ### 问题 2: 无法解析 PDF
+
 ```
 ❌ 错误: Invalid PDF
 ```
+
 **解决**: 确保 PDF 文件未损坏，尝试用其他 PDF 阅读器打开验证
 
 ### 问题 3: 文件过大
+
 ```
 ❌ 错误: File too large
 ```
+
 **解决**: 默认限制 50MB，可在 `.env` 中修改 `PARSEFLOW_MAX_FILE_SIZE`

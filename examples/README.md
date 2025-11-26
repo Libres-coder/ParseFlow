@@ -3,15 +3,18 @@
 ## 📚 示例代码说明
 
 此目录包含 ParseFlow 的使用示例，展示如何：
+
 - 直接使用 PDF Parser 核心库
 - 通过 MCP 客户端调用 ParseFlow
 
 ## 📋 文件列表
 
 ### 1. basic-usage.ts
+
 **PDF Parser 核心库使用示例**
 
 展示如何：
+
 - ✅ 创建 PDFParser 实例
 - ✅ 提取文本（完整、单页、范围）
 - ✅ 获取 PDF 元数据
@@ -19,6 +22,7 @@
 - ✅ 使用不同的提取策略
 
 **运行方式**：
+
 ```bash
 # 使用 tsx
 npx tsx examples/basic-usage.ts
@@ -29,20 +33,24 @@ node examples/basic-usage.js
 ```
 
 ### 2. mcp-client-example.ts
+
 **MCP 客户端调用示例**
 
 展示如何：
+
 - ✅ 创建 MCP 客户端
 - ✅ 连接到 ParseFlow MCP Server
 - ✅ 调用 MCP Tools
 - ✅ 读取 MCP Resources
 
 **前置要求**：
+
 ```bash
 npm install @modelcontextprotocol/sdk
 ```
 
 **运行方式**：
+
 ```bash
 # 取消注释代码后
 npx tsx examples/mcp-client-example.ts
@@ -57,6 +65,7 @@ npx tsx examples/mcp-client-example.ts
 **推荐方式**：通过 Windsurf IDE 的 MCP 集成使用
 
 1. **配置 Windsurf**（参考 [QUICK_START.md](../QUICK_START.md)）
+
    ```json
    // C:\Users\<你的用户名>\.codeium\windsurf\mcp_config.json
    {
@@ -70,13 +79,14 @@ npx tsx examples/mcp-client-example.ts
    ```
 
 2. **在 Windsurf 中使用**
+
    ```
    你：分析 D:\report.pdf
    Cascade：[自动调用 ParseFlow extract_text]
-   
+
    你：这个 PDF 有多少页？
    Cascade：[自动调用 ParseFlow get_metadata]
-   
+
    你：搜索"重要条款"
    Cascade：[自动调用 ParseFlow search_pdf]
    ```
@@ -94,7 +104,7 @@ import { PDFParser } from '../packages/pdf-parser-core/src/parser';
 // 2. 创建实例
 const parser = new PDFParser({
   cache: { enabled: true },
-  security: { maxFileSize: 50 * 1024 * 1024 }
+  security: { maxFileSize: 50 * 1024 * 1024 },
 });
 
 // 3. 使用

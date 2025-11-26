@@ -20,6 +20,7 @@
 ParseFlow is a high-performance **MCP (Model Context Protocol) Server** for PDF document parsing and analysis, designed specifically for AI assistants in **Windsurf** and **Cursor** IDEs.
 
 Through MCP protocol, AI can directly call ParseFlow tools to:
+
 - 📄 Extract text content from PDF files
 - 🔍 Search for keywords in PDFs
 - 📊 Get PDF metadata (title, author, pages, dates, etc.)
@@ -109,11 +110,13 @@ Choose your IDE:
 Restart your IDE and try in the chat:
 
 **In Windsurf**:
+
 ```
 Extract text from D:\document.pdf
 ```
 
 **In Cursor** (Agent mode):
+
 ```
 Use parseflow tool to extract text from D:\document.pdf
 ```
@@ -123,25 +126,30 @@ Use parseflow tool to extract text from D:\document.pdf
 ## 📚 Documentation
 
 ### 📖 User Guides
+
 - [Quick Start](docs/en/guides/quick-start.md) - Get started in 5 minutes
 - [FAQ](docs/en/guides/faq.md) - Frequently asked questions
 - [Examples](docs/en/guides/examples.md) - Code examples and best practices
 
 ### ⚙️ Setup Guides
+
 - [Windsurf Setup](docs/en/setup/windsurf.md) - Windsurf IDE configuration (Recommended)
 - [Cursor Setup](docs/en/setup/cursor.md) - Cursor IDE configuration
 
 ### 🛠️ Development Documentation
+
 - [API Reference](docs/en/development/api.md) - Complete API documentation
 - [Architecture](docs/en/development/architecture.md) - System architecture
 - [Development Guide](docs/en/development/development.md) - How to contribute
 - [Naming Conventions](docs/en/development/naming-conventions.md) - Code standards
 
 ### 📋 Project Planning
+
 - [TODO](docs/en/planning/todo.md) - Feature roadmap
 - [Distribution Analysis](docs/en/planning/distribution-analysis.md) - Release plans
 
 ### 📂 Documentation Index
+
 - [Complete Documentation](docs/en/README.md) - Full documentation index
 
 ---
@@ -208,11 +216,11 @@ ParseFlow/
 
 ParseFlow provides the following MCP tools:
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `extract_text` | Extract text from PDF | `path`, `page?`, `range?`, `strategy?` |
-| `get_metadata` | Get PDF metadata | `path` |
-| `search_pdf` | Search keywords in PDF | `path`, `query`, `caseSensitive?`, `maxResults?` |
+| Tool           | Description            | Parameters                                       |
+| -------------- | ---------------------- | ------------------------------------------------ |
+| `extract_text` | Extract text from PDF  | `path`, `page?`, `range?`, `strategy?`           |
+| `get_metadata` | Get PDF metadata       | `path`                                           |
+| `search_pdf`   | Search keywords in PDF | `path`, `query`, `caseSensitive?`, `maxResults?` |
 
 For detailed API documentation, see [API Reference](docs/en/development/api.md)
 
@@ -223,9 +231,11 @@ For detailed API documentation, see [API Reference](docs/en/development/api.md)
 ### High Priority
 
 #### ⭐ MCP Marketplace Release
+
 Enable one-click installation of ParseFlow!
 
 **Plans**:
+
 - Publish to npm
 - Submit to official MCP Registry
 - Automated installation and configuration
@@ -233,9 +243,11 @@ Enable one-click installation of ParseFlow!
 **Priority**: ⭐⭐⭐⭐⭐
 
 #### ⭐ VSCode Extension
+
 Improve installation and usage experience
 
 **Features**:
+
 - One-click installation
 - Automatic version management
 - Status monitoring UI

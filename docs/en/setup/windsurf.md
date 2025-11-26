@@ -13,6 +13,7 @@ You need to manually configure it by editing Windsurf's `mcp_config.json` file.
 ## 📋 Prerequisites
 
 ### 1. Ensure Project is Built
+
 ```powershell
 cd D:\ParseFlow
 pnpm install
@@ -20,7 +21,9 @@ pnpm build
 ```
 
 ### 2. Verify File Exists
+
 Check if the MCP Server has been compiled:
+
 ```powershell
 dir D:\ParseFlow\packages\mcp-server\dist\index.js
 ```
@@ -41,6 +44,7 @@ cd D:\ParseFlow
 ```
 
 The script will automatically:
+
 1. Check environment
 2. Build the project
 3. Locate Windsurf config file
@@ -56,6 +60,7 @@ If the automatic script fails, configure manually:
 #### 1. Locate Configuration File
 
 Windsurf's MCP configuration file location:
+
 ```
 C:\Users\your-username\.codeium\windsurf\mcp_config.json
 ```
@@ -80,9 +85,7 @@ If the file is empty, add:
   "mcpServers": {
     "parseflow": {
       "command": "node",
-      "args": [
-        "<project-root>\\packages\\mcp-server\\dist\\index.js"
-      ],
+      "args": ["<project-root>\\packages\\mcp-server\\dist\\index.js"],
       "env": {
         "PARSEFLOW_CACHE_DIR": "<project-root>\\.cache",
         "PARSEFLOW_MAX_FILE_SIZE": "52428800",
@@ -136,9 +139,7 @@ For example, if located in `E:\MyProjects\ParseFlow`:
 ```json
 {
   "command": "node",
-  "args": [
-    "E:\\MyProjects\\ParseFlow\\packages\\mcp-server\\dist\\index.js"
-  ],
+  "args": ["E:\\MyProjects\\ParseFlow\\packages\\mcp-server\\dist\\index.js"],
   "env": {
     "PARSEFLOW_CACHE_DIR": "E:\\MyProjects\\ParseFlow\\.cache",
     "PARSEFLOW_ALLOWED_PATHS": "E:\\;D:\\;C:\\Users",
@@ -189,6 +190,7 @@ Get-Content D:\ParseFlow\logs\parseflow.log -Tail 20
 ```
 
 You should see:
+
 ```
 [info] Starting ParseFlow MCP Server...
 [info] ParseFlow MCP Server started successfully
@@ -212,6 +214,7 @@ Expected: Cascade calls search_pdf tool
 ### 3. Check Cascade's Thought Process
 
 Success indicators:
+
 - ✅ See "MCP Tool: parseflow / get_metadata" or similar
 - ✅ Returns results directly, no script writing
 - ✅ Completes in 3-10 seconds
@@ -223,12 +226,14 @@ Success indicators:
 ### Issue 1: Windsurf Doesn't Call ParseFlow
 
 **Possible Causes**:
+
 1. Windsurf not completely restarted
 2. Configuration file path incorrect
 3. MCP Server build failed
 4. Special characters in path
 
 **Solutions**:
+
 ```powershell
 # 1. Check configuration file
 cat C:\Users\<your-username>\.codeium\windsurf\mcp_config.json
@@ -248,6 +253,7 @@ cat D:\ParseFlow\logs\parseflow.log
 **Cause**: MCP Server not built or path incorrect
 
 **Solution**:
+
 ```powershell
 cd D:\ParseFlow
 pnpm install
@@ -259,6 +265,7 @@ pnpm build
 **Cause**: MCP Server never started by Windsurf
 
 **Check**:
+
 1. Is config file path correct (`.codeium\windsurf\mcp_config.json`)?
 2. Is config file JSON format correct?
 3. Was Windsurf completely restarted?
@@ -268,6 +275,7 @@ pnpm build
 **Cause**: No permission to access specified paths
 
 **Solution**:
+
 - Ensure `PARSEFLOW_ALLOWED_PATHS` includes directories you want to access
 - Ensure ParseFlow directory has read/write permissions
 
@@ -277,18 +285,19 @@ pnpm build
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PARSEFLOW_CACHE_DIR` | `.cache` | Cache directory |
-| `PARSEFLOW_MAX_FILE_SIZE` | `52428800` | Max file size 50MB |
-| `PARSEFLOW_ALLOWED_PATHS` | None | Allowed access paths, separated by `;` |
-| `LOG_LEVEL` | `info` | Log level: `error`, `warn`, `info`, `debug` |
-| `PARSEFLOW_LOG_FILE` | None | Log file path |
-| `PARSEFLOW_ERROR_LOG_FILE` | None | Error log file path |
+| Variable                   | Default    | Description                                 |
+| -------------------------- | ---------- | ------------------------------------------- |
+| `PARSEFLOW_CACHE_DIR`      | `.cache`   | Cache directory                             |
+| `PARSEFLOW_MAX_FILE_SIZE`  | `52428800` | Max file size 50MB                          |
+| `PARSEFLOW_ALLOWED_PATHS`  | None       | Allowed access paths, separated by `;`      |
+| `LOG_LEVEL`                | `info`     | Log level: `error`, `warn`, `info`, `debug` |
+| `PARSEFLOW_LOG_FILE`       | None       | Log file path                               |
+| `PARSEFLOW_ERROR_LOG_FILE` | None       | Error log file path                         |
 
 ### Path Format
 
 **Windows**: Use double backslash `\\` or single forward slash `/`
+
 ```json
 "<project-root>\\dist\\index.js"
 or
@@ -296,6 +305,7 @@ or
 ```
 
 **Allowed Paths**: Semicolon-separated
+
 ```json
 "PARSEFLOW_ALLOWED_PATHS": "D:\\;E:\\Projects;C:\\Users"
 ```
@@ -305,11 +315,13 @@ or
 ## 🎯 Quick Reference
 
 ### Configuration File Location
+
 ```
 C:\Users\your-username\.codeium\windsurf\mcp_config.json
 ```
 
 ### Minimal Configuration
+
 ```json
 {
   "mcpServers": {
@@ -322,6 +334,7 @@ C:\Users\your-username\.codeium\windsurf\mcp_config.json
 ```
 
 ### Full Configuration (Template)
+
 See detailed configuration example above.
 
 ---

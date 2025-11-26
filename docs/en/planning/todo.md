@@ -5,6 +5,7 @@
 ## ✅ Completed
 
 ### v1.0.0 - Core Features (2025-11-26)
+
 - [x] PDF text extraction
 - [x] PDF metadata retrieval
 - [x] PDF keyword search
@@ -20,6 +21,7 @@
 ### 📌 High Priority (Near Term)
 
 #### 1. Enhanced Metadata Support
+
 - [ ] Support more PDF metadata fields
   - [ ] Keywords
   - [ ] Creator tool
@@ -32,6 +34,7 @@
 ---
 
 #### 2. Performance Optimization
+
 - [ ] Enhanced caching mechanism
   - [ ] LRU cache strategy
   - [ ] Configurable cache size
@@ -45,6 +48,7 @@
 ---
 
 #### 3. Error Handling Improvements
+
 - [ ] More friendly error messages
 - [ ] Graceful degradation for corrupted PDF files
 - [ ] Prompts for encrypted PDFs
@@ -57,6 +61,7 @@
 ### 🔹 Medium Priority (1-2 Months)
 
 #### 4. Advanced Text Extraction
+
 - [ ] Preserve text formatting (paragraphs, lists)
 - [ ] Identify headings and sections
 - [ ] Extract headers and footers
@@ -68,6 +73,7 @@
 ---
 
 #### 5. Table of Contents (TOC) Support
+
 - [ ] Extract PDF bookmarks
 - [ ] Build TOC structure
 - [ ] Jump to specific sections
@@ -78,6 +84,7 @@
 ---
 
 #### 6. Image Extraction
+
 - [ ] Extract images from PDF
 - [ ] Support multiple image formats (PNG, JPEG)
 - [ ] Batch image export
@@ -88,6 +95,7 @@
 ---
 
 #### 7. Advanced Search
+
 - [ ] Regular expression search
 - [ ] Fuzzy matching
 - [ ] Search result highlighting
@@ -101,6 +109,7 @@
 ### 🔸 Low Priority (Future)
 
 #### 8. OCR Support
+
 - [ ] Integrate OCR engine (Tesseract)
 - [ ] Text recognition for scanned PDFs
 - [ ] Multi-language support
@@ -112,6 +121,7 @@
 ---
 
 #### 9. PDF Analysis Features
+
 - [ ] Document summary generation (AI)
 - [ ] Key information extraction
 - [ ] Entity recognition (names, locations, dates)
@@ -124,6 +134,7 @@
 ---
 
 #### 10. PDF Operations
+
 - [ ] Merge multiple PDFs
 - [ ] Split PDF
 - [ ] Extract specific pages
@@ -136,6 +147,7 @@
 ---
 
 #### 11. Web Interface (Optional)
+
 - [ ] Web-based PDF viewer
 - [ ] Online text extraction
 - [ ] Search and preview
@@ -149,6 +161,7 @@
 ## 🔧 Technical Improvements
 
 ### Code Quality
+
 - [ ] Increase unit test coverage (target: 80%+)
 - [ ] Integration test suite
 - [ ] End-to-end tests
@@ -162,6 +175,7 @@
 ---
 
 ### Documentation
+
 - [ ] Auto-generate API docs (TypeDoc)
 - [ ] More usage examples
 - [ ] Video tutorials
@@ -173,6 +187,7 @@
 ---
 
 ### Developer Experience
+
 - [ ] Hot reload in development mode
 - [ ] Better debugging tools
 - [ ] Performance profiling tools
@@ -187,9 +202,11 @@
 ### Distribution & Sharing (High Priority)
 
 #### A. MCP Marketplace Release ⭐⭐⭐⭐⭐
+
 **Goal**: Enable one-click ParseFlow installation
 
 **Task List**:
+
 - [ ] Prepare for npm publication
   - [ ] Polish package.json
   - [ ] Add bin field
@@ -206,19 +223,22 @@
   - [ ] Await review
 
 **Priority**: ⭐⭐⭐⭐⭐ (Strongly Recommended)  
-**Benefits**: 
-  - ✅ Dramatically improved user experience
-  - ✅ Official recognition
-  - ✅ Wider distribution
+**Benefits**:
+
+- ✅ Dramatically improved user experience
+- ✅ Official recognition
+- ✅ Wider distribution
 
 **Reference**: [Distribution Analysis](distribution-analysis.md)
 
 ---
 
 #### B. VSCode Extension Development ⭐⭐⭐⭐
+
 **Goal**: Improve installation and configuration experience
 
 **Feature Design**:
+
 - [ ] Core features
   - [ ] One-click installation and configuration
   - [ ] Auto-manage MCP config files
@@ -235,6 +255,7 @@
   - [ ] VSCode testing
 
 **Important Note**:
+
 ```
 ⚠️ VSCode extension can only improve installation experience
 ❌ Cannot change AI's tool selection behavior
@@ -250,6 +271,7 @@
 ---
 
 #### C. Other Distribution Channels
+
 - [ ] Example projects and templates
 - [ ] Blog posts
 - [ ] Video tutorials
@@ -262,6 +284,7 @@
 ### Other IDE Integrations
 
 #### D. Claude Desktop Support
+
 - [ ] Adapt configuration file
 - [ ] Usage documentation
 - [ ] Testing and verification
@@ -271,19 +294,23 @@
 ---
 
 #### E. Improve Cursor Experience
+
 **Goal**: Make ParseFlow easier to use for Cursor users
 
 **Current Status**:
+
 - ✅ Cursor supported (Agent mode)
 - ⚠️ Requires explicit tool instructions
 
 **Possible Improvements**:
+
 - [ ] Create Cursor-specific prompt templates
 - [ ] Write best practices guide
 - [ ] Provide quick command examples
 - [ ] Provide feedback to Cursor team
 
 **Important Note**:
+
 ```
 ⚠️ Cursor Agent mode requirement is Cursor's design
 ❌ Cannot be changed through external tools
@@ -298,11 +325,13 @@
 ## 📊 Performance Goals
 
 ### Current Performance
+
 - Small files (<1MB): < 1 second
 - Medium files (1-10MB): 1-5 seconds
 - Large files (10-50MB): 5-30 seconds
 
 ### Target Performance (v2.0)
+
 - Small files (<1MB): < 0.5 seconds
 - Medium files (1-10MB): 1-3 seconds
 - Large files (10-50MB): 3-15 seconds
@@ -313,11 +342,13 @@
 ## 🐛 Known Issues
 
 ### Needs Fixing
+
 - [ ] Some Chinese PDFs may have garbled text
 - [ ] Complex table extraction not ideal
 - [ ] Very large files may cause memory overflow
 
 ### Limitations (By Design)
+
 - ✅ Password-protected PDFs not supported (requires password)
 - ✅ PDF editing not supported (read-only)
 - ✅ OCR requires additional configuration
@@ -327,6 +358,7 @@
 ## 💡 Idea Pool
 
 ### Awaiting Evaluation
+
 - Support other document formats (Word, Excel)?
 - PDF comparison tool?
 - Extract PDF annotations?
@@ -365,16 +397,19 @@ See [CONTRIBUTING.md](../../CONTRIBUTING.md) for details.
 ## 🎯 Version Planning
 
 ### v1.1.0 - Enhanced (Est. 1 Month)
+
 - Enhanced metadata
 - Performance optimization
 - Improved error handling
 
 ### v1.2.0 - Advanced Features (Est. 2-3 Months)
+
 - TOC support
 - Image extraction
 - Advanced search
 
 ### v2.0.0 - Major Update (Est. 6 Months)
+
 - OCR support
 - AI analysis features
 - Web interface (optional)

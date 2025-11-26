@@ -65,11 +65,13 @@ results.forEach((r) => {
 ### Scenario 1: Document Review
 
 **Your Question:**
+
 ```
 Please review D:\contracts\agreement.pdf, focus on payment terms
 ```
 
 **Windsurf Will:**
+
 1. Call ParseFlow to extract full text
 2. Use AI to analyze content
 3. Highlight payment-related clauses
@@ -77,11 +79,13 @@ Please review D:\contracts\agreement.pdf, focus on payment terms
 ### Scenario 2: Quick Search
 
 **Your Question:**
+
 ```
 Find all mentions of "API key" in all PDFs under D:\manuals\
 ```
 
 **Windsurf Will:**
+
 1. Traverse the folder
 2. Call search on each PDF
 3. Aggregate results
@@ -89,11 +93,13 @@ Find all mentions of "API key" in all PDFs under D:\manuals\
 ### Scenario 3: Document Comparison
 
 **Your Question:**
+
 ```
 Compare differences between D:\v1.pdf and D:\v2.pdf
 ```
 
 **Windsurf Will:**
+
 1. Extract text from both documents
 2. Perform difference analysis
 3. Summarize major changes
@@ -101,11 +107,13 @@ Compare differences between D:\v1.pdf and D:\v2.pdf
 ### Scenario 4: Content Summary
 
 **Your Question:**
+
 ```
 Summarize key points of D:\report.pdf in 5 bullet points
 ```
 
 **Windsurf Will:**
+
 1. Extract full text
 2. AI analyze and summarize
 3. Format output

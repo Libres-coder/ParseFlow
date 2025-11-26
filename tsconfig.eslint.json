@@ -12,10 +12,6 @@
       "@parseflow/mcp-server": ["./packages/mcp-server/src/index.ts"]
     }
   },
-  "include": [
-    "packages/*/src/**/*",
-    "tests/**/*",
-    "examples/**/*"
-  ],
+  "include": ["packages/*/src/**/*", "tests/**/*", "examples/**/*"],
   "exclude": ["node_modules", "dist"]
 }

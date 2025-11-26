@@ -19,25 +19,26 @@
 Extract text content from PDF file.
 
 **Syntax**:
+
 ```typescript
 extract_text(params: ExtractTextParams): Promise<ExtractTextResult>
 ```
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `path` | `string` | Yes | Absolute path to PDF file |
-| `page` | `number` | No | Specific page number (1-indexed) |
-| `range` | `string` | No | Page range (e.g., "1-5", "3-10") |
-| `strategy` | `'raw' \| 'formatted' \| 'clean'` | No | Extraction strategy (default: 'formatted') |
+| Parameter  | Type                              | Required | Description                                |
+| ---------- | --------------------------------- | -------- | ------------------------------------------ |
+| `path`     | `string`                          | Yes      | Absolute path to PDF file                  |
+| `page`     | `number`                          | No       | Specific page number (1-indexed)           |
+| `range`    | `string`                          | No       | Page range (e.g., "1-5", "3-10")           |
+| `strategy` | `'raw' \| 'formatted' \| 'clean'` | No       | Extraction strategy (default: 'formatted') |
 
 **Return Value**:
 
 ```typescript
 {
-  content: string;        // Extracted text
-  pageCount: number;      // Total pages
+  content: string; // Extracted text
+  pageCount: number; // Total pages
   extractedPages: number; // Pages extracted
 }
 ```
@@ -46,30 +47,31 @@ extract_text(params: ExtractTextParams): Promise<ExtractTextResult>
 
 ```typescript
 // Extract all text
-const result = await extract_text({ 
-  path: "D:\\document.pdf" 
+const result = await extract_text({
+  path: 'D:\\document.pdf',
 });
 
 // Extract specific page
-const page5 = await extract_text({ 
-  path: "D:\\document.pdf", 
-  page: 5 
+const page5 = await extract_text({
+  path: 'D:\\document.pdf',
+  page: 5,
 });
 
 // Extract page range
-const range = await extract_text({ 
-  path: "D:\\document.pdf", 
-  range: "1-10" 
+const range = await extract_text({
+  path: 'D:\\document.pdf',
+  range: '1-10',
 });
 
 // Use clean strategy
-const clean = await extract_text({ 
-  path: "D:\\document.pdf", 
-  strategy: "clean" 
+const clean = await extract_text({
+  path: 'D:\\document.pdf',
+  strategy: 'clean',
 });
 ```
 
 **Errors**:
+
 - `FileNotFoundError`: File doesn't exist
 - `InvalidPDFError`: Invalid PDF format
 - `PermissionError`: No read permission
@@ -82,15 +84,16 @@ const clean = await extract_text({
 Get PDF file metadata.
 
 **Syntax**:
+
 ```typescript
 get_metadata(params: GetMetadataParams): Promise<MetadataResult>
 ```
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `path` | `string` | Yes | Absolute path to PDF file |
+| Parameter | Type     | Required | Description               |
+| --------- | -------- | -------- | ------------------------- |
+| `path`    | `string` | Yes      | Absolute path to PDF file |
 
 **Return Value**:
 
@@ -123,8 +126,8 @@ get_metadata(params: GetMetadataParams): Promise<MetadataResult>
 **Example**:
 
 ```typescript
-const metadata = await get_metadata({ 
-  path: "D:\\document.pdf" 
+const metadata = await get_metadata({
+  path: 'D:\\document.pdf',
 });
 
 console.log(`Title: ${metadata.info.Title}`);
@@ -139,44 +142,46 @@ console.log(`Author: ${metadata.info.Author}`);
 Search for keywords in PDF.
 
 **Syntax**:
+
 ```typescript
 search_pdf(params: SearchParams): Promise<SearchResult[]>
 ```
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `path` | `string` | Yes | Absolute path to PDF file |
-| `query` | `string` | Yes | Search keyword/phrase |
-| `caseSensitive` | `boolean` | No | Case sensitive search (default: false) |
-| `maxResults` | `number` | No | Max results to return (default: 10) |
+| Parameter       | Type      | Required | Description                            |
+| --------------- | --------- | -------- | -------------------------------------- |
+| `path`          | `string`  | Yes      | Absolute path to PDF file              |
+| `query`         | `string`  | Yes      | Search keyword/phrase                  |
+| `caseSensitive` | `boolean` | No       | Case sensitive search (default: false) |
+| `maxResults`    | `number`  | No       | Max results to return (default: 10)    |
 
 **Return Value**:
 
 ```typescript
 {
-  page: number;       // Page number
-  matches: number;    // Matches on this page
-  context: string;    // Text context around match
+  page: number; // Page number
+  matches: number; // Matches on this page
+  context: string; // Text context around match
   position: {
-    start: number;    // Start position
-    end: number;      // End position
-  };
-}[]
+    start: number; // Start position
+    end: number; // End position
+  }
+}
+[];
 ```
 
 **Example**:
 
 ```typescript
 const results = await search_pdf({
-  path: "D:\\contract.pdf",
-  query: "important clause",
+  path: 'D:\\contract.pdf',
+  query: 'important clause',
   caseSensitive: false,
-  maxResults: 20
+  maxResults: 20,
 });
 
-results.forEach(result => {
+results.forEach((result) => {
   console.log(`Page ${result.page}: ${result.context}`);
 });
 ```
@@ -190,18 +195,19 @@ Extract images from PDF (Planned).
 **Status**: 🚧 Not yet implemented
 
 **Planned Syntax**:
+
 ```typescript
 extract_images(params: ExtractImagesParams): Promise<ImageResult[]>
 ```
 
 **Planned Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `path` | `string` | Yes | Absolute path to PDF file |
-| `outputDir` | `string` | Yes | Output directory for images |
-| `format` | `'png' \| 'jpg'` | No | Image format (default: 'png') |
-| `pages` | `number[]` | No | Specific pages to extract from |
+| Parameter   | Type             | Required | Description                    |
+| ----------- | ---------------- | -------- | ------------------------------ |
+| `path`      | `string`         | Yes      | Absolute path to PDF file      |
+| `outputDir` | `string`         | Yes      | Output directory for images    |
+| `format`    | `'png' \| 'jpg'` | No       | Image format (default: 'png')  |
+| `pages`     | `number[]`       | No       | Specific pages to extract from |
 
 ---
 
@@ -212,6 +218,7 @@ Get table of contents from PDF (Planned).
 **Status**: 🚧 Not yet implemented
 
 **Planned Syntax**:
+
 ```typescript
 get_toc(params: GetTOCParams): Promise<TOCEntry[]>
 ```
@@ -260,12 +267,12 @@ const parser = new PDFParser({
   cache: {
     enabled: true,
     maxSize: 100,
-    ttl: 3600000 // 1 hour
+    ttl: 3600000, // 1 hour
   },
   security: {
     maxFileSize: 52428800, // 50MB
-    allowedPaths: ['D:\\Documents', 'D:\\Projects']
-  }
+    allowedPaths: ['D:\\Documents', 'D:\\Projects'],
+  },
 });
 ```
 
@@ -329,19 +336,19 @@ import { PDFParser } from '@parseflow/core';
 
 async function processPDF() {
   const parser = new PDFParser();
-  
+
   // Get metadata
   const metadata = await parser.getMetadata('document.pdf');
   console.log(`Pages: ${metadata.pageCount}`);
-  
+
   // Extract text
   const text = await parser.extractText('document.pdf');
   console.log(text);
-  
+
   // Search
   const results = await parser.search('document.pdf', 'keyword');
   console.log(`Found ${results.length} results`);
-  
+
   // Extract specific page
   const page1 = await parser.extractPage('document.pdf', 1);
   console.log(page1);
@@ -354,17 +361,17 @@ async function processPDF() {
 
 ### 3.1 Environment Variables
 
-| Variable | Type | Default | Description |
-|----------|------|---------|-------------|
-| `PARSEFLOW_CACHE_DIR` | `string` | `.cache` | Cache directory |
-| `PARSEFLOW_CACHE_ENABLED` | `boolean` | `true` | Enable caching |
-| `PARSEFLOW_CACHE_MAX_SIZE` | `number` | `50` | Max cached items |
-| `PARSEFLOW_CACHE_TTL` | `number` | `3600000` | Cache TTL (ms) |
-| `PARSEFLOW_MAX_FILE_SIZE` | `number` | `52428800` | Max file size (bytes) |
-| `PARSEFLOW_ALLOWED_PATHS` | `string` | `""` | Allowed paths (semicolon-separated) |
-| `LOG_LEVEL` | `string` | `info` | Log level (error/warn/info/debug) |
-| `PARSEFLOW_LOG_FILE` | `string` | `""` | Log file path |
-| `PARSEFLOW_ERROR_LOG_FILE` | `string` | `""` | Error log file path |
+| Variable                   | Type      | Default    | Description                         |
+| -------------------------- | --------- | ---------- | ----------------------------------- |
+| `PARSEFLOW_CACHE_DIR`      | `string`  | `.cache`   | Cache directory                     |
+| `PARSEFLOW_CACHE_ENABLED`  | `boolean` | `true`     | Enable caching                      |
+| `PARSEFLOW_CACHE_MAX_SIZE` | `number`  | `50`       | Max cached items                    |
+| `PARSEFLOW_CACHE_TTL`      | `number`  | `3600000`  | Cache TTL (ms)                      |
+| `PARSEFLOW_MAX_FILE_SIZE`  | `number`  | `52428800` | Max file size (bytes)               |
+| `PARSEFLOW_ALLOWED_PATHS`  | `string`  | `""`       | Allowed paths (semicolon-separated) |
+| `LOG_LEVEL`                | `string`  | `info`     | Log level (error/warn/info/debug)   |
+| `PARSEFLOW_LOG_FILE`       | `string`  | `""`       | Log file path                       |
+| `PARSEFLOW_ERROR_LOG_FILE` | `string`  | `""`       | Error log file path                 |
 
 **Example `.env`**:
 
@@ -543,7 +550,7 @@ import { PDFParser, FileNotFoundError, InvalidPDFError } from '@parseflow/core';
 
 async function safeParse(path: string) {
   const parser = new PDFParser();
-  
+
   try {
     return await parser.extractText(path);
   } catch (error) {
@@ -573,31 +580,31 @@ import { join } from 'path';
 async function batchProcess(directory: string) {
   const parser = new PDFParser();
   const files = await readdir(directory);
-  const pdfFiles = files.filter(f => f.endsWith('.pdf'));
-  
+  const pdfFiles = files.filter((f) => f.endsWith('.pdf'));
+
   const results = [];
-  
+
   for (const file of pdfFiles) {
     try {
       const path = join(directory, file);
       const text = await parser.extractText(path);
       const metadata = await parser.getMetadata(path);
-      
+
       results.push({
         file,
         textLength: text.length,
         pageCount: metadata.metadata.pageCount,
-        success: true
+        success: true,
       });
     } catch (error) {
       results.push({
         file,
         error: error.message,
-        success: false
+        success: false,
       });
     }
   }
-  
+
   return results;
 }
 ```
@@ -611,15 +618,15 @@ import { createWriteStream } from 'fs';
 async function streamExtract(pdfPath: string, outputPath: string) {
   const parser = new PDFParser();
   const writeStream = createWriteStream(outputPath);
-  
+
   const metadata = await parser.getMetadata(pdfPath);
   const totalPages = metadata.metadata.pageCount;
-  
+
   for (let page = 1; page <= totalPages; page++) {
     const text = await parser.extractPage(pdfPath, page);
     writeStream.write(`\n\n--- Page ${page} ---\n\n${text}`);
   }
-  
+
   writeStream.end();
 }
 ```
@@ -631,12 +638,12 @@ import { PDFParser, CacheManager } from '@parseflow/core';
 
 class RedisCache implements CacheManager {
   private redis: RedisClient;
-  
+
   async get(key: string): Promise<any> {
     const value = await this.redis.get(key);
     return value ? JSON.parse(value) : null;
   }
-  
+
   async set(key: string, value: any, ttl?: number): Promise<void> {
     const serialized = JSON.stringify(value);
     if (ttl) {
@@ -645,14 +652,14 @@ class RedisCache implements CacheManager {
       await this.redis.set(key, serialized);
     }
   }
-  
+
   async delete(key: string): Promise<void> {
     await this.redis.del(key);
   }
 }
 
 const parser = new PDFParser({
-  cache: new RedisCache()
+  cache: new RedisCache(),
 });
 ```
 
@@ -665,7 +672,7 @@ const parser = new PDFParser({
 ```typescript
 // Good: Enable cache for repeated access
 const parser = new PDFParser({
-  cache: { enabled: true, maxSize: 100 }
+  cache: { enabled: true, maxSize: 100 },
 });
 
 // Process same file multiple times
@@ -692,12 +699,10 @@ import { PDFParser } from '@parseflow/core';
 
 async function parallelProcess(files: string[]) {
   const parser = new PDFParser();
-  
+
   // Process in parallel (be mindful of memory)
-  const results = await Promise.all(
-    files.map(file => parser.extractText(file))
-  );
-  
+  const results = await Promise.all(files.map((file) => parser.extractText(file)));
+
   return results;
 }
 ```
@@ -707,11 +712,13 @@ async function parallelProcess(files: string[]) {
 ## 8. References
 
 ### Related Documentation
+
 - [Architecture](architecture.md) - System architecture
 - [Development Guide](development.md) - Development setup
 - [Examples](../guides/examples.md) - Usage examples
 
 ### External Resources
+
 - [MCP Protocol](https://modelcontextprotocol.io) - MCP specification
 - [pdf-parse](https://www.npmjs.com/package/pdf-parse) - PDF parsing library
 

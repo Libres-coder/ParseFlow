@@ -221,6 +221,7 @@ ParseFlow/
 #### packages/mcp-server
 
 MCP 服务器的实现，负责：
+
 - 处理 MCP 协议通信
 - 路由 Resource 和 Tool 请求
 - 错误处理和日志记录
@@ -229,6 +230,7 @@ MCP 服务器的实现，负责：
 #### packages/pdf-parser-core
 
 PDF 解析核心库，可独立使用，负责：
+
 - PDF 文件读取和解析
 - 文本、图片、元数据提取
 - 搜索功能实现
@@ -375,9 +377,7 @@ describe('PDFParser', () => {
     });
 
     it('should throw error for non-existent file', async () => {
-      await expect(
-        parser.extractText('non-existent.pdf')
-      ).rejects.toThrow('File not found');
+      await expect(parser.extractText('non-existent.pdf')).rejects.toThrow('File not found');
     });
 
     it('should extract specific page', async () => {
@@ -412,15 +412,18 @@ describe('MCP Server Integration', () => {
   beforeAll(async () => {
     transport = new StdioClientTransport({
       command: 'node',
-      args: ['../../dist/index.js']
+      args: ['../../dist/index.js'],
     });
 
-    client = new Client({
-      name: 'test-client',
-      version: '1.0.0'
-    }, {
-      capabilities: {}
-    });
+    client = new Client(
+      {
+        name: 'test-client',
+        version: '1.0.0',
+      },
+      {
+        capabilities: {},
+      }
+    );
 
     await client.connect(transport);
   });
@@ -432,15 +435,15 @@ describe('MCP Server Integration', () => {
   it('should list available tools', async () => {
     const result = await client.listTools();
     expect(result.tools).toHaveLength(5);
-    expect(result.tools.map(t => t.name)).toContain('extract_text');
+    expect(result.tools.map((t) => t.name)).toContain('extract_text');
   });
 
   it('should extract text using tool', async () => {
     const result = await client.callTool({
       name: 'extract_text',
       arguments: {
-        path: './tests/fixtures/sample.pdf'
-      }
+        path: './tests/fixtures/sample.pdf',
+      },
     });
 
     expect(result.content).toBeTruthy();
@@ -452,6 +455,7 @@ describe('MCP Server Integration', () => {
 ### 4.4 测试覆盖率
 
 目标覆盖率：
+
 - 语句覆盖率：> 80%
 - 分支覆盖率：> 75%
 - 函数覆盖率：> 80%
@@ -480,6 +484,7 @@ mcp-inspector node dist/index.js
 ```
 
 浏览器打开 http://localhost:5173，可以：
+
 - 查看 Resources 列表
 - 测试 Tools 调用
 - 查看请求/响应日志
@@ -508,8 +513,8 @@ logger.error('Failed to parse PDF', { error, path });
 const parser = new PDFParser({
   logging: {
     level: 'debug',
-    enablePerformance: true
-  }
+    enablePerformance: true,
+  },
 });
 
 // 性能分析
@@ -523,7 +528,7 @@ await parser.extractText('large.pdf');
 const after = process.memoryUsage();
 console.log('Memory usage:', {
   heapUsed: (after.heapUsed - before.heapUsed) / 1024 / 1024,
-  external: (after.external - before.external) / 1024 / 1024
+  external: (after.external - before.external) / 1024 / 1024,
 });
 ```
 
@@ -532,6 +537,7 @@ console.log('Memory usage:', {
 #### Q: MCP 服务器无响应
 
 **解决方案：**
+
 ```bash
 # 检查日志
 tail -f ~/.parseflow/logs/parseflow.log
@@ -547,6 +553,7 @@ node dist/index.js
 #### Q: PDF 解析失败
 
 **解决方案：**
+
 ```typescript
 // 检查 PDF 是否有效
 import pdf from 'pdf-parse';
@@ -563,6 +570,7 @@ try {
 #### Q: 缓存问题
 
 **解决方案：**
+
 ```bash
 # 清除缓存
 rm -rf ~/.parseflow/cache/*
@@ -679,10 +687,10 @@ import LRU from 'lru-cache';
 const cache = new LRU({
   max: 100,
   maxSize: 100 * 1024 * 1024, // 100MB
-  ttl: 1000 * 60 * 60,         // 1 小时
+  ttl: 1000 * 60 * 60, // 1 小时
   sizeCalculation: (value) => {
     return Buffer.byteLength(JSON.stringify(value));
-  }
+  },
 });
 ```
 
@@ -696,10 +704,10 @@ async function extractPagesParallel(
   pdfPath: string,
   pages: number[]
 ): Promise<Map<number, string>> {
-  const workers = pages.map(page => {
+  const workers = pages.map((page) => {
     return new Promise((resolve, reject) => {
       const worker = new Worker('./worker.js', {
-        workerData: { pdfPath, page }
+        workerData: { pdfPath, page },
       });
       worker.on('message', resolve);
       worker.on('error', reject);

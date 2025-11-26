@@ -9,23 +9,29 @@
 ParseFlow supports two IDEs:
 
 #### Option A: Windsurf (Recommended, Auto-detect)
+
 **Config File Location**:
+
 ```
 C:\Users\<your-username>\.codeium\windsurf\mcp_config.json
 ```
 
 **Open File**:
+
 ```powershell
 notepad C:\Users\<your-username>\.codeium\windsurf\mcp_config.json
 ```
 
 #### Option B: Cursor (Requires Explicit Tool Call in Agent Mode)
+
 **Config File Location**:
+
 ```
 C:\Users\<your-username>\.cursor\mcp.json
 ```
 
 **Open File**:
+
 ```powershell
 notepad C:\Users\<your-username>\.cursor\mcp.json
 ```
@@ -90,6 +96,7 @@ Use parseflow's get_metadata tool to check how many pages D:\report.pdf has
 ```
 
 ⚠️ **Cursor Notes**:
+
 - Must be in Composer's Agent Mode
 - Must explicitly specify parseflow tool usage
 
@@ -122,6 +129,7 @@ You should see server startup logs. Press `Ctrl+C` to stop.
 ### Check 2: Check Windsurf Logs
 
 Windsurf logs are usually in:
+
 ```
 %APPDATA%\Windsurf\logs
 ```
@@ -150,26 +158,31 @@ Ensure core functionality works.
 ## 💡 Common Use Cases
 
 ### Scenario 1: Quick PDF Info
+
 ```
 You: What's the basic info of D:\report.pdf?
 ```
 
 ### Scenario 2: Extract Specific Content
+
 ```
 You: Extract pages 3-5 from D:\contract.pdf
 ```
 
 ### Scenario 3: Search Keywords
+
 ```
 You: Find all "important notes" in D:\manual.pdf
 ```
 
 ### Scenario 4: Summarize & Analyze
+
 ```
 You: Summarize the main points of D:\article.pdf
 ```
 
 ### Scenario 5: Compare Documents
+
 ```
 You: Compare differences between D:\v1.pdf and D:\v2.pdf
 ```

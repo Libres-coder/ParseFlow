@@ -24,12 +24,12 @@ AI invokes tools
 
 ### Pros & Cons
 
-| Pros | Cons |
-|------|------|
-| ✅ Full control | ❌ Complex manual setup |
-| ✅ High flexibility | ❌ Poor user experience |
+| Pros                    | Cons                     |
+| ----------------------- | ------------------------ |
+| ✅ Full control         | ❌ Complex manual setup  |
+| ✅ High flexibility     | ❌ Poor user experience  |
 | ✅ Good for development | ❌ Hardcoded path issues |
-| ✅ No dependencies | ❌ Inconvenient updates |
+| ✅ No dependencies      | ❌ Inconvenient updates  |
 
 ### Cursor Agent Mode Requirement Analysis
 
@@ -40,21 +40,23 @@ This is a characteristic of Cursor's MCP implementation, not a limitation:
 #### Technical Reasons
 
 1. **Different MCP Integration Levels**
+
    ```
    Windsurf:
    ├── Chat Mode: ✅ MCP integrated
    └── Agent Mode: ✅ MCP integrated
-   
+
    Cursor (Current Version):
    ├── Chat Mode: ❌ No MCP integration
    └── Agent Mode: ✅ MCP integrated
    ```
 
 2. **Tool Invocation Mechanism**
+
    ```
    Windsurf Cascade:
    - Context analysis → Auto tool selection → Call MCP
-   
+
    Cursor Agent:
    - Explicit instruction → Tool matching → Call MCP
    ```
@@ -65,12 +67,12 @@ This is a characteristic of Cursor's MCP implementation, not a limitation:
 
 #### Version Evolution
 
-| Cursor Version | MCP Support |
-|----------------|-------------|
-| 0.44.x and earlier | ❌ Not supported |
-| 0.45.x | ✅ Agent mode support |
-| 1.0+ | ✅ Enhanced Agent mode |
-| Future versions? | May support Chat mode |
+| Cursor Version     | MCP Support            |
+| ------------------ | ---------------------- |
+| 0.44.x and earlier | ❌ Not supported       |
+| 0.45.x             | ✅ Agent mode support  |
+| 1.0+               | ✅ Enhanced Agent mode |
+| Future versions?   | May support Chat mode  |
 
 **Conclusion**: This is an implementation difference, not a technical limitation. Cursor may improve in the future.
 
@@ -99,6 +101,7 @@ ParseFlow MCP Server
 #### 1. Preparation
 
 **Required**:
+
 - [ ] Publish to npm (public package)
 - [ ] Prepare package.json
   - Name: `@parseflow/mcp-server`
@@ -129,6 +132,7 @@ npm view @parseflow/mcp-server
 **Repository**: `modelcontextprotocol/servers`
 
 **Steps**:
+
 1. Fork repository
 2. Create server directory structure
 3. Add server configuration
@@ -137,6 +141,7 @@ npm view @parseflow/mcp-server
 6. Await review
 
 **Configuration Example**:
+
 ```json
 {
   "name": "parseflow",
@@ -151,13 +156,13 @@ npm view @parseflow/mcp-server
 
 ### Advantages
 
-| Advantage | Description |
-|-----------|-------------|
-| ✅ One-click install | No manual configuration |
-| ✅ Official recognition | Listed in marketplace |
-| ✅ Auto-updates | npm version management |
-| ✅ Wider reach | Easier discovery |
-| ✅ Better UX | Professional impression |
+| Advantage               | Description             |
+| ----------------------- | ----------------------- |
+| ✅ One-click install    | No manual configuration |
+| ✅ Official recognition | Listed in marketplace   |
+| ✅ Auto-updates         | npm version management  |
+| ✅ Wider reach          | Easier discovery        |
+| ✅ Better UX            | Professional impression |
 
 ### Considerations
 
@@ -177,6 +182,7 @@ Develop a VSCode extension to improve installation and management experience.
 ### Technical Feasibility
 
 **✅ Completely Feasible**:
+
 - Windsurf and Cursor both based on VSCode
 - Both support loading VSCode extensions
 - Extensions can manage MCP configurations
@@ -230,18 +236,21 @@ Command Palette
 ### Implementation Plan
 
 #### Phase 1: Basic Extension (1-2 weeks)
+
 - [ ] Extension scaffold
 - [ ] Basic UI
 - [ ] Config file management
 - [ ] Status display
 
 #### Phase 2: Server Management (1 week)
+
 - [ ] Start/stop control
 - [ ] Process monitoring
 - [ ] Log viewer
 - [ ] Error handling
 
 #### Phase 3: Updates & Polish (1 week)
+
 - [ ] Version checking
 - [ ] Auto-update
 - [ ] Documentation
@@ -269,6 +278,7 @@ Command Palette
 ```
 
 **Critical Understanding**:
+
 ```
 AI Tool Selection = IDE's Internal AI Layer Decision
 
@@ -324,13 +334,13 @@ This is **product design decision**, not technical constraint.
 
 ### Advantages of Extension Approach
 
-| Advantage | Impact |
-|-----------|--------|
-| ✅ Best installation UX | Significant |
-| ✅ Automatic management | High |
-| ✅ Visual interface | Medium |
-| ✅ Professional appearance | High |
-| ✅ Easy updates | High |
+| Advantage                  | Impact      |
+| -------------------------- | ----------- |
+| ✅ Best installation UX    | Significant |
+| ✅ Automatic management    | High        |
+| ✅ Visual interface        | Medium      |
+| ✅ Professional appearance | High        |
+| ✅ Easy updates            | High        |
 
 ### Considerations
 
@@ -345,16 +355,19 @@ This is **product design decision**, not technical constraint.
 ## 🔄 Method C: Other Distribution Channels
 
 ### C1: GitHub Releases
+
 - Binary packages
 - Installation scripts
 - Release notes
 
 ### C2: Docker Image
+
 - Pre-configured container
 - Easy deployment
 - Cross-platform
 
 ### C3: Homebrew/Chocolatey
+
 - OS package managers
 - Simple installation
 - Auto-updates
@@ -363,50 +376,58 @@ This is **product design decision**, not technical constraint.
 
 ## 📊 Comparison Matrix
 
-| Method | Installation | Updates | UX | Effort | Priority |
-|--------|--------------|---------|----|----|----------|
-| **Manual Config** | ❌ Complex | ❌ Manual | ⭐⭐ | ✅ Low | Current |
-| **MCP Marketplace** | ✅ One-click | ✅ Auto | ⭐⭐⭐⭐⭐ | ⭐⭐ Medium | ⭐⭐⭐⭐⭐ |
-| **VSCode Extension** | ✅ One-click | ✅ Auto | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ High | ⭐⭐⭐⭐ |
-| **GitHub Releases** | ⭐ Script | ⭐ Manual | ⭐⭐⭐ | ⭐ Low | ⭐⭐ |
-| **Docker** | ⭐⭐⭐ Container | ⭐⭐ Image | ⭐⭐⭐ | ⭐⭐ Medium | ⭐⭐ |
+| Method               | Installation     | Updates    | UX         | Effort      | Priority   |
+| -------------------- | ---------------- | ---------- | ---------- | ----------- | ---------- |
+| **Manual Config**    | ❌ Complex       | ❌ Manual  | ⭐⭐       | ✅ Low      | Current    |
+| **MCP Marketplace**  | ✅ One-click     | ✅ Auto    | ⭐⭐⭐⭐⭐ | ⭐⭐ Medium | ⭐⭐⭐⭐⭐ |
+| **VSCode Extension** | ✅ One-click     | ✅ Auto    | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ High | ⭐⭐⭐⭐   |
+| **GitHub Releases**  | ⭐ Script        | ⭐ Manual  | ⭐⭐⭐     | ⭐ Low      | ⭐⭐       |
+| **Docker**           | ⭐⭐⭐ Container | ⭐⭐ Image | ⭐⭐⭐     | ⭐⭐ Medium | ⭐⭐       |
 
 ---
 
 ## 🚀 Recommended Roadmap
 
 ### Phase 1: Current (v1.0) ✅
+
 - Manual configuration
 - Complete documentation
 - Helper scripts
 
 ### Phase 2: Community Distribution
+
 **Priority**: ⭐⭐⭐⭐⭐
 
 **Tasks**:
+
 1. Publish to npm
 2. Submit to MCP Marketplace
 3. Await review
 
 **Benefits**:
+
 - ✅ One-click installation
 - ✅ Official recognition
 - ✅ Wider distribution
 
 ### Phase 3: Extension Enhancement
+
 **Priority**: ⭐⭐⭐⭐
 
 **Tasks**:
+
 1. Develop VSCode extension
 2. Auto configuration management
 3. Status monitoring UI
 
 **Benefits**:
+
 - ✅ Best installation experience
 - ✅ Auto version management
 - ✅ Professional image
 
 ### Phase 4: Future Considerations
+
 - Claude Desktop support
 - Other AI IDE integrations
 - Enterprise features
@@ -420,16 +441,19 @@ This is **product design decision**, not technical constraint.
 **A: No, this is not possible.**
 
 **Reason**:
+
 - AI's tool selection is IDE's internal logic
 - Extensions cannot modify AI behavior
 - Only IDE developers can change this
 
 **What's Possible**:
+
 - ✅ Improve installation experience
 - ✅ Simplify configuration
 - ✅ Better UX
 
 **What's Not Possible**:
+
 - ❌ Change AI's decision-making
 - ❌ Auto-invoke tools in Cursor
 - ❌ Bypass Agent mode requirement
@@ -439,6 +463,7 @@ This is **product design decision**, not technical constraint.
 **A: Possibly, but uncertain.**
 
 Cursor team may:
+
 - ✅ Extend MCP to Chat mode
 - ✅ Improve tool auto-selection
 - ✅ Better MCP integration
@@ -450,6 +475,7 @@ But timeline and decisions are entirely up to Cursor team.
 **A: MCP Marketplace + VSCode Extension**
 
 Recommended sequence:
+
 1. **First**: MCP Marketplace (highest priority)
 2. **Then**: VSCode Extension (better UX)
 3. **Optional**: Other channels as needed

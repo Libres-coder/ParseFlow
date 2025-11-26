@@ -106,39 +106,27 @@ class ParseFlowServer {
   private server: Server;
   private resourceManager: ResourceManager;
   private toolManager: ToolManager;
-  
+
   constructor(config: ServerConfig) {
     this.server = new Server(
-      { name: "parseflow", version: "1.0.0" },
+      { name: 'parseflow', version: '1.0.0' },
       { capabilities: { resources: {}, tools: {} } }
     );
     this.setupHandlers();
   }
-  
+
   private setupHandlers(): void {
     // Resource 处理
-    this.server.setRequestHandler(
-      ListResourcesRequestSchema,
-      this.handleListResources.bind(this)
-    );
-    
-    this.server.setRequestHandler(
-      ReadResourceRequestSchema,
-      this.handleReadResource.bind(this)
-    );
-    
+    this.server.setRequestHandler(ListResourcesRequestSchema, this.handleListResources.bind(this));
+
+    this.server.setRequestHandler(ReadResourceRequestSchema, this.handleReadResource.bind(this));
+
     // Tool 处理
-    this.server.setRequestHandler(
-      ListToolsRequestSchema,
-      this.handleListTools.bind(this)
-    );
-    
-    this.server.setRequestHandler(
-      CallToolRequestSchema,
-      this.handleCallTool.bind(this)
-    );
+    this.server.setRequestHandler(ListToolsRequestSchema, this.handleListTools.bind(this));
+
+    this.server.setRequestHandler(CallToolRequestSchema, this.handleCallTool.bind(this));
   }
-  
+
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
@@ -147,6 +135,7 @@ class ParseFlowServer {
 ```
 
 **通信方式：**
+
 - 使用 stdio (标准输入输出) 通信
 - 支持 JSON-RPC 2.0 协议
 - 异步非阻塞处理
@@ -159,12 +148,12 @@ class ParseFlowServer {
 
 ```typescript
 interface PDFResourceURI {
-  scheme: "pdf";           // 协议
-  path: string;            // 文件路径
+  scheme: 'pdf'; // 协议
+  path: string; // 文件路径
   query?: {
-    page?: number;         // 页码
-    range?: string;        // 页码范围 "1-10"
-    section?: string;      // 章节名
+    page?: number; // 页码
+    range?: string; // 页码范围 "1-10"
+    section?: string; // 章节名
   };
 }
 
@@ -180,9 +169,9 @@ interface PDFResourceURI {
 ```typescript
 interface PDFResource {
   uri: string;
-  name: string;           // 显示名称
-  description?: string;   // 描述
-  mimeType: "application/pdf";
+  name: string; // 显示名称
+  description?: string; // 描述
+  mimeType: 'application/pdf';
   metadata?: {
     pageCount: number;
     author?: string;
@@ -208,30 +197,30 @@ interface PDFTool {
 // 工具列表
 const TOOLS: PDFTool[] = [
   {
-    name: "extract_text",
-    description: "从 PDF 提取文本内容",
+    name: 'extract_text',
+    description: '从 PDF 提取文本内容',
     inputSchema: {
-      type: "object",
+      type: 'object',
       properties: {
-        path: { type: "string", description: "PDF 文件路径" },
-        page: { type: "number", description: "页码（可选）" },
-        range: { type: "string", description: "页码范围（可选）" }
+        path: { type: 'string', description: 'PDF 文件路径' },
+        page: { type: 'number', description: '页码（可选）' },
+        range: { type: 'string', description: '页码范围（可选）' },
       },
-      required: ["path"]
-    }
+      required: ['path'],
+    },
   },
   {
-    name: "search_pdf",
-    description: "在 PDF 中搜索关键词",
+    name: 'search_pdf',
+    description: '在 PDF 中搜索关键词',
     inputSchema: {
-      type: "object",
+      type: 'object',
       properties: {
-        path: { type: "string" },
-        query: { type: "string", description: "搜索关键词" },
-        caseSensitive: { type: "boolean", default: false }
+        path: { type: 'string' },
+        query: { type: 'string', description: '搜索关键词' },
+        caseSensitive: { type: 'boolean', default: false },
       },
-      required: ["path", "query"]
-    }
+      required: ['path', 'query'],
+    },
   },
   // ... 其他工具
 ];
@@ -247,12 +236,12 @@ const TOOLS: PDFTool[] = [
 class PDFParser {
   private cache: CacheManager;
   private config: ParserConfig;
-  
+
   constructor(config?: ParserConfig) {
     this.cache = new CacheManager(config?.cache);
     this.config = { ...DEFAULT_CONFIG, ...config };
   }
-  
+
   // 主要方法
   async extractText(path: string, options?: ExtractOptions): Promise<string>;
   async extractPage(path: string, page: number): Promise<string>;
@@ -269,7 +258,6 @@ class PDFParser {
 1. **pdf-parse**（主要）
    - 轻量级，易于使用
    - 适合文本提取
-   
 2. **pdfjs-dist**（备用）
    - Mozilla 维护，功能强大
    - 支持更复杂的 PDF 结构
@@ -289,12 +277,12 @@ ParseFlow 实现 MCP 1.0 标准，支持以下能力：
 ```typescript
 const SERVER_CAPABILITIES = {
   resources: {
-    subscribe: false,      // 暂不支持订阅
-    listChanged: false
+    subscribe: false, // 暂不支持订阅
+    listChanged: false,
   },
   tools: {
-    listChanged: false
-  }
+    listChanged: false,
+  },
 };
 ```
 
@@ -351,7 +339,7 @@ enum ParseFlowErrorCode {
   PERMISSION_DENIED = -32004,
   FILE_TOO_LARGE = -32005,
   UNSUPPORTED_FORMAT = -32006,
-  CACHE_ERROR = -32007
+  CACHE_ERROR = -32007,
 }
 ```
 
@@ -382,9 +370,9 @@ enum ParseFlowErrorCode {
 
 ```typescript
 enum ExtractionStrategy {
-  RAW = "raw",           // 原始文本，保留所有空格和换行
-  FORMATTED = "formatted", // 格式化，保留段落结构
-  CLEAN = "clean"        // 清理，移除多余空白
+  RAW = 'raw', // 原始文本，保留所有空格和换行
+  FORMATTED = 'formatted', // 格式化，保留段落结构
+  CLEAN = 'clean', // 清理，移除多余空白
 }
 
 interface ExtractOptions {
@@ -402,27 +390,27 @@ class TextExtractor {
   async extract(buffer: Buffer, options: ExtractOptions): Promise<string> {
     const data = await pdf(buffer);
     let text = data.text;
-    
+
     switch (options.strategy) {
       case ExtractionStrategy.RAW:
         return text;
-      
+
       case ExtractionStrategy.FORMATTED:
         return this.formatText(text);
-      
+
       case ExtractionStrategy.CLEAN:
         return this.cleanText(text);
     }
   }
-  
+
   private formatText(text: string): string {
     // 保留段落，规范化空白
     return text
       .split('\n\n')
-      .map(para => para.replace(/\s+/g, ' ').trim())
+      .map((para) => para.replace(/\s+/g, ' ').trim())
       .join('\n\n');
   }
-  
+
   private cleanText(text: string): string {
     // 移除多余空白，合并行
     return text.replace(/\s+/g, ' ').trim();
@@ -469,10 +457,10 @@ interface PDFMetadata {
 ```typescript
 interface SearchResult {
   page: number;
-  snippet: string;        // 匹配的文本片段
-  context: string;        // 上下文（前后各 50 字符）
-  position: number;       // 在页面中的位置
-  score?: number;         // 相关性评分（语义搜索）
+  snippet: string; // 匹配的文本片段
+  context: string; // 上下文（前后各 50 字符）
+  position: number; // 在页面中的位置
+  score?: number; // 相关性评分（语义搜索）
 }
 
 class SearchEngine {
@@ -482,18 +470,12 @@ class SearchEngine {
     query: string,
     options: SearchOptions
   ): Promise<SearchResult[]> {
-    const regex = new RegExp(
-      options.caseSensitive ? query : query.toLowerCase(),
-      'g'
-    );
+    const regex = new RegExp(options.caseSensitive ? query : query.toLowerCase(), 'g');
     // ... 实现
   }
-  
+
   // 语义搜索（可选，使用向量嵌入）
-  async semanticSearch(
-    text: string,
-    query: string
-  ): Promise<SearchResult[]> {
+  async semanticSearch(text: string, query: string): Promise<SearchResult[]> {
     // 使用 transformers.js 或调用嵌入 API
     // ... 实现
   }
@@ -506,17 +488,14 @@ class SearchEngine {
 
 ```typescript
 class ImageExtractor {
-  async extractImages(
-    pdfPath: string,
-    outputDir: string
-  ): Promise<string[]> {
+  async extractImages(pdfPath: string, outputDir: string): Promise<string[]> {
     const doc = await pdfjsLib.getDocument(pdfPath).promise;
     const imagePaths: string[] = [];
-    
+
     for (let i = 1; i <= doc.numPages; i++) {
       const page = await doc.getPage(i);
       const ops = await page.getOperatorList();
-      
+
       // 查找图像操作符
       for (let j = 0; j < ops.fnArray.length; j++) {
         if (ops.fnArray[j] === pdfjsLib.OPS.paintImageXObject) {
@@ -527,7 +506,7 @@ class ImageExtractor {
         }
       }
     }
-    
+
     return imagePaths;
   }
 }
@@ -579,24 +558,24 @@ class ImageExtractor {
 
 ```typescript
 class CacheManager {
-  private memoryCache: LRUCache<string, CachedData>;  // 内存缓存
-  private diskCache: DiskCache;                       // 磁盘缓存
-  
+  private memoryCache: LRUCache<string, CachedData>; // 内存缓存
+  private diskCache: DiskCache; // 磁盘缓存
+
   async get(key: string): Promise<CachedData | null> {
     // 先查内存
     let data = this.memoryCache.get(key);
     if (data) return data;
-    
+
     // 再查磁盘
     data = await this.diskCache.get(key);
     if (data) {
       this.memoryCache.set(key, data);
       return data;
     }
-    
+
     return null;
   }
-  
+
   async set(key: string, data: CachedData, ttl?: number): Promise<void> {
     // 同时写入内存和磁盘
     this.memoryCache.set(key, data);
@@ -630,22 +609,17 @@ function generateCacheKey(path: string, options: ExtractOptions): string {
 ```typescript
 class ParallelProcessor {
   private workers: Worker[];
-  
-  async extractPages(
-    pdfPath: string,
-    pages: number[]
-  ): Promise<Map<number, string>> {
-    const tasks = pages.map(page => ({
+
+  async extractPages(pdfPath: string, pages: number[]): Promise<Map<number, string>> {
+    const tasks = pages.map((page) => ({
       type: 'extract',
       path: pdfPath,
-      page
+      page,
     }));
-    
+
     // 分配到多个 Worker
-    const results = await Promise.all(
-      tasks.map(task => this.executeInWorker(task))
-    );
-    
+    const results = await Promise.all(tasks.map((task) => this.executeInWorker(task)));
+
     return new Map(results.map((r, i) => [pages[i], r]));
   }
 }
@@ -658,7 +632,7 @@ class ParallelProcessor {
 ```typescript
 async function streamExtract(pdfPath: string): AsyncGenerator<string> {
   const doc = await pdfjsLib.getDocument(pdfPath).promise;
-  
+
   for (let i = 1; i <= doc.numPages; i++) {
     const page = await doc.getPage(i);
     const content = await page.getTextContent();
@@ -673,7 +647,7 @@ async function streamExtract(pdfPath: string): AsyncGenerator<string> {
 ```typescript
 class MemoryMonitor {
   private maxMemoryUsage = 500 * 1024 * 1024; // 500MB
-  
+
   checkMemory(): void {
     const usage = process.memoryUsage();
     if (usage.heapUsed > this.maxMemoryUsage) {
@@ -694,24 +668,22 @@ class MemoryMonitor {
 ```typescript
 class PathValidator {
   private allowedPaths: string[];
-  
+
   validate(path: string): boolean {
     const resolved = path.resolve(path);
-    
+
     // 检查路径遍历攻击
     if (resolved.includes('..')) {
       throw new Error('Invalid path: contains ".."');
     }
-    
+
     // 检查是否在白名单目录
-    const isAllowed = this.allowedPaths.some(allowed =>
-      resolved.startsWith(allowed)
-    );
-    
+    const isAllowed = this.allowedPaths.some((allowed) => resolved.startsWith(allowed));
+
     if (!isAllowed) {
       throw new Error('Access denied: path not in allowed list');
     }
-    
+
     return true;
   }
 }
@@ -738,7 +710,7 @@ import { VM } from 'vm2';
 
 class SandboxExecutor {
   private vm: VM;
-  
+
   constructor() {
     this.vm = new VM({
       timeout: 5000,
@@ -746,7 +718,7 @@ class SandboxExecutor {
       // 禁止访问文件系统、网络等
     });
   }
-  
+
   execute(code: string): any {
     return this.vm.run(code);
   }
@@ -770,12 +742,12 @@ interface ParserPlugin {
 
 class PluginManager {
   private plugins: Map<string, ParserPlugin> = new Map();
-  
+
   register(plugin: ParserPlugin): void {
     plugin.init(this.parser);
     this.plugins.set(plugin.name, plugin);
   }
-  
+
   get(name: string): ParserPlugin | undefined {
     return this.plugins.get(name);
   }
@@ -792,8 +764,8 @@ interface Extractor {
 
 // 示例：表格提取器
 class TableExtractor implements Extractor {
-  name = "table";
-  
+  name = 'table';
+
   async extract(buffer: Buffer): Promise<Table[]> {
     // 使用 tabula-js 或自定义算法
     // ...
@@ -817,7 +789,7 @@ class WordParser implements DocumentParser {
   canHandle(mimeType: string): boolean {
     return mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
   }
-  
+
   async parse(buffer: Buffer): Promise<ParsedDocument> {
     // 使用 mammoth.js
   }
@@ -835,10 +807,7 @@ import winston from 'winston';
 
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
+  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
   transports: [
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
     new winston.transports.File({ filename: 'combined.log' }),
@@ -870,6 +839,7 @@ class PerformanceTracker {
 ParseFlow 采用分层架构，清晰分离 MCP 协议层、业务逻辑层和解析引擎层。通过合理的抽象和接口设计，实现了高内聚低耦合，便于扩展和维护。
 
 **关键技术亮点：**
+
 - ✅ 原生 MCP 支持，无缝集成 Windsurf
 - ✅ 多层缓存，高性能处理
 - ✅ 完善的安全机制
