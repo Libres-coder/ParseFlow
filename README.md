@@ -431,50 +431,53 @@ npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
 
 ---
 
-## 🚀 未来计划
+## 🚀 开发路线图
 
-### 高优先级
+### 📅 近期目标（1-2 周）
 
-#### ⭐ MCP Marketplace 发布
+**当前状态**: ✅ CI/CD 完成 | ✅ 文档完善
 
-让用户一键安装 ParseFlow！
+**下一步**:
+1. ⭐ **扩展测试覆盖** - 目标 85%+
+   - Extractors 完整测试
+   - Search 模块测试
+   - 错误处理测试
 
-**计划**：
+2. ⭐ **实现核心功能**
+   - 图片提取 (`extractImages`)
+   - 目录提取 (`getTOC`)
 
-- 发布到 npm
-- 提交到官方 MCP Registry
-- 自动安装和配置
+### 📅 中期目标（1-2 月）
 
-**优先级**: ⭐⭐⭐⭐⭐
+3. **性能优化**
+   - 大文件流式处理
+   - 缓存机制
+   - 并发处理
 
-#### ⭐ VSCode 扩展
+4. **发布准备**
+   - 发布到 npm
+   - MCP Marketplace 提交
+   - GitHub Release 自动化
 
-改善安装和使用体验
+5. **功能增强**
+   - PDF 合并/拆分
+   - 水印添加
+   - 表单处理
 
-**功能**：
+### 📅 长期目标（3-6 月）
 
-- 一键安装配置
-- 自动版本管理
-- 状态监控 UI
+6. **生态系统**
+   - CLI 工具 (`@parseflow/cli`)
+   - Web UI
+   - VSCode 扩展
+   - Docker 镜像
 
-**注意**: VSCode 扩展只能改善安装体验，不能改变 AI 的工具选择行为
+7. **高级特性**
+   - OCR 支持（扫描件识别）
+   - AI 文档分析
+   - 更多格式支持
 
-**优先级**: ⭐⭐⭐⭐
-
-### 计划中
-
-- 目录（TOC）提取
-- 图像导出功能
-- 高级搜索功能
-- 性能优化
-
-### 未来考虑
-
-- OCR 支持（扫描件识别）
-- AI 文档分析
-- 更多 IDE 集成
-
-**详细路线图**: [docs/planning/todo.md](docs/planning/todo.md)  
+**完整规划**: [docs/planning/todo.md](docs/planning/todo.md)  
 **技术分析**: [docs/planning/distribution-analysis.md](docs/planning/distribution-analysis.md)
 
 ---
