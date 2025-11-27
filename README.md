@@ -231,6 +231,7 @@ D:\example.pdf 有多少页？
 - [API 文档](docs/development/api.md) - 完整 API 参考
 - [架构设计](docs/development/architecture.md) - 系统架构说明
 - [开发指南](docs/development/development.md) - 如何参与开发
+- [测试指南](docs/development/testing.md) - 测试策略和集成测试 PDF 说明 ⭐
 - [命名规范](docs/development/naming-conventions.md) - 代码规范
 
 ### 📋 项目规划
@@ -319,6 +320,51 @@ pnpm lint
 # 构建
 pnpm build
 ```
+
+### 测试说明
+
+#### 📊 测试概况
+
+```
+总测试数:   22 tests
+单元测试:   14 tests (必须通过)
+集成测试:   8 tests  (可选，需要 PDF)
+当前覆盖率: 94.56%
+```
+
+#### ⚠️ 集成测试 PDF 提醒
+
+**集成测试需要测试 PDF 文件，但这是可选的！**
+
+```bash
+# 位置
+tests/fixtures/test.pdf
+
+# 添加测试 PDF（任意 PDF 即可）
+cp /path/to/your.pdf tests/fixtures/test.pdf
+```
+
+**测试行为**:
+- ✅ **有 PDF**: 运行全部 22 个测试
+- ✅ **无 PDF**: 运行 14 个单元测试，自动跳过 8 个集成测试
+- ✅ **CI 通过**: 两种情况都通过，退出码 0
+
+**为什么不提交 PDF?**
+- 避免二进制文件增大仓库
+- 开发者可使用自己的测试文件
+- CI 无需下载大文件
+
+```bash
+# 无 PDF 时的输出示例
+⚠️  Integration tests skipped: test.pdf not found
+   Expected location: tests/fixtures/test.pdf
+   Place a test PDF at tests/fixtures/test.pdf to run these tests
+
+✅ Test Suites: 1 skipped, 2 passed, 2 of 3 total
+✅ Tests:       8 skipped, 14 passed, 22 total
+```
+
+**详细说明**: 查看 [测试指南](docs/development/testing.md)
 
 ### 手动测试 MCP Server
 

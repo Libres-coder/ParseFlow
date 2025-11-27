@@ -132,13 +132,60 @@ async extractText(path: string, options?: ExtractOptions): Promise<string> {
 - 测试覆盖率 > 80%
 - 使用描述性测试名称
 
+#### 测试类型
+
+**单元测试** (`*.test.ts`):
+- 测试单个函数/类的功能
+- 无需外部依赖（如 PDF 文件）
+- 必须在 CI 中通过
+
+**集成测试** (`*.integration.test.ts`):
+- 测试真实场景（需要实际 PDF 文件）
+- 可选运行，不影响 CI
+- 测试 PDF 位置: `tests/fixtures/test.pdf`
+
+#### ⚠️ 集成测试 PDF 说明
+
+集成测试需要测试 PDF，但**不要提交到仓库**！
+
+```bash
+# 添加测试 PDF（任意 PDF 即可）
+cp /path/to/your.pdf tests/fixtures/test.pdf
+
+# 运行所有测试（包括集成测试）
+pnpm test
+
+# 只运行单元测试
+pnpm test -- --testPathIgnorePatterns=integration
+```
+
+**为什么不提交 PDF?**
+- ✅ 避免增大仓库体积
+- ✅ 开发者可用自己的测试文件
+- ✅ CI 会自动跳过集成测试
+
+详见 [测试指南](./docs/development/testing.md)
+
+#### 测试示例
+
 ```typescript
+// 单元测试
 describe('PDFParser', () => {
   it('should extract text from valid PDF', async () => {
     // ...
   });
 
   it('should throw error for non-existent file', async () => {
+    // ...
+  });
+});
+
+// 集成测试（带条件跳过）
+const hasPdf = existsSync(testPdfPath);
+const describeIntegration = hasPdf ? describe : describe.skip;
+
+describeIntegration('Integration Tests', () => {
+  it('should extract text from real PDF', async () => {
     // ...
   });
 });
@@ -191,6 +238,7 @@ describe('PDFParser', () => {
 - [架构设计](./docs/development/architecture.md)
 - [API 文档](./docs/development/api.md)
 - [开发指南](./docs/development/development.md)
+- [测试指南](./docs/development/testing.md) - 测试策略和集成测试 PDF 说明 ⭐
 - [命名规范](./docs/development/naming-conventions.md)
 
 ### 相关技术

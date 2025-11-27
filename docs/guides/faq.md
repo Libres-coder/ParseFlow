@@ -491,14 +491,133 @@ VSCode 扩展不能做的：
 
 ---
 
+## 🧪 测试和开发
+
+### Q35: 运行测试时显示 "test.pdf not found"？
+
+**A:** 这是正常的！集成测试需要测试 PDF，但这是**可选的**。
+
+**快速解决**：
+
+```bash
+# 添加任意 PDF 作为测试文件
+cp /path/to/your.pdf tests/fixtures/test.pdf
+
+# 然后运行测试
+pnpm test
+```
+
+**测试行为**：
+- ✅ **有 PDF**: 运行全部 22 个测试（14 单元 + 8 集成）
+- ✅ **无 PDF**: 运行 14 个单元测试，自动跳过 8 个集成测试
+- ✅ **CI 通过**: 两种情况都通过，退出码 0
+
+**为什么没有 PDF？**
+- PDF 未提交到仓库（避免增大体积）
+- 开发者可用自己的测试文件
+- CI 会自动跳过集成测试
+
+详见 [测试指南](../development/testing.md)
+
+### Q36: 为什么不提交测试 PDF 到仓库？
+
+**A:** 出于以下考虑：
+
+1. **体积** - PDF 是二进制文件，会增大仓库
+2. **隐私** - 避免意外提交敏感内容
+3. **灵活** - 开发者可用自己的测试文件
+4. **CI 优化** - 无需下载大文件
+
+**替代方案**：
+- 使用条件跳过机制（`describe.skip`）
+- 集成测试可选运行
+- CI 只运行单元测试
+
+### Q37: 如何运行集成测试？
+
+**A:**
+
+```bash
+# 1. 添加测试 PDF（任意 PDF 即可）
+cp /path/to/your.pdf tests/fixtures/test.pdf
+
+# 2. 运行所有测试
+pnpm test
+
+# 或只运行集成测试
+pnpm test -- --testPathPattern=integration
+```
+
+**无 PDF 时的输出**：
+```bash
+⚠️  Integration tests skipped: test.pdf not found
+   Expected location: tests/fixtures/test.pdf
+
+✅ Test Suites: 1 skipped, 2 passed, 2 of 3 total
+✅ Tests:       8 skipped, 14 passed, 22 total
+```
+
+### Q38: 测试覆盖率要求是多少？
+
+**A:**
+
+**当前覆盖率**: 94.56%
+
+**最低阈值**:
+```javascript
+{
+  branches: 20%,
+  functions: 30%,
+  lines: 25%,
+  statements: 25%
+}
+```
+
+**说明**: 阈值设置较低是因为项目刚开始添加测试，实际覆盖率远超阈值。
+
+查看覆盖率报告：
+```bash
+pnpm test:coverage
+```
+
+### Q39: 如何为新功能添加测试？
+
+**A:** 参考现有测试：
+
+**单元测试** (`*.test.ts`):
+```typescript
+describe('MyFeature', () => {
+  it('should work correctly', () => {
+    expect(result).toBe(expected);
+  });
+});
+```
+
+**集成测试** (`*.integration.test.ts`):
+```typescript
+const hasPdf = existsSync(testPdfPath);
+const describeIntegration = hasPdf ? describe : describe.skip;
+
+describeIntegration('Integration Tests', () => {
+  it('should work with real PDF', async () => {
+    // ...
+  });
+});
+```
+
+详见 [测试指南](../development/testing.md) 和 [贡献指南](../../CONTRIBUTING.md)
+
+---
+
 ## 💬 获取帮助
 
 如果以上没有解决您的问题：
 
 1. **查看文档**：
-   - [README](../README.md)
-   - [API 文档](./API.md)
-   - [开发指南](./DEVELOPMENT.md)
+   - [README](../../README.md)
+   - [测试指南](../development/testing.md) ⭐
+   - [API 文档](../development/api.md)
+   - [开发指南](../development/development.md)
 
 2. **提交 Issue**：
    - [GitHub Issues](https://github.com/Libres-coder/ParseFlow/issues)
@@ -510,4 +629,4 @@ VSCode 扩展不能做的：
 
 ---
 
-**最后更新**: 2025-11-26
+**最后更新**: 2025-11-27
