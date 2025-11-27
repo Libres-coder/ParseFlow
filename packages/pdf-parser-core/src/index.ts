@@ -5,6 +5,9 @@
  */
 
 export { PDFParser } from './parser.js';
+export { ImageExtractorExternal } from './extractors/image-extractor-external.js';
+export { TOCExtractorExternal } from './extractors/toc-extractor-external.js';
+
 export type {
   ParserConfig,
   ExtractOptions,

@@ -1,42 +1,39 @@
 /**
  * 图片提取器
  *
- * 注意：完整的图片提取需要 pdfjs-dist 库
- * 当前实现提供基础框架和错误处理
+ * 注意：完整的图片提取需要外部工具或库
+ *
+ * 推荐方案：
+ * 1. 使用 ImageExtractorExternal (需要 poppler-utils)
+ * 2. 集成 pdfjs-dist (浏览器环境)
  */
 
 import type { ImageExtractOptions } from '../types/index.js';
 
 export class ImageExtractor {
   /**
-   * 提取 PDF 中的图片
+   * 提取 PDF 中的图片（从 buffer）
    *
    * @param buffer - PDF 文件 buffer
    * @param outputDir - 输出目录
    * @param options - 提取选项
    * @returns 提取的图片路径数组
    *
-   * @throws Error - 功能未实现
+   * @throws Error - 功能未实现，建议使用 ImageExtractorExternal
    */
   extract(_buffer: Buffer, _outputDir: string, _options?: ImageExtractOptions): Promise<string[]> {
-    // TODO: 实现图片提取
-    // 需要安装 pdfjs-dist: pnpm add pdfjs-dist
-    //
-    // 实现步骤:
-    // 1. 使用 pdfjs-dist 加载 PDF
-    // 2. 遍历每一页
-    // 3. 获取页面上的图片对象
-    // 4. 转换为指定格式 (PNG/JPG)
-    // 5. 保存到输出目录
-    // 6. 返回文件路径列表
-
     return Promise.reject(
       new Error(
-        'Image extraction is not yet implemented. ' +
-          'This feature requires pdfjs-dist library. ' +
-          'To implement: ' +
-          '1. Install pdfjs-dist: pnpm add pdfjs-dist ' +
-          '2. Implement extraction logic in ImageExtractor.extract()'
+        'Image extraction from Buffer is not yet implemented.\n\n' +
+          'Recommended solutions:\n' +
+          '1. Use ImageExtractorExternal with file path (requires poppler-utils):\n' +
+          '   const extractor = new ImageExtractorExternal();\n' +
+          '   const images = await extractor.extract(pdfPath, outputDir);\n\n' +
+          '2. Install poppler-utils:\n' +
+          '   - Ubuntu/Debian: sudo apt-get install poppler-utils\n' +
+          '   - macOS: brew install poppler\n' +
+          '   - Windows: https://github.com/oschwartz10612/poppler-windows/releases\n\n' +
+          'See: packages/pdf-parser-core/src/extractors/image-extractor-external.ts'
       )
     );
   }
