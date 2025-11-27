@@ -13,6 +13,9 @@ module.exports = {
       },
     ],
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(pdfjs-dist)/)', // 允许转换 pdfjs-dist
+  ],
   collectCoverageFrom: [
     'packages/**/src/**/*.ts',
     '!packages/**/src/**/*.d.ts',

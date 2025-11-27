@@ -13,23 +13,21 @@ export class TOCExtractor {
    *
    * @param buffer - PDF 文件 buffer
    * @returns 目录项数组
+   *
+   * @note 当前使用 pdf-parse，功能有限。完整的目录提取需要 pdfjs-dist
    */
   async extract(buffer: Buffer): Promise<TOCItem[]> {
     try {
+      // 使用 pdf-parse 解析（功能有限）
       const data = await pdf(buffer);
 
-      // pdf-parse 提供的信息有限
-      // 完整的目录提取需要 pdfjs-dist
+      // pdf-parse 不直接支持目录提取
+      // 未来可以集成 pdfjs-dist 来实现完整功能
 
-      // 尝试从 metadata 中获取基本信息
+      // 现在返回空数组，避免测试和构建问题
+      // TODO: 集成 pdfjs-dist 以提取真实目录
       if (data.info) {
-        // pdf-parse 不直接提供 outline/bookmarks
-        // 返回空数组，并在注释中说明
-        // TODO: 使用 pdfjs-dist 实现完整的目录提取
-        // 示例代码:
-        // const doc = await getDocument(buffer).promise;
-        // const outline = await doc.getOutline();
-        // return this.parseOutline(outline);
+        // 文档存在，但我们暂时无法提取目录
       }
 
       return [];
@@ -40,37 +38,7 @@ export class TOCExtractor {
     }
   }
 
-  // 以下方法将在实现完整功能时使用（需要 pdfjs-dist）
-
-  // private parseOutlineItem(
-  //   _outline: any,
-  //   _level: number = 0
-  // ): TOCItem[] {
-  //   // TODO: 实现大纲解析
-  //   // 示例实现:
-  //   // const items: TOCItem[] = [];
-  //   // for (const item of outline) {
-  //   //   const tocItem: TOCItem = {
-  //   //     title: item.title,
-  //   //     page: await this.getPageNumber(item.dest),
-  //   //     level,
-  //   //   };
-  //   //   if (item.items && item.items.length > 0) {
-  //   //     tocItem.children = this.parseOutlineItem(item.items, level + 1);
-  //   //   }
-  //   //   items.push(tocItem);
-  //   // }
-  //   // return items;
-  //   return [];
-  // }
-
-  // private async getPageNumber(_dest: any): Promise<number> {
-  //   // TODO: 实现页码解析
-  //   return 1;
-  // }
-
-  // private buildHierarchy(_flatItems: TOCItem[]): TOCItem[] {
-  //   // TODO: 实现层级构建
-  //   return [];
-  // }
+  // 以下方法将在集成 pdfjs-dist 后实现
+  // 注意：pdfjs-dist 在 Jest/Node.js 环境中有兼容性问题
+  // 可能需要使用单独的 Node.js 兼容包或在运行时动态加载
 }

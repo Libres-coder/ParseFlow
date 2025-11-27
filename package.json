@@ -70,5 +70,8 @@
     "*.{js,jsx,json,md}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "pdfjs-dist": "^4.10.38"
   }
 }
