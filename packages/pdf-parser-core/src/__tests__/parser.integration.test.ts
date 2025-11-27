@@ -3,17 +3,30 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { PDFParser } from '../parser';
 import { join } from 'path';
+import { existsSync } from 'fs';
 
 describe('PDFParser Integration Tests', () => {
   let parser: PDFParser;
   const testPdfPath = join(__dirname, '../../../../tests/fixtures/test.pdf');
 
+  beforeAll(() => {
+    if (!existsSync(testPdfPath)) {
+      console.warn(
+        '\n⚠️  Integration tests skipped: test.pdf not found\n' +
+          `   Expected location: ${testPdfPath}\n` +
+          '   Place a test PDF at tests/fixtures/test.pdf to run these tests\n'
+      );
+    }
+  });
+
   beforeEach(() => {
     parser = new PDFParser();
   });
 
+  const itIfPdfExists = existsSync(testPdfPath) ? it : it.skip;
+
   describe('extractText with real PDF', () => {
-    it('should extract text from real PDF file', async () => {
+    itIfPdfExists('should extract text from real PDF file', async () => {
       const result = await parser.extractText(testPdfPath);
 
       expect(result).toBeDefined();
@@ -21,7 +34,7 @@ describe('PDFParser Integration Tests', () => {
       expect(result.length).toBeGreaterThan(0);
     });
 
-    it('should extract text with formatted strategy', async () => {
+    itIfPdfExists('should extract text with formatted strategy', async () => {
       const result = await parser.extractText(testPdfPath, {
         strategy: 'formatted',
       });
@@ -31,7 +44,7 @@ describe('PDFParser Integration Tests', () => {
       expect(result.length).toBeGreaterThan(0);
     });
 
-    it('should extract text with clean strategy', async () => {
+    itIfPdfExists('should extract text with clean strategy', async () => {
       const result = await parser.extractText(testPdfPath, {
         strategy: 'clean',
       });
@@ -43,7 +56,7 @@ describe('PDFParser Integration Tests', () => {
   });
 
   describe('getMetadata with real PDF', () => {
-    it('should extract metadata from real PDF', async () => {
+    itIfPdfExists('should extract metadata from real PDF', async () => {
       const result = await parser.getMetadata(testPdfPath);
 
       expect(result).toBeDefined();
@@ -55,7 +68,7 @@ describe('PDFParser Integration Tests', () => {
   });
 
   describe('extractPage with real PDF', () => {
-    it('should extract first page', async () => {
+    itIfPdfExists('should extract first page', async () => {
       const result = await parser.extractPage(testPdfPath, 1);
 
       expect(result).toBeDefined();
@@ -65,7 +78,7 @@ describe('PDFParser Integration Tests', () => {
   });
 
   describe('extractRange with real PDF', () => {
-    it('should extract page range', async () => {
+    itIfPdfExists('should extract page range', async () => {
       const result = await parser.extractRange(testPdfPath, '1-1');
 
       expect(result).toBeDefined();
@@ -75,13 +88,13 @@ describe('PDFParser Integration Tests', () => {
   });
 
   describe('search with real PDF', () => {
-    it('should search for keywords', async () => {
+    itIfPdfExists('should search for keywords', async () => {
       const results = await parser.search(testPdfPath, 'the');
 
       expect(Array.isArray(results)).toBe(true);
     });
 
-    it('should handle empty search results', async () => {
+    itIfPdfExists('should handle empty search results', async () => {
       const results = await parser.search(testPdfPath, 'xyznonexistent123');
 
       expect(Array.isArray(results)).toBe(true);
