@@ -20,23 +20,19 @@ describe('TextExtractor', () => {
   describe('extract', () => {
     it('should throw error for invalid buffer', async () => {
       const invalidBuffer = Buffer.from('not a pdf');
-      
-      await expect(extractor.extract(invalidBuffer))
-        .rejects.toThrow();
+
+      await expect(extractor.extract(invalidBuffer)).rejects.toThrow();
     });
 
     it('should accept extraction options', async () => {
       const invalidBuffer = Buffer.from('not a pdf');
-      
+
       // Test with different strategies
-      await expect(extractor.extract(invalidBuffer, { strategy: 'raw' }))
-        .rejects.toThrow();
-        
-      await expect(extractor.extract(invalidBuffer, { strategy: 'formatted' }))
-        .rejects.toThrow();
-        
-      await expect(extractor.extract(invalidBuffer, { strategy: 'clean' }))
-        .rejects.toThrow();
+      await expect(extractor.extract(invalidBuffer, { strategy: 'raw' })).rejects.toThrow();
+
+      await expect(extractor.extract(invalidBuffer, { strategy: 'formatted' })).rejects.toThrow();
+
+      await expect(extractor.extract(invalidBuffer, { strategy: 'clean' })).rejects.toThrow();
     });
   });
 });

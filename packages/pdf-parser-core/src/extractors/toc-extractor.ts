@@ -1,6 +1,6 @@
 /**
  * 目录（TOC）提取器
- * 
+ *
  * 从 PDF 的书签/大纲（Outline）中提取目录结构
  */
 
@@ -10,29 +10,28 @@ import type { TOCItem } from '../types/index.js';
 export class TOCExtractor {
   /**
    * 提取目录
-   * 
+   *
    * @param buffer - PDF 文件 buffer
    * @returns 目录项数组
    */
   async extract(buffer: Buffer): Promise<TOCItem[]> {
     try {
       const data = await pdf(buffer);
-      
+
       // pdf-parse 提供的信息有限
       // 完整的目录提取需要 pdfjs-dist
-      
+
       // 尝试从 metadata 中获取基本信息
       if (data.info) {
         // pdf-parse 不直接提供 outline/bookmarks
         // 返回空数组，并在注释中说明
-        
         // TODO: 使用 pdfjs-dist 实现完整的目录提取
         // 示例代码:
         // const doc = await getDocument(buffer).promise;
         // const outline = await doc.getOutline();
         // return this.parseOutline(outline);
       }
-      
+
       return [];
     } catch (error) {
       throw new Error(
@@ -42,7 +41,7 @@ export class TOCExtractor {
   }
 
   // 以下方法将在实现完整功能时使用（需要 pdfjs-dist）
-  
+
   // private parseOutlineItem(
   //   _outline: any,
   //   _level: number = 0

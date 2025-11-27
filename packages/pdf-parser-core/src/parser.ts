@@ -113,12 +113,12 @@ export class PDFParser {
 
   /**
    * 提取图片
-   * 
+   *
    * @param path - PDF 文件路径
    * @param outputDir - 输出目录
    * @param options - 提取选项
    * @returns 提取的图片路径数组
-   * 
+   *
    * @throws Error - 功能未完全实现，需要 pdfjs-dist
    */
   async extractImages(
@@ -132,10 +132,10 @@ export class PDFParser {
 
   /**
    * 获取目录
-   * 
+   *
    * @param path - PDF 文件路径
    * @returns 目录项数组
-   * 
+   *
    * @note 当前实现返回空数组，完整功能需要 pdfjs-dist
    */
   async getTOC(path: string): Promise<TOCItem[]> {

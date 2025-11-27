@@ -67,9 +67,7 @@ describe('PDFParser', () => {
 
   describe('getTOC', () => {
     it('should throw error for non-existent file', async () => {
-      await expect(parser.getTOC('non-existent.pdf')).rejects.toThrow(
-        'ENOENT'
-      );
+      await expect(parser.getTOC('non-existent.pdf')).rejects.toThrow('ENOENT');
     });
 
     it('should have getTOC method', () => {
@@ -89,9 +87,7 @@ describe('PDFParser', () => {
 
     describe('page and range validation', () => {
       it('should validate page is positive number', async () => {
-        await expect(parser.extractPage('test.pdf', 0)).rejects.toThrow(
-          'Page number must be >= 1'
-        );
+        await expect(parser.extractPage('test.pdf', 0)).rejects.toThrow('Page number must be >= 1');
       });
 
       it('should validate page is not negative', async () => {
@@ -101,21 +97,15 @@ describe('PDFParser', () => {
       });
 
       it('should validate range format', async () => {
-        await expect(parser.extractRange('test.pdf', 'invalid')).rejects.toThrow(
-          'Invalid range'
-        );
+        await expect(parser.extractRange('test.pdf', 'invalid')).rejects.toThrow('Invalid range');
       });
 
       it('should validate range start <= end', async () => {
-        await expect(parser.extractRange('test.pdf', '5-3')).rejects.toThrow(
-          'Invalid range'
-        );
+        await expect(parser.extractRange('test.pdf', '5-3')).rejects.toThrow('Invalid range');
       });
 
       it('should validate range start is positive', async () => {
-        await expect(parser.extractRange('test.pdf', '0-5')).rejects.toThrow(
-          'Invalid range'
-        );
+        await expect(parser.extractRange('test.pdf', '0-5')).rejects.toThrow('Invalid range');
       });
     });
 
