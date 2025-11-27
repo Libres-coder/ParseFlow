@@ -15,6 +15,8 @@ import type {
 } from './types/index.js';
 import { TextExtractor } from './extractors/text-extractor.js';
 import { MetadataExtractor } from './extractors/metadata-extractor.js';
+import { ImageExtractor } from './extractors/image-extractor.js';
+import { TOCExtractor } from './extractors/toc-extractor.js';
 import { SearchEngine } from './search/keyword-search.js';
 
 /**
@@ -24,12 +26,16 @@ export class PDFParser {
   private config: Required<ParserConfig>;
   private textExtractor: TextExtractor;
   private metadataExtractor: MetadataExtractor;
+  private imageExtractor: ImageExtractor;
+  private tocExtractor: TOCExtractor;
   private searchEngine: SearchEngine;
 
   constructor(config: ParserConfig = {}) {
     this.config = this.mergeConfig(config);
     this.textExtractor = new TextExtractor();
     this.metadataExtractor = new MetadataExtractor();
+    this.imageExtractor = new ImageExtractor();
+    this.tocExtractor = new TOCExtractor();
     this.searchEngine = new SearchEngine();
   }
 
@@ -106,27 +112,35 @@ export class PDFParser {
   }
 
   /**
-   * 提取图片（简化实现）
+   * 提取图片
+   * 
+   * @param path - PDF 文件路径
+   * @param outputDir - 输出目录
+   * @param options - 提取选项
+   * @returns 提取的图片路径数组
+   * 
+   * @throws Error - 功能未完全实现，需要 pdfjs-dist
    */
-  extractImages(
-    _path: string,
-    _outputDir: string,
-    _options?: ImageExtractOptions
+  async extractImages(
+    path: string,
+    outputDir: string,
+    options?: ImageExtractOptions
   ): Promise<string[]> {
-    // 提取图片需要使用 pdfjs-dist，这里返回占位符
-    // 实际实现见 ImageExtractor 类
-    return Promise.reject(
-      new Error('Image extraction not implemented yet. Use pdfjs-dist for full implementation.')
-    );
+    const buffer = this.readFile(path);
+    return await this.imageExtractor.extract(buffer, outputDir, options);
   }
 
   /**
-   * 获取目录（简化实现）
+   * 获取目录
+   * 
+   * @param path - PDF 文件路径
+   * @returns 目录项数组
+   * 
+   * @note 当前实现返回空数组，完整功能需要 pdfjs-dist
    */
-  getTOC(_path: string): Promise<TOCItem[]> {
-    // PDF 目录提取需要使用 pdfjs-dist
-    // 这里返回空数组占位
-    return Promise.resolve([]);
+  async getTOC(path: string): Promise<TOCItem[]> {
+    const buffer = this.readFile(path);
+    return await this.tocExtractor.extract(buffer);
   }
 
   /**

@@ -54,19 +54,26 @@ describe('PDFParser', () => {
   });
 
   describe('extractImages', () => {
-    it('should reject with not implemented error', async () => {
-      await expect(parser.extractImages('test.pdf', '/tmp/output')).rejects.toThrow(
-        'not implemented'
+    it('should throw error for non-existent file', async () => {
+      await expect(parser.extractImages('non-existent.pdf', '/tmp/output')).rejects.toThrow(
+        'ENOENT'
       );
+    });
+
+    it('should have extractImages method', () => {
+      expect(typeof parser.extractImages).toBe('function');
     });
   });
 
   describe('getTOC', () => {
-    it('should return empty array (not implemented)', async () => {
-      const result = await parser.getTOC('test.pdf');
+    it('should throw error for non-existent file', async () => {
+      await expect(parser.getTOC('non-existent.pdf')).rejects.toThrow(
+        'ENOENT'
+      );
+    });
 
-      expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(0);
+    it('should have getTOC method', () => {
+      expect(typeof parser.getTOC).toBe('function');
     });
   });
 
