@@ -1,3 +1,6 @@
 # 测试脚本
 test-*.ts
 debug-*.ts
+
+# 工具脚本
+scripts/test-tools/
