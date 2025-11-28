@@ -8,6 +8,13 @@ dist/
 lib/
 build/
 
+# TypeScript compiled files in src (should use dist instead)
+packages/*/src/**/*.js
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts.map
+!packages/*/src/**/*.test.js
+!packages/*/src/**/*.spec.js
+
 # Test coverage
 coverage/
 .nyc_output/
