@@ -41,11 +41,11 @@ ParseFlow 是基于 **Model Context Protocol (MCP)** 的 PDF 解析服务器，�
 
 ### 核心功能
 
-- 📄 **文本提取**：提取 PDF 文本内容，支持分页和范围提取
-- 📊 **元数据读取**：获取标题、作者、页数、创建日期等信息
-- 🔍 **关键词搜索**：在 PDF 中搜索特定内容
-- 🖼️ **图像提取**：导出 PDF 中的图片（计划中）
-- 📑 **目录提取**：获取 PDF 书签和目录结构（计划中）
+- 📄 **文本提取**：提取 PDF 文本内容，支持分页和范围提取 ✅
+- 📊 **元数据读取**：获取标题、作者、页数、创建日期等信息 ✅
+- 🔍 **关键词搜索**：在 PDF 中搜索特定内容 ✅
+- 🖼️ **图像提取**：导出 PDF 中的图片（需要 poppler-utils）✅
+- 📑 **目录提取**：获取 PDF 书签和目录结构（需要 pdftk/pdfinfo）✅
 
 ### 技术特点
 
@@ -68,19 +68,22 @@ ParseFlow 是基于 **Model Context Protocol (MCP)** 的 PDF 解析服务器，�
 │      ParseFlow MCP Server           │
 │  ┌─────────────────────────────┐   │
 │  │   MCP Tools                 │   │
-│  │  • extract_text             │   │
-│  │  • search_pdf               │   │
-│  │  • get_metadata             │   │
-│  │  • extract_images (planned) │   │
-│  │  • get_toc (planned)        │   │
+│  │  • extract_text         ✅  │   │
+│  │  • search_pdf           ✅  │   │
+│  │  • get_metadata         ✅  │   │
+│  │  • extract_images       ✅  │   │
+│  │  • get_toc              ✅  │   │
 │  └─────────────────────────────┘   │
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
 │    PDF Parser Core Library          │
-│  • pdf-parse (文本提取)             │
-│  • 元数据解析                       │
-│  • 关键词搜索                       │
+│  • pdf-parse (文本/元数据)          │
+│  • pdf-lib (PDF 操作)               │
+│  • 关键词搜索引擎                   │
+│  • 外部工具集成 (可选)              │
+│    - pdfimages (图片提取)           │
+│    - pdftk/pdfinfo (目录提取)       │
 └─────────────────────────────────────┘
 ```
 
@@ -93,6 +96,26 @@ ParseFlow 是基于 **Model Context Protocol (MCP)** 的 PDF 解析服务器，�
 - **Node.js** >= 18.0.0
 - **pnpm** >= 8.0.0（推荐）或 npm >= 9.0.0
 - **Windsurf IDE**（支持 MCP 的版本）
+
+### 可选工具（用于图片和目录提取）
+
+如果需要使用图片提取和目录提取功能，请安装：
+
+**Windows**:
+- [Poppler](https://github.com/oschwartz10612/poppler-windows/releases) - 用于图片和目录提取
+- 下载后添加到系统 PATH（例如：`D:\poppler\Library\bin`）
+
+**Ubuntu/Debian**:
+```bash
+sudo apt-get install poppler-utils pdftk
+```
+
+**macOS**:
+```bash
+brew install poppler pdftk-java
+```
+
+> 💡 不安装外部工具也能使用文本提取、元数据和搜索功能。详见 [外部工具指南](docs/guides/external-tools.md)
 
 ### 安装步骤
 
