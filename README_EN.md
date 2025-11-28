@@ -16,42 +16,76 @@
 
 ---
 
+## ⚡ Quick Overview
+
+> **3 Key Features**
+
+✅ **Automatic Recognition** - No manual tool selection, AI automatically calls PDF parsing functions  
+✅ **Dynamic Path Passing** - No hardcoding, specify different PDF files each time  
+✅ **Local Deployment** - Deploy locally via configuration files, full data control
+
+**Usage Example**:
+
+```
+In Windsurf, simply say:
+"Analyze D:\report.pdf"
+"How many pages does this PDF have?"
+"Search for 'breach of contract' in the contract"
+```
+
+---
+
 ## 📖 Overview
 
 ParseFlow is a high-performance **MCP (Model Context Protocol) Server** for PDF document parsing and analysis, designed specifically for AI assistants in **Windsurf** and **Cursor** IDEs.
 
-Through MCP protocol, AI can directly call ParseFlow tools to:
+### Core Features
 
-- 📄 Extract text content from PDF files
-- 🔍 Search for keywords in PDFs
-- 📊 Get PDF metadata (title, author, pages, dates, etc.)
-- 🎯 Support multiple extraction strategies (raw, formatted, clean)
+- 📄 **Text Extraction**: Extract PDF text content with pagination and range support ✅
+- 📊 **Metadata Reading**: Get title, author, page count, creation date, etc. ✅
+- 🔍 **Keyword Search**: Search for specific content in PDFs ✅
+- 🖼️ **Image Extraction**: Export images from PDFs (requires poppler-utils) ✅
+- 📑 **Table of Contents**: Extract PDF bookmarks and TOC structure (requires pdftk/pdfinfo) ✅
+
+### Technical Features
+
+- ✅ **MCP Protocol Support**: Standard MCP Tools implementation
+- ✅ **TypeScript Development**: Type-safe, maintainable
+- ✅ **Monorepo Architecture**: Separate core library and server
+- ✅ **Local Deployment**: Data stays local, secure and controllable
 
 ---
 
-## ✨ Key Features
+## 🏗️ Architecture
 
-### 🎯 Core Capabilities
-
-- **Fast PDF Parsing**: Extract text content in seconds
-- **Intelligent Search**: Keyword search with context snippets
-- **Metadata Extraction**: Get complete PDF file information
-- **Multiple Strategies**: Support raw, formatted, and clean text extraction
-- **Large File Support**: Handle PDFs up to 50MB (configurable)
-
-### 🔌 MCP Integration
-
-- **Windsurf Support**: Native MCP integration, automatic tool recognition
-- **Cursor Support**: MCP support in Agent mode
-- **Real-time Interaction**: AI directly calls PDF parsing tools
-- **No Manual Operations**: Fully automated PDF processing
-
-### 💪 Technical Advantages
-
-- **TypeScript Development**: Type-safe, maintainable
-- **Monorepo Architecture**: Clear modular structure
-- **Comprehensive Testing**: Unit and integration tests
-- **Complete Documentation**: Detailed guides and API reference
+```
+┌─────────────────────────────────────┐
+│          Windsurf IDE               │
+│       (MCP Client / Cascade)        │
+└──────────────┬──────────────────────┘
+               │ MCP Protocol (stdio)
+┌──────────────▼──────────────────────┐
+│      ParseFlow MCP Server           │
+│  ┌─────────────────────────────┐   │
+│  │   MCP Tools                 │   │
+│  │  • extract_text         ✅  │   │
+│  │  • search_pdf           ✅  │   │
+│  │  • get_metadata         ✅  │   │
+│  │  • extract_images       ✅  │   │
+│  │  • get_toc              ✅  │   │
+│  └─────────────────────────────┘   │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│    PDF Parser Core Library          │
+│  • pdf-parse (text/metadata)        │
+│  • pdf-lib (PDF operations)         │
+│  • Keyword search engine            │
+│  • External tools (optional)        │
+│    - pdfimages (image extraction)   │
+│    - pdftk/pdfinfo (TOC extraction) │
+└─────────────────────────────────────┘
+```
 
 ---
 
@@ -62,6 +96,26 @@ Through MCP protocol, AI can directly call ParseFlow tools to:
 - Node.js >= 18.0.0
 - pnpm >= 8.0.0
 - Windsurf or Cursor IDE
+
+### Optional Tools (for Image and TOC Extraction)
+
+If you need image extraction and table of contents extraction features, please install:
+
+**Windows**:
+- [Poppler](https://github.com/oschwartz10612/poppler-windows/releases) - For image and TOC extraction
+- Download and add to system PATH (e.g., `D:\poppler\Library\bin`)
+
+**Ubuntu/Debian**:
+```bash
+sudo apt-get install poppler-utils pdftk
+```
+
+**macOS**:
+```bash
+brew install poppler pdftk-java
+```
+
+> 💡 You can still use text extraction, metadata, and search features without installing external tools. See [External Tools Guide](docs/guides/external-tools.md)
 
 ### Installation
 
@@ -217,11 +271,13 @@ ParseFlow/
 
 ParseFlow provides the following MCP tools:
 
-| Tool           | Description            | Parameters                                       |
-| -------------- | ---------------------- | ------------------------------------------------ |
-| `extract_text` | Extract text from PDF  | `path`, `page?`, `range?`, `strategy?`           |
-| `get_metadata` | Get PDF metadata       | `path`                                           |
-| `search_pdf`   | Search keywords in PDF | `path`, `query`, `caseSensitive?`, `maxResults?` |
+| Tool              | Description               | Parameters                                       | Status |
+| ----------------- | ------------------------- | ------------------------------------------------ | ------ |
+| `extract_text`    | Extract text from PDF     | `path`, `page?`, `range?`, `strategy?`           | ✅     |
+| `get_metadata`    | Get PDF metadata          | `path`                                           | ✅     |
+| `search_pdf`      | Search keywords in PDF    | `path`, `query`, `caseSensitive?`, `maxResults?` | ✅     |
+| `extract_images`  | Extract images from PDF   | `path`, `outputDir`, `format?`                   | ✅     |
+| `get_toc`         | Get table of contents     | `path`                                           | ✅     |
 
 For detailed API documentation, see [API Reference](docs/en/development/api.md)
 
@@ -229,49 +285,57 @@ For detailed API documentation, see [API Reference](docs/en/development/api.md)
 
 ## 🚀 Future Plans
 
+### ✅ Completed Features (v1.0.0)
+
+- ✅ Text extraction
+- ✅ Metadata extraction
+- ✅ Keyword search
+- ✅ Image extraction (external tool integration)
+- ✅ Table of contents extraction (external tool integration)
+
 ### High Priority
 
-#### ⭐ MCP Marketplace Release
+#### ⭐ npm Package Release
 
-Enable one-click installation of ParseFlow!
+Simplify installation and usage!
 
 **Plans**:
 
-- Publish to npm
-- Submit to official MCP Registry
-- Automated installation and configuration
+- ✅ Core functionality complete
+- ✅ Documentation complete
+- ✅ Testing complete
+- 📦 Ready to publish to npm
+- 🎯 Submit to official MCP Registry
 
 **Priority**: ⭐⭐⭐⭐⭐
 
-#### ⭐ VSCode Extension
+#### ⭐ GitHub Release
 
-Improve installation and usage experience
+Complete project release
 
-**Features**:
+**Plans**:
 
-- One-click installation
-- Automatic version management
-- Status monitoring UI
+- 📋 Create release notes
+- 📦 Package distribution
+- 🎉 v1.0.0 release
 
-**Note**: VSCode extension can only improve installation experience, not change AI's tool selection behavior
+**Priority**: ⭐⭐⭐⭐⭐
 
-**Priority**: ⭐⭐⭐⭐
+### Medium Priority
 
-### Planned
-
-- Table of Contents (TOC) extraction
-- Image export functionality
-- Advanced search features
-- Performance optimization
+- 🔄 Performance optimization (large file handling)
+- 📊 Advanced search features (fuzzy search, regex)
+- 🎨 Better error messages and user feedback
 
 ### Future Considerations
 
-- OCR support (for scanned documents)
-- AI document analysis
-- More IDE integrations
+- 📸 OCR support (for scanned documents)
+- 🤖 AI-powered document analysis
+- 🔄 PDF merge/split functionality
+- 🔐 PDF encryption/decryption
+- 🌐 More IDE integrations
 
-**Detailed Roadmap**: [docs/en/planning/todo.md](docs/en/planning/todo.md)  
-**Technical Analysis**: [docs/en/planning/distribution-analysis.md](docs/en/planning/distribution-analysis.md)
+**Detailed Roadmap**: [docs/en/planning/todo.md](docs/en/planning/todo.md)
 
 ---
 
@@ -309,6 +373,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Model Context Protocol](https://modelcontextprotocol.io) - MCP protocol standard
 - [pdf-parse](https://www.npmjs.com/package/pdf-parse) - PDF text extraction library
+- [pdf-lib](https://www.npmjs.com/package/pdf-lib) - PDF manipulation library
+- [Poppler](https://poppler.freedesktop.org/) - PDF rendering library
 - Windsurf Community - Testing and feedback
 
 ---
