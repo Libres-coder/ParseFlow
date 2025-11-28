@@ -9,13 +9,87 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- Image extraction using pdfjs-dist
-- Table of Contents (TOC) extraction
 - OCR support with Tesseract.js
 - Semantic search with vector embeddings
+- PDF merge/split functionality
+- PDF encryption/decryption
 - Performance optimization with streaming and parallel processing
 
-## [1.0.0] - 2025-11-26
+## [1.0.0] - 2025-11-28
+
+### 🎉 Major Release - All Core Features Completed
+
+#### ✨ New Features
+
+- ✅ **Image Extraction** - Extract images from PDF using poppler-utils (pdfimages)
+  - Support PNG and JPG formats
+  - Customizable output directory
+  - Size filtering options
+  - Windows/Linux/macOS support
+
+- ✅ **Table of Contents (TOC) Extraction** - Extract PDF bookmarks and outline structure
+  - Support pdftk (full features) and pdfinfo (basic)
+  - Hierarchical TOC structure
+  - Page number resolution
+  - External tool integration
+
+- ✅ **External Tools Integration**
+  - `ImageExtractorExternal` - Image extraction via pdfimages
+  - `TOCExtractorExternal` - TOC extraction via pdftk/pdfinfo
+  - Automatic tool detection
+  - Cross-platform support (Windows PowerShell, Linux, macOS)
+  - Custom path configuration
+
+#### 🔧 Improvements
+
+- ✅ **Windows Compatibility**
+  - PowerShell execution support
+  - Environment variable inheritance fix
+  - Custom tool path configuration
+
+- ✅ **Testing**
+  - Real PDF testing validation
+  - 52 unit tests (100% passing)
+  - Integration tests for external tools
+  - 83.6% code coverage
+
+- ✅ **Documentation**
+  - External tools installation guide
+  - Windows/Linux/macOS setup instructions
+  - Complete API documentation
+  - Usage examples and best practices
+
+#### 📦 Technical Details
+
+- **Dependencies**: 
+  - Added `pdf-lib@1.17.1` for PDF operations
+  - Removed `pdfjs-dist` (Node.js compatibility issues)
+- **Architecture**: Monorepo with `pdf-parser-core` and `mcp-server`
+- **Quality**: ESLint 0 errors, TypeScript strict mode
+- **Platform**: Full Windows/Linux/macOS support
+
+#### 🏗️ Architecture Updates
+
+- Enhanced core library with external tool support
+- Improved error messages and user guidance
+- Better path handling for Windows environments
+- Flexible configuration for external tools
+
+### 📝 Breaking Changes
+
+None - All changes are backward compatible
+
+### 🐛 Bug Fixes
+
+- Fixed Windows environment variable inheritance in Node.js processes
+- Fixed `.gitignore` null byte issue
+- Resolved Jest/pdfjs-dist ESM compatibility problems
+
+### 🔄 Deprecated
+
+- Direct pdfjs-dist integration (moved to external tools approach)
+
+## [0.9.0] - 2025-11-26
 
 ### Added
 
@@ -65,3 +139,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/Libres-coder/ParseFlow/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/Libres-coder/ParseFlow/releases/tag/v1.0.0
+[0.9.0]: https://github.com/Libres-coder/ParseFlow/releases/tag/v0.9.0
