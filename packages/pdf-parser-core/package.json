@@ -1,15 +1,43 @@
 {
   "name": "@parseflow/core",
   "version": "1.0.0",
-  "description": "Core PDF parsing library for ParseFlow",
+  "description": "Core PDF parsing library for ParseFlow - Extract text, metadata, images, and TOC from PDF files",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist",
     "test": "jest"
+  },
+  "keywords": [
+    "pdf",
+    "parser",
+    "pdf-parse",
+    "pdf-extraction",
+    "text-extraction",
+    "metadata",
+    "image-extraction",
+    "toc",
+    "mcp",
+    "model-context-protocol"
+  ],
+  "author": "Libres-coder",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Libres-coder/ParseFlow.git",
+    "directory": "packages/pdf-parser-core"
+  },
+  "homepage": "https://github.com/Libres-coder/ParseFlow#readme",
+  "bugs": {
+    "url": "https://github.com/Libres-coder/ParseFlow/issues"
   },
   "dependencies": {
     "pdf-parse": "^1.1.1",
@@ -20,5 +48,8 @@
     "@types/pdf-parse": "^1.1.4",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
