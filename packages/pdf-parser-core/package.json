@@ -1,6 +1,6 @@
 {
   "name": "parseflow-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Core PDF parsing library for ParseFlow - Extract text, metadata, images, and TOC from PDF files",
   "type": "module",
   "main": "dist/index.js",
@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "pdf-parse": "^1.1.1",
-    "pdfjs-dist": "^4.0.379"
+    "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",

@@ -10,7 +10,7 @@ import {
   ListToolsRequestSchema,
   CallToolRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser } from '@parseflow/core';
+import { PDFParser } from 'parseflow-core';
 import { logger } from './utils/logger.js';
 import { ResourceHandler } from './resources/handler.js';
 import { ToolHandler } from './tools/index.js';

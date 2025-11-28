@@ -3,7 +3,7 @@
  */
 
 import { Resource } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser } from '@parseflow/core';
+import { PDFParser } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';

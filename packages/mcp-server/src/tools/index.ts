@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser, type TOCItem } from '@parseflow/core';
+import { PDFParser, type TOCItem } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
