@@ -17,12 +17,27 @@ import type { ImageExtractOptions } from '../types/index.js';
 const execAsync = promisify(exec);
 
 export class ImageExtractorExternal {
+  private pdfimagesPath: string;
+
+  /**
+   * @param pdfimagesPath - pdfimages 可执行文件的完整路径（可选）
+   */
+  constructor(pdfimagesPath?: string) {
+    this.pdfimagesPath = pdfimagesPath || 'pdfimages';
+  }
+
   /**
    * 检查 pdfimages 是否可用
    */
   async isAvailable(): Promise<boolean> {
     try {
-      await execAsync('pdfimages -v');
+      // Windows 上使用 PowerShell 执行命令
+      const cmd =
+        process.platform === 'win32'
+          ? `powershell.exe -Command "${this.pdfimagesPath} -v"`
+          : `${this.pdfimagesPath} -v`;
+
+      await execAsync(cmd);
       return true;
     } catch {
       return false;
@@ -64,7 +79,12 @@ export class ImageExtractorExternal {
 
     try {
       // 执行 pdfimages
-      await execAsync(`pdfimages ${formatFlag} "${pdfPath}" "${imagePrefix}"`);
+      const cmd =
+        process.platform === 'win32'
+          ? `powershell.exe -Command "${this.pdfimagesPath} ${formatFlag} '${pdfPath}' '${imagePrefix}'"`
+          : `${this.pdfimagesPath} ${formatFlag} "${pdfPath}" "${imagePrefix}"`;
+
+      await execAsync(cmd);
 
       // 列出生成的文件
       const files = readdirSync(outputDir);

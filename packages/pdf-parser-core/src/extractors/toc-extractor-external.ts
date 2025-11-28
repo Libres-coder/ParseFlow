@@ -15,19 +15,39 @@ import type { TOCItem } from '../types/index.js';
 const execAsync = promisify(exec);
 
 export class TOCExtractorExternal {
+  private pdfinfoPath: string;
+  private pdftkPath: string;
+
+  /**
+   * @param pdftkPath - pdftk 可执行文件的完整路径（可选）
+   * @param pdfinfoPath - pdfinfo 可执行文件的完整路径（可选）
+   */
+  constructor(pdftkPath?: string, pdfinfoPath?: string) {
+    this.pdftkPath = pdftkPath || 'pdftk';
+    this.pdfinfoPath = pdfinfoPath || 'pdfinfo';
+  }
+
   /**
    * 检查工具是否可用
    */
   async isAvailable(): Promise<{ pdfinfo: boolean; pdftk: boolean }> {
-    const checkPdfinfo = execAsync('pdfinfo -v')
+    const checkPdfinfo = this.execCommand(`${this.pdfinfoPath} -v`)
       .then(() => true)
       .catch(() => false);
-    const checkPdftk = execAsync('pdftk --version')
+    const checkPdftk = this.execCommand(`${this.pdftkPath} --version`)
       .then(() => true)
       .catch(() => false);
 
     const [pdfinfo, pdftk] = await Promise.all([checkPdfinfo, checkPdftk]);
     return { pdfinfo, pdftk };
+  }
+
+  /**
+   * 执行命令（支持 Windows PowerShell）
+   */
+  private async execCommand(cmd: string): Promise<{ stdout: string; stderr: string }> {
+    const finalCmd = process.platform === 'win32' ? `powershell.exe -Command "${cmd}"` : cmd;
+    return execAsync(finalCmd);
   }
 
   /**
@@ -62,7 +82,7 @@ export class TOCExtractorExternal {
    */
   private async extractWithPdftk(pdfPath: string): Promise<TOCItem[]> {
     try {
-      const { stdout } = await execAsync(`pdftk "${pdfPath}" dump_data`);
+      const { stdout } = await this.execCommand(`${this.pdftkPath} "${pdfPath}" dump_data`);
 
       // 解析 pdftk 输出
       const toc: TOCItem[] = [];
@@ -104,7 +124,7 @@ export class TOCExtractorExternal {
   private async extractWithPdfinfo(pdfPath: string): Promise<TOCItem[]> {
     try {
       // pdfinfo 不直接提供目录，只能获取基本信息
-      const { stdout } = await execAsync(`pdfinfo "${pdfPath}"`);
+      const { stdout } = await this.execCommand(`${this.pdfinfoPath} "${pdfPath}"`);
 
       // pdfinfo 没有目录信息，返回空数组
       // 可以考虑基于页面标题生成简单目录
