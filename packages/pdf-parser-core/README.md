@@ -1,8 +1,8 @@
-# @parseflow/core
+# parseflow-core
 
 **Core PDF parsing library for ParseFlow** - Extract text, metadata, images, and TOC from PDF files.
 
-[![npm version](https://img.shields.io/npm/v/@parseflow/core.svg)](https://www.npmjs.com/package/@parseflow/core)
+[![npm version](https://img.shields.io/npm/v/parseflow-core.svg)](https://www.npmjs.com/package/parseflow-core)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -20,17 +20,17 @@
 ## 📦 Installation
 
 ```bash
-npm install @parseflow/core
+npm install parseflow-core
 ```
 
 Or using pnpm:
 ```bash
-pnpm add @parseflow/core
+pnpm add parseflow-core
 ```
 
 Or using yarn:
 ```bash
-yarn add @parseflow/core
+yarn add parseflow-core
 ```
 
 ---
@@ -40,7 +40,7 @@ yarn add @parseflow/core
 ### Text Extraction
 
 ```typescript
-import { PDFParser } from '@parseflow/core';
+import { PDFParser } from 'parseflow-core';
 
 const parser = new PDFParser();
 
@@ -85,7 +85,7 @@ results.forEach(result => {
 ### Image Extraction (requires poppler-utils)
 
 ```typescript
-import { ImageExtractorExternal } from '@parseflow/core';
+import { ImageExtractorExternal } from 'parseflow-core';
 
 const extractor = new ImageExtractorExternal();
 const images = await extractor.extract('path/to/document.pdf', './output', {
@@ -96,7 +96,7 @@ const images = await extractor.extract('path/to/document.pdf', './output', {
 ### Table of Contents (requires pdftk or pdfinfo)
 
 ```typescript
-import { TOCExtractorExternal } from '@parseflow/core';
+import { TOCExtractorExternal } from 'parseflow-core';
 
 const tocExtractor = new TOCExtractorExternal();
 const toc = await tocExtractor.extract('path/to/document.pdf');
@@ -214,7 +214,7 @@ MIT © Libres-coder
 
 - [GitHub](https://github.com/Libres-coder/ParseFlow)
 - [Issues](https://github.com/Libres-coder/ParseFlow/issues)
-- [npm](https://www.npmjs.com/package/@parseflow/core)
+- [npm](https://www.npmjs.com/package/parseflow-core)
 
 ---
 

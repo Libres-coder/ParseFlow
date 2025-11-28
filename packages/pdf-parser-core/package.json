@@ -1,5 +1,5 @@
 {
-  "name": "@parseflow/core",
+  "name": "parseflow-core",
   "version": "1.0.0",
   "description": "Core PDF parsing library for ParseFlow - Extract text, metadata, images, and TOC from PDF files",
   "type": "module",
