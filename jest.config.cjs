@@ -8,14 +8,20 @@ module.exports = {
       'ts-jest',
       {
         diagnostics: {
-          ignoreCodes: ['TS151002', 'TS2307'],
+          ignoreCodes: ['TS151002', 'TS2307'], // 忽略警告和模块解析错误
         },
+        isolatedModules: true, // 启用隔离模块模式
       },
     ],
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(pdfjs-dist)/)', // 允许转换 pdfjs-dist
-  ],
+  globals: {
+    'ts-jest': {
+      diagnostics: {
+        ignoreCodes: ['TS151002', 'TS2307'],
+      },
+      isolatedModules: true,
+    },
+  },
   collectCoverageFrom: [
     'packages/**/src/**/*.ts',
     '!packages/**/src/**/*.d.ts',
@@ -23,10 +29,10 @@ module.exports = {
   ],
   coverageThreshold: {
     global: {
-      branches: 20,
-      functions: 30,
-      lines: 25,
-      statements: 25,
+      branches: 50,
+      functions: 50,
+      lines: 50,
+      statements: 50,
     },
   },
   moduleNameMapper: {
