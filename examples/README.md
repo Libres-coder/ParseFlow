@@ -1,23 +1,18 @@
-﻿# Examples 目录
+# ParseFlow Examples
 
-## 📚 示例代码说明
+This directory contains comprehensive examples demonstrating how to use ParseFlow in various scenarios.
 
-此目录包含 ParseFlow 的使用示例，展示如何：
+## 📚 Available Examples
 
-- 直接使用 PDF Parser 核心库
-- 通过 MCP 客户端调用 ParseFlow
+### 1. Basic Usage (`basic-usage/`)
+Simple examples for getting started with parseflow-core.
 
-## 📋 文件列表
+**Examples:**
+- `extract-text.js` - Extract text from PDF files
+- `get-metadata.js` - Get PDF metadata and information
+- `search-pdf.js` - Search for keywords in PDFs
 
-### 1. basic-usage.ts
-
-**PDF Parser 核心库使用示例**
-
-展示如何：
-
-- ✅ 创建 PDFParser 实例
-- ✅ 提取文本（完整、单页、范围）
-- ✅ 获取 PDF 元数据
+**Usage:**
 - ✅ 搜索关键词
 - ✅ 使用不同的提取策略
 

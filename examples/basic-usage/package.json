@@ -1,0 +1,14 @@
+{
+  "name": "parseflow-basic-usage-examples",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Basic usage examples for parseflow-core",
+  "scripts": {
+    "extract-text": "node extract-text.js",
+    "get-metadata": "node get-metadata.js",
+    "search-pdf": "node search-pdf.js"
+  },
+  "dependencies": {
+    "parseflow-core": "^1.0.1"
+  }
+}
