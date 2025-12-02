@@ -1,7 +1,8 @@
 {
   "name": "@parseflow/mcp-server",
   "version": "1.0.0",
-  "description": "MCP Server for PDF parsing",
+  "mcpName": "io.github.libres-coder/parseflow",
+  "description": "MCP Server for PDF parsing with text extraction, metadata retrieval, keyword search, and more",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,5 +26,34 @@
     "@types/node": "^20.10.6",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
-  }
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "pdf",
+    "parser",
+    "pdf-parse",
+    "pdf-extraction",
+    "text-extraction",
+    "metadata"
+  ],
+  "author": "Libres-coder",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Libres-coder/ParseFlow.git",
+    "directory": "packages/mcp-server"
+  },
+  "homepage": "https://github.com/Libres-coder/ParseFlow#readme",
+  "bugs": {
+    "url": "https://github.com/Libres-coder/ParseFlow/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
 }
