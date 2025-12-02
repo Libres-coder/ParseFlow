@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "name": "io.github.libres-coder/parseflow",
-  "description": "A comprehensive PDF parsing and analysis server for MCP with text extraction, metadata retrieval, keyword search, image extraction, and table of contents extraction",
+  "name": "io.github.Libres-coder/parseflow",
+  "description": "PDF parsing server with text extraction, metadata, search, images, and TOC via MCP",
   "repository": {
     "url": "https://github.com/Libres-coder/ParseFlow",
     "source": "github"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "parseflow-mcp-server",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "transport": {
         "type": "stdio"
       }
