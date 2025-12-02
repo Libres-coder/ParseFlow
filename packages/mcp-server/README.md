@@ -1,146 +1,153 @@
-# ParseFlow MCP Server
+# MCP Registry
 
-[![npm version](https://img.shields.io/npm/v/parseflow-mcp-server.svg)](https://www.npmjs.com/package/parseflow-mcp-server)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+The MCP registry provides MCP clients with a list of MCP servers, like an app store for MCP servers.
 
-Model Context Protocol (MCP) server for comprehensive PDF parsing and analysis.
+[**📤 Publish my MCP server**](docs/guides/publishing/publish-server.md) | [**⚡️ Live API docs**](https://registry.modelcontextprotocol.io/docs) | [**👀 Ecosystem vision**](docs/explanations/ecosystem-vision.md) | 📖 **[Full documentation](./docs)**
 
-## 🚀 Features
+## Development Status
 
-- **Text Extraction**: Extract text from PDF files with multiple formatting strategies
-- **Metadata Retrieval**: Get PDF document information (title, author, pages, etc.)
-- **Keyword Search**: Search for specific text within PDF documents
-- **Image Extraction**: Extract images from PDF files (requires poppler-utils)
-- **Table of Contents**: Get bookmarks and navigation structure
+**2025-10-24 update**: The Registry API has entered an **API freeze (v0.1)** 🎉. For the next month or more, the API will remain stable with no breaking changes, allowing integrators to confidently implement support. This freeze applies to v0.1 while development continues on v0. We'll use this period to validate the API in real-world integrations and gather feedback to shape v1 for general availability. Thank you to everyone for your contributions and patience—your involvement has been key to getting us here!
 
-## 📦 Installation
+**2025-09-08 update**: The registry has launched in preview 🎉 ([announcement blog post](https://blog.modelcontextprotocol.io/posts/2025-09-08-mcp-registry-preview/)). While the system is now more stable, this is still a preview release and breaking changes or data resets may occur. A general availability (GA) release will follow later. We'd love your feedback in [GitHub discussions](https://github.com/modelcontextprotocol/registry/discussions/new?category=ideas) or in the [#registry-dev Discord](https://discord.com/channels/1358869848138059966/1369487942862504016) ([joining details here](https://modelcontextprotocol.io/community/communication)).
 
-### Global Installation (Recommended for MCP)
+Current key maintainers:
+- **Adam Jones** (Anthropic) [@domdomegg](https://github.com/domdomegg)  
+- **Tadas Antanavicius** (PulseMCP) [@tadasant](https://github.com/tadasant)
+- **Toby Padilla** (GitHub) [@toby](https://github.com/toby)
+- **Radoslav (Rado) Dimitrov** (Stacklok) [@rdimitrov](https://github.com/rdimitrov)
 
-```bash
-npm install -g parseflow-mcp-server
-```
+## Contributing
 
-### Local Installation
+We use multiple channels for collaboration - see [modelcontextprotocol.io/community/communication](https://modelcontextprotocol.io/community/communication).
 
-```bash
-npm install parseflow-mcp-server
-```
+Often (but not always) ideas flow through this pipeline:
 
-## 🔧 Usage
+- **[Discord](https://modelcontextprotocol.io/community/communication)** - Real-time community discussions
+- **[Discussions](https://github.com/modelcontextprotocol/registry/discussions)** - Propose and discuss product/technical requirements
+- **[Issues](https://github.com/modelcontextprotocol/registry/issues)** - Track well-scoped technical work  
+- **[Pull Requests](https://github.com/modelcontextprotocol/registry/pulls)** - Contribute work towards issues
 
-### With Claude Desktop
+### Quick start:
 
-Add to your Claude Desktop configuration file:
+#### Pre-requisites
 
-**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **Docker**
+- **Go 1.24.x**
+- **ko** - Container image builder for Go ([installation instructions](https://ko.build/install/))
+- **golangci-lint v2.4.0**
 
-```json
-{
-  "mcpServers": {
-    "parseflow": {
-      "command": "parseflow"
-    }
-  }
-}
-```
-
-### With Windsurf / Cursor
-
-Add to your MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "parseflow": {
-      "command": "parseflow",
-      "args": []
-    }
-  }
-}
-```
-
-### Standalone Usage
+#### Running the server
 
 ```bash
-# Run the server
-parseflow
-
-# Or with custom options
-node /path/to/parseflow-mcp-server/dist/index.js
+# Start full development environment
+make dev-compose
 ```
 
-## 🛠️ Available Tools
+This starts the registry at [`localhost:8080`](http://localhost:8080) with PostgreSQL. The database uses ephemeral storage and is reset each time you restart the containers, ensuring a clean state for development and testing.
 
-When connected via MCP, the following tools are available:
+**Note:** The registry uses [ko](https://ko.build) to build container images. The `make dev-compose` command automatically builds the registry image with ko and loads it into your local Docker daemon before starting the services.
 
-### 1. `extract_text`
-Extract text content from PDF files.
+By default, the registry seeds from the production API with a filtered subset of servers (to keep startup fast). This ensures your local environment mirrors production behavior and all seed data passes validation. For offline development you can seed from a file without validation with `MCP_REGISTRY_SEED_FROM=data/seed.json MCP_REGISTRY_ENABLE_REGISTRY_VALIDATION=false make dev-compose`.
 
-**Parameters**:
-- `path` (string, required): Absolute path to PDF file
-- `page` (number, optional): Extract specific page
-- `range` (string, optional): Extract page range (e.g., "1-10")
-- `strategy` (string, optional): Extraction strategy - `raw`, `formatted`, or `clean`
+The setup can be configured with environment variables in [docker-compose.yml](./docker-compose.yml) - see [.env.example](./.env.example) for a reference.
 
-### 2. `get_metadata`
-Get PDF document metadata and properties.
+<details>
+<summary>Alternative: Running a pre-built Docker image</summary>
 
-**Parameters**:
-- `path` (string, required): Absolute path to PDF file
+Pre-built Docker images are automatically published to GitHub Container Registry:
 
-### 3. `search_pdf`
-Search for keywords or phrases within a PDF.
+```bash
+# Run latest stable release
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:latest
 
-**Parameters**:
-- `path` (string, required): Absolute path to PDF file
-- `query` (string, required): Search term or phrase
-- `caseSensitive` (boolean, optional): Case-sensitive search (default: false)
-- `maxResults` (number, optional): Maximum results to return (default: 10)
+# Run latest from main branch (continuous deployment)
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:main
 
-### 4. `extract_images`
-Extract images from PDF files (requires poppler-utils).
+# Run specific release version
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:v1.0.0
 
-**Parameters**:
-- `path` (string, required): Absolute path to PDF file
-- `outputDir` (string, required): Directory to save extracted images
-- `format` (string, optional): Output format - `png` or `jpg` (default: png)
+# Run development build from main branch
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:main-20250906-abc123d
+```
 
-### 5. `get_toc`
-Get table of contents (bookmarks) from PDF.
+**Available tags:** 
+- **Releases**: `latest`, `v1.0.0`, `v1.1.0`, etc.
+- **Continuous**: `main` (latest main branch build)
+- **Development**: `main-<date>-<sha>` (specific commit builds)
 
-**Parameters**:
-- `path` (string, required): Absolute path to PDF file
+</details>
 
-## 📋 Requirements
+#### Publishing a server
 
-- **Node.js**: >= 18.0.0
-- **poppler-utils** (optional, for image extraction):
-  - macOS: `brew install poppler`
-  - Ubuntu/Debian: `apt-get install poppler-utils`
-  - Windows: Download from [poppler releases](https://github.com/oschwartz10612/poppler-windows/releases)
+To publish a server, we've built a simple CLI. You can use it with:
 
-## 🔗 Related Packages
+```bash
+# Build the latest CLI
+make publisher
 
-- **[parseflow-core](https://www.npmjs.com/package/parseflow-core)**: Core PDF parsing library
-- Use `parseflow-core` directly if you want to integrate PDF parsing into your Node.js applications
+# Use it!
+./bin/mcp-publisher --help
+```
 
-## 📖 Documentation
+See [the publisher guide](./docs/guides/publishing/publish-server.md) for more details.
 
-Full documentation: [https://github.com/Libres-coder/ParseFlow](https://github.com/Libres-coder/ParseFlow)
+#### Other commands
 
-## 🐛 Bug Reports
+```bash
+# Run lint, unit tests and integration tests
+make check
+```
 
-Report issues: [https://github.com/Libres-coder/ParseFlow/issues](https://github.com/Libres-coder/ParseFlow/issues)
+There are also a few more helpful commands for development. Run `make help` to learn more, or look in [Makefile](./Makefile).
 
-## 📄 License
+<!--
+For Claude and other AI tools: Always prefer make targets over custom commands where possible.
+-->
 
-MIT © [Libres-coder](https://github.com/Libres-coder)
+## Architecture
 
-## 🌟 MCP Registry
+### Project Structure
 
-Find this server on the official MCP Registry:  
-[https://registry.modelcontextprotocol.io/](https://registry.modelcontextprotocol.io/)
+```
+├── cmd/                     # Application entry points
+│   └── publisher/           # Server publishing tool
+├── data/                    # Seed data
+├── deploy/                  # Deployment configuration (Pulumi)
+├── docs/                    # Documentation
+├── internal/                # Private application code
+│   ├── api/                 # HTTP handlers and routing
+│   ├── auth/                # Authentication (GitHub OAuth, JWT, namespace blocking)
+│   ├── config/              # Configuration management
+│   ├── database/            # Data persistence (PostgreSQL)
+│   ├── service/             # Business logic
+│   ├── telemetry/           # Metrics and monitoring
+│   └── validators/          # Input validation
+├── pkg/                     # Public packages
+│   ├── api/                 # API types and structures
+│   │   └── v0/              # Version 0 API types
+│   └── model/               # Data models for server.json
+├── scripts/                 # Development and testing scripts
+├── tests/                   # Integration tests
+└── tools/                   # CLI tools and utilities
+    └── validate-*.sh        # Schema validation tools
+```
 
-Search for: **parseflow**
+### Authentication
+
+Publishing supports multiple authentication methods:
+- **GitHub OAuth** - For publishing by logging into GitHub
+- **GitHub OIDC** - For publishing from GitHub Actions
+- **DNS verification** - For proving ownership of a domain and its subdomains
+- **HTTP verification** - For proving ownership of a domain
+
+The registry validates namespace ownership when publishing. E.g. to publish...:
+- `io.github.domdomegg/my-cool-mcp` you must login to GitHub as `domdomegg`, or be in a GitHub Action on domdomegg's repos
+- `me.adamjones/my-cool-mcp` you must prove ownership of `adamjones.me` via DNS or HTTP challenge
+
+## Community Projects
+
+Check out [community projects](docs/community-projects.md) to explore notable registry-related work created by the community.
+
+## More documentation
+
+See the [documentation](./docs) for more details if your question has not been answered here!
