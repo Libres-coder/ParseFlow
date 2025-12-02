@@ -79,3 +79,15 @@ yarn.lock
 
 # Build artifacts
 .turbo/
+
+# MCP Registry tokens (never commit!)
+.mcpregistry_*
+*.exe
+*.tar.gz
+
+# npm package tarballs
+*.tgz
+
+# Temporary markdown files
+*_TEMP.md
+*_DRAFT.md
