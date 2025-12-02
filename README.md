@@ -1,560 +1,153 @@
-# ParseFlow - PDF 解析 MCP 服务器
+# MCP Registry
 
-<div align="center">
+The MCP registry provides MCP clients with a list of MCP servers, like an app store for MCP servers.
 
-**为 Windsurf AI 提供强大的 PDF 解析能力**
+[**📤 Publish my MCP server**](docs/guides/publishing/publish-server.md) | [**⚡️ Live API docs**](https://registry.modelcontextprotocol.io/docs) | [**👀 Ecosystem vision**](docs/explanations/ecosystem-vision.md) | 📖 **[Full documentation](./docs)**
 
-[![CI](https://github.com/Libres-coder/ParseFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/Libres-coder/ParseFlow/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org)
-[![MCP](https://img.shields.io/badge/MCP-1.0-purple.svg)](https://modelcontextprotocol.io)
-[![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](CHANGELOG.md)
+## Development Status
 
-**中文** | [English](README_EN.md)
+**2025-10-24 update**: The Registry API has entered an **API freeze (v0.1)** 🎉. For the next month or more, the API will remain stable with no breaking changes, allowing integrators to confidently implement support. This freeze applies to v0.1 while development continues on v0. We'll use this period to validate the API in real-world integrations and gather feedback to shape v1 for general availability. Thank you to everyone for your contributions and patience—your involvement has been key to getting us here!
 
-</div>
+**2025-09-08 update**: The registry has launched in preview 🎉 ([announcement blog post](https://blog.modelcontextprotocol.io/posts/2025-09-08-mcp-registry-preview/)). While the system is now more stable, this is still a preview release and breaking changes or data resets may occur. A general availability (GA) release will follow later. We'd love your feedback in [GitHub discussions](https://github.com/modelcontextprotocol/registry/discussions/new?category=ideas) or in the [#registry-dev Discord](https://discord.com/channels/1358869848138059966/1369487942862504016) ([joining details here](https://modelcontextprotocol.io/community/communication)).
 
----
+Current key maintainers:
+- **Adam Jones** (Anthropic) [@domdomegg](https://github.com/domdomegg)  
+- **Tadas Antanavicius** (PulseMCP) [@tadasant](https://github.com/tadasant)
+- **Toby Padilla** (GitHub) [@toby](https://github.com/toby)
+- **Radoslav (Rado) Dimitrov** (Stacklok) [@rdimitrov](https://github.com/rdimitrov)
 
-## ⚡ 快速了解
+## Contributing
 
-> **3 个关键特点**
+We use multiple channels for collaboration - see [modelcontextprotocol.io/community/communication](https://modelcontextprotocol.io/community/communication).
 
-✅ **Cascade 自动识别** - 无需手动指定工具，自动调用 PDF 解析功能  
-✅ **路径动态传递** - 无需硬编码，每次指定不同的 PDF 文件  
-✅ **本地部署使用** - 通过配置文件本地部署，完全掌控数据
+Often (but not always) ideas flow through this pipeline:
 
-**使用示例**：
+- **[Discord](https://modelcontextprotocol.io/community/communication)** - Real-time community discussions
+- **[Discussions](https://github.com/modelcontextprotocol/registry/discussions)** - Propose and discuss product/technical requirements
+- **[Issues](https://github.com/modelcontextprotocol/registry/issues)** - Track well-scoped technical work  
+- **[Pull Requests](https://github.com/modelcontextprotocol/registry/pulls)** - Contribute work towards issues
 
-```
-在 Windsurf 中直接说：
-"分析 D:\report.pdf"
-"这个 PDF 有多少页？"
-"在合同中搜索'违约责任'"
-```
+### Quick start:
 
----
+#### Pre-requisites
 
-## 📖 项目简介
+- **Docker**
+- **Go 1.24.x**
+- **ko** - Container image builder for Go ([installation instructions](https://ko.build/install/))
+- **golangci-lint v2.4.0**
 
-ParseFlow 是基于 **Model Context Protocol (MCP)** 的 PDF 解析服务器，支持 **Windsurf** 和 **Cursor** 两大 AI 编程助手。
-
-### 核心功能
-
-- 📄 **文本提取**：提取 PDF 文本内容，支持分页和范围提取 ✅
-- 📊 **元数据读取**：获取标题、作者、页数、创建日期等信息 ✅
-- 🔍 **关键词搜索**：在 PDF 中搜索特定内容 ✅
-- 🖼️ **图像提取**：导出 PDF 中的图片（需要 poppler-utils）✅
-- 📑 **目录提取**：获取 PDF 书签和目录结构（需要 pdftk/pdfinfo）✅
-
-### 技术特点
-
-- ✅ **MCP 协议支持**：标准 MCP Tools 实现
-- ✅ **TypeScript 开发**：类型安全，易于维护
-- ✅ **Monorepo 架构**：核心库和服务器分离
-- ✅ **本地部署**：数据不外传，安全可控
-
----
-
-## 🏗️ 架构设计
-
-```
-┌─────────────────────────────────────┐
-│          Windsurf IDE               │
-│       (MCP Client / Cascade)        │
-└──────────────┬──────────────────────┘
-               │ MCP Protocol (stdio)
-┌──────────────▼──────────────────────┐
-│      ParseFlow MCP Server           │
-│  ┌─────────────────────────────┐   │
-│  │   MCP Tools                 │   │
-│  │  • extract_text         ✅  │   │
-│  │  • search_pdf           ✅  │   │
-│  │  • get_metadata         ✅  │   │
-│  │  • extract_images       ✅  │   │
-│  │  • get_toc              ✅  │   │
-│  └─────────────────────────────┘   │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│    PDF Parser Core Library          │
-│  • pdf-parse (文本/元数据)          │
-│  • pdf-lib (PDF 操作)               │
-│  • 关键词搜索引擎                   │
-│  • 外部工具集成 (可选)              │
-│    - pdfimages (图片提取)           │
-│    - pdftk/pdfinfo (目录提取)       │
-└─────────────────────────────────────┘
-```
-
----
-
-## 🚀 快速开始
-
-### 前置要求
-
-- **Node.js** >= 18.0.0
-- **pnpm** >= 8.0.0（推荐）或 npm >= 9.0.0
-- **Windsurf IDE**（支持 MCP 的版本）
-
-### 可选工具（用于图片和目录提取）
-
-如果需要使用图片提取和目录提取功能，请安装：
-
-**Windows**:
-- [Poppler](https://github.com/oschwartz10612/poppler-windows/releases) - 用于图片和目录提取
-- 下载后添加到系统 PATH（例如：`D:\poppler\Library\bin`）
-
-**Ubuntu/Debian**:
-```bash
-sudo apt-get install poppler-utils pdftk
-```
-
-**macOS**:
-```bash
-brew install poppler pdftk-java
-```
-
-> 💡 不安装外部工具也能使用文本提取、元数据和搜索功能。详见 [外部工具指南](docs/guides/external-tools.md)
-
-### 安装步骤
-
-#### 1. 克隆项目
+#### Running the server
 
 ```bash
-git clone https://github.com/your-org/ParseFlow.git
-cd ParseFlow
+# Start full development environment
+make dev-compose
 ```
 
-#### 2. 安装依赖
+This starts the registry at [`localhost:8080`](http://localhost:8080) with PostgreSQL. The database uses ephemeral storage and is reset each time you restart the containers, ensuring a clean state for development and testing.
+
+**Note:** The registry uses [ko](https://ko.build) to build container images. The `make dev-compose` command automatically builds the registry image with ko and loads it into your local Docker daemon before starting the services.
+
+By default, the registry seeds from the production API with a filtered subset of servers (to keep startup fast). This ensures your local environment mirrors production behavior and all seed data passes validation. For offline development you can seed from a file without validation with `MCP_REGISTRY_SEED_FROM=data/seed.json MCP_REGISTRY_ENABLE_REGISTRY_VALIDATION=false make dev-compose`.
+
+The setup can be configured with environment variables in [docker-compose.yml](./docker-compose.yml) - see [.env.example](./.env.example) for a reference.
+
+<details>
+<summary>Alternative: Running a pre-built Docker image</summary>
+
+Pre-built Docker images are automatically published to GitHub Container Registry:
 
 ```bash
-pnpm install
+# Run latest stable release
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:latest
+
+# Run latest from main branch (continuous deployment)
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:main
+
+# Run specific release version
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:v1.0.0
+
+# Run development build from main branch
+docker run -p 8080:8080 ghcr.io/modelcontextprotocol/registry:main-20250906-abc123d
 ```
 
-#### 3. 构建项目
+**Available tags:** 
+- **Releases**: `latest`, `v1.0.0`, `v1.1.0`, etc.
+- **Continuous**: `main` (latest main branch build)
+- **Development**: `main-<date>-<sha>` (specific commit builds)
+
+</details>
+
+#### Publishing a server
+
+To publish a server, we've built a simple CLI. You can use it with:
 
 ```bash
-pnpm build
+# Build the latest CLI
+make publisher
+
+# Use it!
+./bin/mcp-publisher --help
 ```
 
-构建完成后，MCP Server 文件位于：
+See [the publisher guide](./docs/guides/publishing/publish-server.md) for more details.
 
-```
-packages/mcp-server/dist/index.js
-```
-
-#### 4. 配置 IDE
-
-**支持两种 IDE**：
-
-##### 选项 A：Windsurf（推荐，自动识别）
-
-**配置文件**：`C:\Users\<用户名>\.codeium\windsurf\mcp_config.json`
-
-##### 选项 B：Cursor（需在 Agent 模式明确指示）
-
-**配置文件**：`C:\Users\<用户名>\.cursor\mcp.json`
-
----
-
-**Windsurf 配置示例**（推荐，使用体验更好）：
-
-编辑该文件，添加 ParseFlow 配置：
-
-```json
-{
-  "mcpServers": {
-    "parseflow": {
-      "command": "node",
-      "args": ["<项目根目录>\\packages\\mcp-server\\dist\\index.js"],
-      "env": {
-        "PARSEFLOW_CACHE_DIR": "<项目根目录>\\.cache",
-        "PARSEFLOW_MAX_FILE_SIZE": "52428800",
-        "PARSEFLOW_ALLOWED_PATHS": "D:\\;C:\\Users",
-        "LOG_LEVEL": "info"
-      }
-    }
-  }
-}
-```
-
-**注意**：
-
-- 将 `<项目根目录>` 替换为你的实际项目路径（例如 `D:\\ParseFlow` 或 `E:\\Projects\\ParseFlow`）
-- 使用双反斜杠 `\\` 或单斜杠 `/`
-- `PARSEFLOW_ALLOWED_PATHS` 设置允许访问的目录
-
-#### 5. 重启 Windsurf
-
-**完全退出** Windsurf（确认任务管理器中进程已关闭），然后重新启动。
-
-#### 6. 测试
-
-在 Windsurf 对话框中输入：
-
-```
-D:\example.pdf 有多少页？
-```
-
-如果 Cascade 自动调用 ParseFlow 并返回结果，说明配置成功！
-
----
-
-## 💡 使用示例
-
-### 基本查询
-
-```
-问：D:\report.pdf 有多少页？
-答：该 PDF 共有 25 页。
-```
-
-### 内容提取
-
-```
-问：请提取 D:\contract.pdf 第 5 页的内容
-答：[返回第 5 页的文本内容]
-```
-
-### 关键词搜索
-
-```
-问：在 D:\manual.pdf 中搜索"安装步骤"
-答：找到 3 处匹配：
-   - 第 12 页：安装步骤详解
-   - 第 15 页：高级安装步骤
-   - 第 20 页：常见安装步骤问题
-```
-
-### 元数据获取
-
-```
-问：D:\document.pdf 的作者是谁？
-答：作者：Unknown, 创建日期：2025-01-15
-```
-
----
-
-## 📚 文档
-
-### 📖 用户指南
-
-- [快速开始](docs/guides/quick-start.md) - 5 分钟上手 ParseFlow
-- [常见问题](docs/guides/faq.md) - FAQ 和故障排除
-- [使用示例](docs/guides/examples.md) - 代码示例和最佳实践
-
-### ⚙️ 环境配置
-
-- [Windsurf 配置](docs/setup/windsurf.md) - Windsurf IDE 配置指南（推荐）
-- [Cursor 配置](docs/setup/cursor.md) - Cursor IDE 配置指南
-
-### 🛠️ 开发文档
-
-- [API 文档](docs/development/api.md) - 完整 API 参考
-- [架构设计](docs/development/architecture.md) - 系统架构说明
-- [开发指南](docs/development/development.md) - 如何参与开发
-- [测试指南](docs/development/testing.md) - 测试策略和集成测试 PDF 说明 ⭐
-- [命名规范](docs/development/naming-conventions.md) - 代码规范
-
-### 📋 项目规划
-
-- [待办事项](docs/planning/todo.md) - 功能路线图
-- [分发分析](docs/planning/distribution-analysis.md) - 发布计划
-
-### 📂 文档索引
-
-- [完整文档目录](docs/README.md) - 所有文档的索引
-
----
-
-## 🛠️ 项目结构
-
-```
-ParseFlow/
-├── packages/
-│   ├── mcp-server/              # MCP 服务器
-│   │   ├── src/
-│   │   │   ├── index.ts         # 入口文件
-│   │   │   ├── server.ts        # MCP Server 实现
-│   │   │   ├── tools/           # MCP Tools 处理器
-│   │   │   └── utils/           # 工具函数
-│   │   └── package.json
-│   └── pdf-parser-core/         # PDF 解析核心库
-│       ├── src/
-│       │   ├── parser.ts        # 主解析器
-│       │   ├── extractors/      # 文本/元数据提取器
-│       │   ├── search/          # 搜索引擎
-│       │   └── types/           # TypeScript 类型
-│       └── package.json
-├── scripts/                     # 配置和诊断脚本
-├── docs/                        # 文档
-├── examples/                    # 示例代码
-├── tests/                       # 测试文件
-└── README.md                    # 本文件
-```
-
----
-
-## 🔧 配置选项
-
-### 环境变量
-
-| 变量名                    | 说明                       | 默认值            |
-| ------------------------- | -------------------------- | ----------------- |
-| `PARSEFLOW_CACHE_DIR`     | 缓存目录                   | `.cache`          |
-| `PARSEFLOW_MAX_FILE_SIZE` | 最大文件大小（字节）       | `52428800` (50MB) |
-| `PARSEFLOW_ALLOWED_PATHS` | 允许访问的路径（`;` 分隔） | 无                |
-| `LOG_LEVEL`               | 日志级别                   | `info`            |
-| `PARSEFLOW_LOG_FILE`      | 日志文件路径               | 可选              |
-
-### 配置示例
-
-```json
-{
-  "env": {
-    "PARSEFLOW_CACHE_DIR": "/path/to/cache",
-    "PARSEFLOW_MAX_FILE_SIZE": "104857600",
-    "PARSEFLOW_ALLOWED_PATHS": "D:\\Documents;E:\\Projects",
-    "LOG_LEVEL": "debug"
-  }
-}
-```
-
----
-
-## 🧪 开发指南
-
-### 本地开发
+#### Other commands
 
 ```bash
-# 安装依赖
-pnpm install
-
-# 开发模式（自动重启）
-pnpm dev
-
-# 运行测试
-pnpm test
-
-# 代码检查
-pnpm lint
-
-# 构建
-pnpm build
+# Run lint, unit tests and integration tests
+make check
 ```
 
-### 测试说明
+There are also a few more helpful commands for development. Run `make help` to learn more, or look in [Makefile](./Makefile).
 
-#### 📊 测试概况
+<!--
+For Claude and other AI tools: Always prefer make targets over custom commands where possible.
+-->
+
+## Architecture
+
+### Project Structure
 
 ```
-总测试数:   22 tests
-单元测试:   14 tests (必须通过)
-集成测试:   8 tests  (可选，需要 PDF)
-当前覆盖率: 94.56%
+├── cmd/                     # Application entry points
+│   └── publisher/           # Server publishing tool
+├── data/                    # Seed data
+├── deploy/                  # Deployment configuration (Pulumi)
+├── docs/                    # Documentation
+├── internal/                # Private application code
+│   ├── api/                 # HTTP handlers and routing
+│   ├── auth/                # Authentication (GitHub OAuth, JWT, namespace blocking)
+│   ├── config/              # Configuration management
+│   ├── database/            # Data persistence (PostgreSQL)
+│   ├── service/             # Business logic
+│   ├── telemetry/           # Metrics and monitoring
+│   └── validators/          # Input validation
+├── pkg/                     # Public packages
+│   ├── api/                 # API types and structures
+│   │   └── v0/              # Version 0 API types
+│   └── model/               # Data models for server.json
+├── scripts/                 # Development and testing scripts
+├── tests/                   # Integration tests
+└── tools/                   # CLI tools and utilities
+    └── validate-*.sh        # Schema validation tools
 ```
 
-#### ⚠️ 集成测试 PDF 提醒
+### Authentication
 
-**集成测试需要测试 PDF 文件，但这是可选的！**
+Publishing supports multiple authentication methods:
+- **GitHub OAuth** - For publishing by logging into GitHub
+- **GitHub OIDC** - For publishing from GitHub Actions
+- **DNS verification** - For proving ownership of a domain and its subdomains
+- **HTTP verification** - For proving ownership of a domain
 
-```bash
-# 位置
-tests/fixtures/test.pdf
+The registry validates namespace ownership when publishing. E.g. to publish...:
+- `io.github.domdomegg/my-cool-mcp` you must login to GitHub as `domdomegg`, or be in a GitHub Action on domdomegg's repos
+- `me.adamjones/my-cool-mcp` you must prove ownership of `adamjones.me` via DNS or HTTP challenge
 
-# 添加测试 PDF（任意 PDF 即可）
-cp /path/to/your.pdf tests/fixtures/test.pdf
-```
+## Community Projects
 
-**测试行为**:
-- ✅ **有 PDF**: 运行全部 22 个测试
-- ✅ **无 PDF**: 运行 14 个单元测试，自动跳过 8 个集成测试
-- ✅ **CI 通过**: 两种情况都通过，退出码 0
+Check out [community projects](docs/community-projects.md) to explore notable registry-related work created by the community.
 
-**为什么不提交 PDF?**
-- 避免二进制文件增大仓库
-- 开发者可使用自己的测试文件
-- CI 无需下载大文件
+## More documentation
 
-```bash
-# 无 PDF 时的输出示例
-⚠️  Integration tests skipped: test.pdf not found
-   Expected location: tests/fixtures/test.pdf
-   Place a test PDF at tests/fixtures/test.pdf to run these tests
-
-✅ Test Suites: 1 skipped, 2 passed, 2 of 3 total
-✅ Tests:       8 skipped, 14 passed, 22 total
-```
-
-**详细说明**: 查看 [测试指南](docs/development/testing.md)
-
-### 手动测试 MCP Server
-
-```bash
-# 直接运行
-node packages/mcp-server/dist/index.js
-
-# 使用 MCP Inspector
-npx @modelcontextprotocol/inspector node packages/mcp-server/dist/index.js
-```
-
-### 使用配置脚本
-
-```bash
-# 自动配置 Windsurf
-.\scripts\setup-windsurf.ps1
-
-# 检查 MCP 状态
-.\scripts\check-mcp-status.ps1
-
-# 测试安装
-.\scripts\test-installation.ps1
-```
-
----
-
-## 📋 MCP Tools 参考
-
-### extract_text
-
-提取 PDF 文本内容。
-
-**参数**：
-
-- `path` (string): PDF 文件路径
-- `page` (number, 可选): 提取特定页
-- `range` (string, 可选): 页码范围，如 "1-5"
-- `strategy` (string, 可选): 提取策略 - "raw", "formatted", "clean"
-
-**返回**：文本内容
-
-### search_pdf
-
-在 PDF 中搜索关键词。
-
-**参数**：
-
-- `path` (string): PDF 文件路径
-- `query` (string): 搜索关键词
-- `caseSensitive` (boolean, 可选): 是否区分大小写
-- `maxResults` (number, 可选): 最大结果数
-
-**返回**：搜索结果数组（包含页码和上下文）
-
-### get_metadata
-
-获取 PDF 元数据。
-
-**参数**：
-
-- `path` (string): PDF 文件路径
-
-**返回**：元数据对象（标题、作者、页数、创建日期等）
-
----
-
-## 🚀 开发路线图
-
-### 📅 近期目标（1-2 周）
-
-**当前状态**: ✅ CI/CD 完成 | ✅ 文档完善
-
-**下一步**:
-1. ⭐ **扩展测试覆盖** - 目标 85%+
-   - Extractors 完整测试
-   - Search 模块测试
-   - 错误处理测试
-
-2. ⭐ **实现核心功能**
-   - 图片提取 (`extractImages`)
-   - 目录提取 (`getTOC`)
-
-### 📅 中期目标（1-2 月）
-
-3. **性能优化**
-   - 大文件流式处理
-   - 缓存机制
-   - 并发处理
-
-4. **发布准备**
-   - 发布到 npm
-   - MCP Marketplace 提交
-   - GitHub Release 自动化
-
-5. **功能增强**
-   - PDF 合并/拆分
-   - 水印添加
-   - 表单处理
-
-### 📅 长期目标（3-6 月）
-
-6. **生态系统**
-   - CLI 工具 (`@parseflow/cli`)
-   - Web UI
-   - VSCode 扩展
-   - Docker 镜像
-
-7. **高级特性**
-   - OCR 支持（扫描件识别）
-   - AI 文档分析
-   - 更多格式支持
-
-**完整规划**: [docs/planning/todo.md](docs/planning/todo.md)  
-**技术分析**: [docs/planning/distribution-analysis.md](docs/planning/distribution-analysis.md)
-
----
-
-## 🤝 贡献指南
-
-欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md)
-
-### 贡献流程
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
----
-
-## 🐛 问题反馈
-
-如果遇到问题：
-
-1. 查看 [docs/guides/faq.md](docs/guides/faq.md) 常见问题
-2. 查看 [logs/parseflow.log](logs/) 日志文件
-3. 提交 [Issue](https://github.com/Libres-coder/ParseFlow/issues)
-
----
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
-
----
-
-## 🙏 致谢
-
-- [Model Context Protocol](https://modelcontextprotocol.io) - MCP 协议标准
-- [pdf-parse](https://www.npmjs.com/package/pdf-parse) - PDF 文本提取库
-- Windsurf 社区 - 测试和反馈
-
----
-
-## 📮 资源链接
-
-- [MCP 协议文档](https://modelcontextprotocol.io)
-- [Windsurf IDE](https://codeium.com/windsurf)
-- [项目文档](docs/)
-
----
-
-<div align="center">
-
-**v1.0.0** | **2025-11-26** | **本地部署**
-
-Made with ❤️ for Windsurf Community
-
-</div>
+See the [documentation](./docs) for more details if your question has not been answered here!

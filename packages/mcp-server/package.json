@@ -1,5 +1,5 @@
 {
-  "name": "@parseflow/mcp-server",
+  "name": "parseflow-mcp-server",
   "version": "1.0.0",
   "mcpName": "io.github.libres-coder/parseflow",
   "description": "MCP Server for PDF parsing with text extraction, metadata retrieval, keyword search, and more",
