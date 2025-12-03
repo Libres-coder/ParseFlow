@@ -1,7 +1,7 @@
 {
   "name": "parseflow-core",
   "version": "1.0.1",
-  "description": "Core PDF parsing library for ParseFlow - Extract text, metadata, images, and TOC from PDF files",
+  "description": "Document parsing library for ParseFlow - Extract text and data from PDF, Word (docx), and Excel (xlsx) files",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,13 +18,14 @@
   },
   "keywords": [
     "pdf",
+    "docx",
+    "xlsx",
+    "word",
+    "excel",
     "parser",
-    "pdf-parse",
-    "pdf-extraction",
+    "document-parsing",
     "text-extraction",
     "metadata",
-    "image-extraction",
-    "toc",
     "mcp",
     "model-context-protocol"
   ],
@@ -41,7 +42,9 @@
   },
   "dependencies": {
     "pdf-parse": "^1.1.1",
-    "pdf-lib": "^1.17.1"
+    "pdf-lib": "^1.17.1",
+    "mammoth": "^1.6.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",

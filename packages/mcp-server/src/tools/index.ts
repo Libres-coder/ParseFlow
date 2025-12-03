@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser, type TOCItem } from 'parseflow-core';
+import { PDFParser, WordParser, ExcelParser, type TOCItem } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
@@ -11,9 +11,13 @@ import { handleError } from '../utils/error-handler.js';
 export class ToolHandler {
   private pathResolver: PathResolver;
   private tools: Tool[];
+  private wordParser: WordParser;
+  private excelParser: ExcelParser;
 
   constructor(private parser: PDFParser) {
     this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
+    this.wordParser = new WordParser();
+    this.excelParser = new ExcelParser();
     this.tools = this.defineTools();
   }
 
@@ -43,6 +47,14 @@ export class ToolHandler {
           return await this.extractImages(args);
         case 'get_toc':
           return await this.getToc(args);
+        case 'extract_word':
+          return await this.extractWord(args);
+        case 'search_word':
+          return await this.searchWord(args);
+        case 'extract_excel':
+          return await this.extractExcel(args);
+        case 'search_excel':
+          return await this.searchExcel(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -172,6 +184,104 @@ export class ToolHandler {
             },
           },
           required: ['path'],
+        },
+      },
+      {
+        name: 'extract_word',
+        description:
+          'Extract text content from Word (docx) files. Use this tool when the user wants to read, analyze, or extract content from Word documents.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the Word file (e.g., D:\\documents\\file.docx)',
+            },
+            format: {
+              type: 'string',
+              enum: ['text', 'html'],
+              description: 'Output format: "text" for plain text, "html" for HTML. Default is "text".',
+              default: 'text',
+            },
+          },
+          required: ['path'],
+        },
+      },
+      {
+        name: 'search_word',
+        description:
+          'Search for keywords or phrases within a Word document. Returns matching results with context.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the Word file',
+            },
+            query: {
+              type: 'string',
+              description: 'The keyword or phrase to search for',
+            },
+            caseSensitive: {
+              type: 'boolean',
+              description: 'Whether the search should be case-sensitive. Default is false.',
+              default: false,
+            },
+          },
+          required: ['path', 'query'],
+        },
+      },
+      {
+        name: 'extract_excel',
+        description:
+          'Extract data from Excel (xlsx/xls) files. Use this tool to read spreadsheet data, analyze tables, or extract specific sheets.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the Excel file (e.g., D:\\documents\\file.xlsx)',
+            },
+            sheetName: {
+              type: 'string',
+              description: 'Optional: Specific sheet name to extract',
+            },
+            sheetIndex: {
+              type: 'number',
+              description: 'Optional: Sheet index to extract (0-based)',
+            },
+            format: {
+              type: 'string',
+              enum: ['json', 'csv', 'text'],
+              description: 'Output format: "json", "csv", or "text". Default is "json".',
+              default: 'json',
+            },
+          },
+          required: ['path'],
+        },
+      },
+      {
+        name: 'search_excel',
+        description:
+          'Search for keywords or phrases within an Excel file. Returns matching cells with sheet name, cell reference, and value.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the Excel file',
+            },
+            query: {
+              type: 'string',
+              description: 'The keyword or phrase to search for',
+            },
+            caseSensitive: {
+              type: 'boolean',
+              description: 'Whether the search should be case-sensitive. Default is false.',
+              default: false,
+            },
+          },
+          required: ['path', 'query'],
         },
       },
     ];
@@ -355,6 +465,132 @@ ${JSON.stringify(structuredData, null, 2)}`;
     };
 
     const text = `目录结构：\n\n${formatToc(toc)}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 提取 Word 文档工具
+   */
+  private async extractWord(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const format = (args.format as string) ?? 'text';
+
+    let text: string;
+    if (format === 'html') {
+      text = await this.wordParser.extractHTML(path);
+    } else {
+      const result = await this.wordParser.extractText(path);
+      text = result.text;
+      
+      if (result.warnings && result.warnings.length > 0) {
+        text += '\n\n---\nWarnings:\n' + result.warnings.join('\n');
+      }
+    }
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 搜索 Word 文档工具
+   */
+  private async searchWord(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const query = args.query as string;
+    const caseSensitive = (args.caseSensitive as boolean) ?? false;
+
+    const results = await this.wordParser.searchText(path, query, caseSensitive);
+
+    const text =
+      results.length === 0
+        ? 'No matches found'
+        : `Found ${results.length} results:\n\n${results
+            .map((r, i) => `[${i + 1}] Position ${r.position}\n${r.context}\n`)
+            .join('\n')}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 提取 Excel 数据工具
+   */
+  private async extractExcel(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const sheetName = args.sheetName as string | undefined;
+    const sheetIndex = args.sheetIndex as number | undefined;
+    const format = (args.format as 'json' | 'csv' | 'text') ?? 'json';
+
+    const results = await this.excelParser.extractData(path, {
+      sheetName,
+      sheetIndex,
+      format,
+    });
+
+    let text: string;
+    if (format === 'json') {
+      text = results
+        .map(
+          r =>
+            `=== Sheet: ${r.sheetName} ===\n` +
+            `Rows: ${r.rowCount}, Columns: ${r.columnCount}\n` +
+            `Data:\n${JSON.stringify(r.data, null, 2)}`
+        )
+        .join('\n\n');
+    } else {
+      text = results.map(r => `=== Sheet: ${r.sheetName} ===\n${r.data}`).join('\n\n');
+    }
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 搜索 Excel 数据工具
+   */
+  private async searchExcel(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const query = args.query as string;
+    const caseSensitive = (args.caseSensitive as boolean) ?? false;
+
+    const results = await this.excelParser.searchText(path, query, caseSensitive);
+
+    const text =
+      results.length === 0
+        ? 'No matches found'
+        : `Found ${results.length} results:\n\n${results
+            .map(
+              (r, i) =>
+                `[${i + 1}] Sheet: ${r.sheetName}, Cell: ${r.cellRef} (Row ${r.row}, Col ${r.col})\n` +
+                `Value: ${r.value}\n`
+            )
+            .join('\n')}`;
 
     return {
       content: [
