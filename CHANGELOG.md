@@ -13,7 +13,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Semantic search with vector embeddings
 - PDF merge/split functionality
 - PDF encryption/decryption
+- PowerPoint (pptx) support
 - Performance optimization with streaming and parallel processing
+
+## [1.1.0] - 2025-12-03
+
+### 🎉 Major Feature Release - Office Documents Support
+
+#### ✨ New Features
+
+- ✅ **Word (docx) Support**
+  - Text extraction with mammoth
+  - HTML conversion
+  - Document metadata retrieval
+  - Text search with context
+  - MCP tools: `extract_word`, `search_word`
+
+- ✅ **Excel (xlsx/xls) Support**
+  - Multi-sheet data extraction
+  - Multiple output formats (JSON, CSV, Text)
+  - Sheet-specific extraction
+  - Cell-based search with coordinates
+  - Range extraction
+  - Workbook metadata
+  - MCP tools: `extract_excel`, `search_excel`
+
+#### 📦 New Packages
+
+- `WordParser` - Complete Word document parsing
+- `ExcelParser` - Complete Excel spreadsheet parsing
+
+#### 🔧 Dependencies
+
+- Added `mammoth@^1.11.0` for Word parsing
+- Added `xlsx@^0.18.5` for Excel parsing
+
+#### 📚 Documentation
+
+- Added `OFFICE_EXAMPLES.md` with comprehensive usage examples
+- Updated `README.md` with Office documents support
+- Created test suite `test-office-docs.ts`
+- Added test files (Word测试文件.docx, Excel测试文件.xlsx)
+
+#### 🛠️ MCP Server
+
+- Total tools increased from 5 to 9
+- 5 PDF tools (existing)
+- 2 Word tools (new)
+- 2 Excel tools (new)
+
+#### 🧹 Cleanup
+
+- Removed 8 redundant documentation files (~35 KB)
+- Simplified `PROJECT_STATUS.md`
+- Improved project organization
+
+#### 🐛 Bug Fixes
+
+- Fixed Excel metadata extraction reliability
+- Added null checks for sheet names
+- Improved error handling for malformed files
 
 ## [1.0.0] - 2025-11-28
 
