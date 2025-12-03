@@ -202,18 +202,18 @@ export class ExcelParser {
     try {
       const stats = await fs.stat(filePath);
       const buffer = await fs.readFile(filePath);
-      const workbook = XLSX.read(buffer, { type: 'buffer', bookProps: true });
+      const workbook = XLSX.read(buffer, { type: 'buffer' });
 
       return {
         fileName: path.basename(filePath),
         filePath: path.resolve(filePath),
         fileSize: stats.size,
         lastModified: stats.mtime,
-        sheetNames: workbook.SheetNames,
-        sheetCount: workbook.SheetNames.length,
+        sheetNames: workbook.SheetNames || [],
+        sheetCount: (workbook.SheetNames || []).length,
         properties: {
           extension: path.extname(filePath),
-          props: workbook.Props
+          props: workbook.Props || {}
         }
       };
     } catch (error) {
@@ -296,8 +296,8 @@ export class ExcelParser {
    */
   async getSheetNames(filePath: string): Promise<string[]> {
     const buffer = await fs.readFile(filePath);
-    const workbook = XLSX.read(buffer, { type: 'buffer', bookSheets: true });
-    return workbook.SheetNames;
+    const workbook = XLSX.read(buffer, { type: 'buffer' });
+    return workbook.SheetNames || [];
   }
 
   /**

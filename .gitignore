@@ -64,10 +64,17 @@ tmp/
 tests/fixtures/*.pdf
 !tests/fixtures/.gitkeep
 
+# 测试文件
+test-output/
+*.pdf
+!PDF测试文档.pdf
+Excel测试文件.xlsx
+test-office-docs.ts
+extracted-images/
+
 # Output
 output/
 *.pdf.txt
-extracted-images/
 
 # Package manager
 package-lock.json
