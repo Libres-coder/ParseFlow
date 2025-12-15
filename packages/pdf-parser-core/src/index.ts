@@ -25,6 +25,15 @@ export type {
   ExcelMetadataResult
 } from './ExcelParser.js';
 
+// PowerPoint Parser
+export { PowerPointParser } from './PowerPointParser.js';
+export type {
+  PowerPointExtractOptions,
+  PowerPointExtractResult,
+  PowerPointMetadataResult,
+  PowerPointSearchResult
+} from './PowerPointParser.js';
+
 // PDF Types
 export type {
   ParserConfig,

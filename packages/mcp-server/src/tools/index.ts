@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser, WordParser, ExcelParser, type TOCItem } from 'parseflow-core';
+import { PDFParser, WordParser, ExcelParser, PowerPointParser, type TOCItem } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
@@ -13,11 +13,13 @@ export class ToolHandler {
   private tools: Tool[];
   private wordParser: WordParser;
   private excelParser: ExcelParser;
+  private pptParser: PowerPointParser;
 
   constructor(private parser: PDFParser) {
     this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
     this.wordParser = new WordParser();
     this.excelParser = new ExcelParser();
+    this.pptParser = new PowerPointParser();
     this.tools = this.defineTools();
   }
 
@@ -55,6 +57,10 @@ export class ToolHandler {
           return await this.extractExcel(args);
         case 'search_excel':
           return await this.searchExcel(args);
+        case 'extract_powerpoint':
+          return await this.extractPowerPoint(args);
+        case 'search_powerpoint':
+          return await this.searchPowerPoint(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -270,6 +276,49 @@ export class ToolHandler {
             path: {
               type: 'string',
               description: 'Absolute path to the Excel file',
+            },
+            query: {
+              type: 'string',
+              description: 'The keyword or phrase to search for',
+            },
+            caseSensitive: {
+              type: 'boolean',
+              description: 'Whether the search should be case-sensitive. Default is false.',
+              default: false,
+            },
+          },
+          required: ['path', 'query'],
+        },
+      },
+      {
+        name: 'extract_powerpoint',
+        description:
+          'Extract text content from PowerPoint (pptx) files. Use this tool to read presentations, extract slide content, or analyze presentation text.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the PowerPoint file (e.g., D:\\documents\\presentation.pptx)',
+            },
+            slideNumber: {
+              type: 'number',
+              description: 'Optional: Extract a specific slide (1-indexed)',
+            },
+          },
+          required: ['path'],
+        },
+      },
+      {
+        name: 'search_powerpoint',
+        description:
+          'Search for keywords or phrases within a PowerPoint presentation. Returns matching results with slide numbers and context.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the PowerPoint file',
             },
             query: {
               type: 'string',
@@ -589,6 +638,61 @@ ${JSON.stringify(structuredData, null, 2)}`;
               (r, i) =>
                 `[${i + 1}] Sheet: ${r.sheetName}, Cell: ${r.cellRef} (Row ${r.row}, Col ${r.col})\n` +
                 `Value: ${r.value}\n`
+            )
+            .join('\n')}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 提取 PowerPoint 内容工具
+   */
+  private async extractPowerPoint(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const slideNumber = args.slideNumber as number | undefined;
+
+    let text: string;
+    if (slideNumber !== undefined) {
+      text = await this.pptParser.extractSlide(path, slideNumber);
+    } else {
+      const result = await this.pptParser.extractText(path);
+      text = `Total Slides: ${result.totalSlides}\n\n${result.text}`;
+    }
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 搜索 PowerPoint 内容工具
+   */
+  private async searchPowerPoint(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const query = args.query as string;
+    const caseSensitive = (args.caseSensitive as boolean) ?? false;
+
+    const results = await this.pptParser.searchText(path, query, caseSensitive);
+
+    const text =
+      results.length === 0
+        ? 'No matches found'
+        : `Found ${results.length} results:\n\n${results
+            .map(
+              (r, i) =>
+                `[${i + 1}] Slide ${r.slideNumber}, Position ${r.position}\n${r.context}\n`
             )
             .join('\n')}`;
 
