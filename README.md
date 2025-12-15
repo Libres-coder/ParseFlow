@@ -8,7 +8,7 @@
 
 ParseFlow is a comprehensive document parsing solution that supports **PDF**, **Word (docx)**, and **Excel (xlsx/xls)** files. It provides both a standalone library and an MCP (Model Context Protocol) server for AI assistants.
 
-[中文文档](./README_EN.md) | [Examples](./OFFICE_EXAMPLES.md) | [GitHub](https://github.com/Libres-coder/ParseFlow)
+[English](./README_EN.md) | [Examples](./OFFICE_EXAMPLES.md) | [GitHub](https://github.com/Libres-coder/ParseFlow)
 
 ---
 
