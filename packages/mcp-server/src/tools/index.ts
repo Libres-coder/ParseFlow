@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser, WordParser, ExcelParser, PowerPointParser, type TOCItem } from 'parseflow-core';
+import { PDFParser, WordParser, ExcelParser, PowerPointParser, OCRParser, type TOCItem } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
@@ -14,12 +14,14 @@ export class ToolHandler {
   private wordParser: WordParser;
   private excelParser: ExcelParser;
   private pptParser: PowerPointParser;
+  private ocrParser: OCRParser;
 
   constructor(private parser: PDFParser) {
     this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
     this.wordParser = new WordParser();
     this.excelParser = new ExcelParser();
     this.pptParser = new PowerPointParser();
+    this.ocrParser = new OCRParser();
     this.tools = this.defineTools();
   }
 
@@ -61,6 +63,10 @@ export class ToolHandler {
           return await this.extractPowerPoint(args);
         case 'search_powerpoint':
           return await this.searchPowerPoint(args);
+        case 'extract_ocr':
+          return await this.extractOCR(args);
+        case 'search_ocr':
+          return await this.searchOCR(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -323,6 +329,55 @@ export class ToolHandler {
             query: {
               type: 'string',
               description: 'The keyword or phrase to search for',
+            },
+            caseSensitive: {
+              type: 'boolean',
+              description: 'Whether the search should be case-sensitive. Default is false.',
+              default: false,
+            },
+          },
+          required: ['path', 'query'],
+        },
+      },
+      {
+        name: 'extract_ocr',
+        description:
+          'Extract text from images using OCR (Optical Character Recognition). Supports common image formats (jpg, png, bmp, gif, webp). Use this tool when the user wants to read text from scanned documents, screenshots, or photos.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the image file (e.g., D:\\documents\\scan.png)',
+            },
+            language: {
+              type: 'string',
+              description: 'OCR language code. Default is "eng" (English). Supported: eng, chi_sim (Chinese Simplified), chi_tra (Chinese Traditional), jpn (Japanese), kor (Korean), fra (French), deu (German), spa (Spanish), rus (Russian)',
+              default: 'eng',
+            },
+          },
+          required: ['path'],
+        },
+      },
+      {
+        name: 'search_ocr',
+        description:
+          'Search for keywords in an image using OCR. First extracts text from the image, then searches for the query.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the image file',
+            },
+            query: {
+              type: 'string',
+              description: 'The keyword or phrase to search for',
+            },
+            language: {
+              type: 'string',
+              description: 'OCR language code. Default is "eng".',
+              default: 'eng',
             },
             caseSensitive: {
               type: 'boolean',
@@ -693,6 +748,61 @@ ${JSON.stringify(structuredData, null, 2)}`;
             .map(
               (r, i) =>
                 `[${i + 1}] Slide ${r.slideNumber}, Position ${r.position}\n${r.context}\n`
+            )
+            .join('\n')}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 提取 OCR 文本工具
+   */
+  private async extractOCR(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const language = (args.language as string) ?? 'eng';
+
+    const result = await this.ocrParser.extractText(path, { language });
+
+    const text = `OCR Result (Confidence: ${result.confidence.toFixed(1)}%)\n` +
+      `Language: ${result.metadata.language}\n\n` +
+      `--- Extracted Text ---\n${result.text}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 搜索 OCR 文本工具
+   */
+  private async searchOCR(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const query = args.query as string;
+    const language = (args.language as string) ?? 'eng';
+    const caseSensitive = (args.caseSensitive as boolean) ?? false;
+
+    const results = await this.ocrParser.searchText(path, query, caseSensitive, language);
+
+    const text =
+      results.length === 0
+        ? 'No matches found'
+        : `Found ${results.length} results:\n\n${results
+            .map(
+              (r, i) =>
+                `[${i + 1}] Position ${r.position}, Confidence: ${r.confidence.toFixed(1)}%\n` +
+                `Context: ${r.context}\n`
             )
             .join('\n')}`;
 

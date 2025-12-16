@@ -34,6 +34,14 @@ export type {
   PowerPointSearchResult
 } from './PowerPointParser.js';
 
+// OCR Parser
+export { OCRParser } from './OCRParser.js';
+export type {
+  OCRExtractOptions,
+  OCRExtractResult,
+  OCRSearchResult
+} from './OCRParser.js';
+
 // PDF Types
 export type {
   ParserConfig,

@@ -9,11 +9,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- OCR support with Tesseract.js
 - Semantic search with vector embeddings
 - PDF merge/split functionality
 - PDF encryption/decryption
 - Performance optimization with streaming and parallel processing
+
+## [1.3.0] - 2025-12-16
+
+### 🎉 OCR Support Release
+
+#### ✨ New Features
+
+- ✅ **OCR (Optical Character Recognition) Support**
+  - Image text extraction with Tesseract.js
+  - Multi-language support (12 languages)
+  - Text search in images with context
+  - Confidence scores for extracted text
+  - MCP tools: `extract_ocr`, `search_ocr`
+
+#### 📦 New Packages
+
+- `OCRParser` - Complete OCR text extraction
+
+#### 🔧 Dependencies
+
+- Added `tesseract.js@^5.1.0` for OCR processing
+
+#### 🌍 Supported Languages
+
+- English (eng), Chinese Simplified (chi_sim), Chinese Traditional (chi_tra)
+- Japanese (jpn), Korean (kor), French (fra), German (deu)
+- Spanish (spa), Russian (rus), Arabic (ara), Portuguese (por), Italian (ita)
+
+#### 🔢 Total MCP Tools: 13
+
+- PDF: 5 tools
+- Word: 2 tools
+- Excel: 2 tools
+- PowerPoint: 2 tools
+- OCR: 2 tools
 
 ## [1.2.0] - 2025-12-16
 
