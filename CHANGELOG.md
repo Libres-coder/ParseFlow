@@ -13,8 +13,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Semantic search with vector embeddings
 - PDF merge/split functionality
 - PDF encryption/decryption
-- PowerPoint (pptx) support
 - Performance optimization with streaming and parallel processing
+
+## [1.2.0] - 2025-12-16
+
+### 🎉 PowerPoint Support Release
+
+#### ✨ New Features
+
+- ✅ **PowerPoint (pptx) Support**
+  - Slide text extraction with node-pptx-parser
+  - Per-slide extraction
+  - Text search across slides with context
+  - Presentation metadata retrieval
+  - MCP tools: `extract_powerpoint`, `search_powerpoint`
+
+#### 📦 New Packages
+
+- `PowerPointParser` - Complete PowerPoint presentation parsing
+
+#### 🔧 Dependencies
+
+- Added `node-pptx-parser@^1.0.1` for PowerPoint parsing
+
+#### 📝 Documentation
+
+- Updated README.md (Chinese)
+- Updated README_EN.md (English)
+- Added PowerPoint examples
+
+#### 🔢 Total MCP Tools: 11
+
+- PDF: 5 tools
+- Word: 2 tools
+- Excel: 2 tools
+- PowerPoint: 2 tools
 
 ## [1.1.0] - 2025-12-03
 
