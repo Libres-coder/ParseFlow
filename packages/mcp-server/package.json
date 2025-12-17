@@ -1,14 +1,39 @@
 {
   "name": "parseflow-mcp-server",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "mcpName": "io.github.libres-coder/parseflow",
-  "description": "MCP Server for PDF parsing",
+  "description": "AI-powered document parsing with 20 tools: PDF, Word, Excel, PowerPoint, OCR, semantic search, and batch processing",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "pdf",
+    "document-parsing",
+    "word",
+    "excel",
+    "powerpoint",
+    "ocr",
+    "semantic-search",
+    "batch-processing",
+    "ai",
+    "llm"
+  ],
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
     "parseflow": "./dist/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Libres-coder/ParseFlow.git"
+  },
+  "homepage": "https://github.com/Libres-coder/ParseFlow",
+  "bugs": {
+    "url": "https://github.com/Libres-coder/ParseFlow/issues"
+  },
+  "author": "Libres-coder",
+  "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
