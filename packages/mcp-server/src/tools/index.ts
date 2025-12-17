@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser, WordParser, ExcelParser, PowerPointParser, OCRParser, type TOCItem } from 'parseflow-core';
+import { PDFParser, WordParser, ExcelParser, PowerPointParser, OCRParser, PDFUtils, type TOCItem } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
@@ -15,6 +15,7 @@ export class ToolHandler {
   private excelParser: ExcelParser;
   private pptParser: PowerPointParser;
   private ocrParser: OCRParser;
+  private pdfUtils: PDFUtils;
 
   constructor(private parser: PDFParser) {
     this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
@@ -22,6 +23,7 @@ export class ToolHandler {
     this.excelParser = new ExcelParser();
     this.pptParser = new PowerPointParser();
     this.ocrParser = new OCRParser();
+    this.pdfUtils = new PDFUtils();
     this.tools = this.defineTools();
   }
 
@@ -67,6 +69,12 @@ export class ToolHandler {
           return await this.extractOCR(args);
         case 'search_ocr':
           return await this.searchOCR(args);
+        case 'merge_pdf':
+          return await this.mergePDF(args);
+        case 'split_pdf':
+          return await this.splitPDF(args);
+        case 'extract_pdf_pages':
+          return await this.extractPDFPages(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -391,6 +399,73 @@ export class ToolHandler {
             },
           },
           required: ['path', 'query'],
+        },
+      },
+      {
+        name: 'merge_pdf',
+        description:
+          'Merge multiple PDF files into a single PDF. Use this tool when the user wants to combine or merge PDFs.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            paths: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Array of absolute paths to PDF files to merge (at least 2 files)',
+            },
+            outputPath: {
+              type: 'string',
+              description: 'Absolute path for the merged output PDF file',
+            },
+          },
+          required: ['paths', 'outputPath'],
+        },
+      },
+      {
+        name: 'split_pdf',
+        description:
+          'Split a PDF file into individual pages or extract specific page ranges. Use this tool when the user wants to split or separate PDF pages.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the PDF file to split',
+            },
+            outputDir: {
+              type: 'string',
+              description: 'Directory where split pages will be saved',
+            },
+            prefix: {
+              type: 'string',
+              description: 'Prefix for output file names (default: "page")',
+              default: 'page',
+            },
+          },
+          required: ['path', 'outputDir'],
+        },
+      },
+      {
+        name: 'extract_pdf_pages',
+        description:
+          'Extract specific pages from a PDF file. Supports page ranges like "1-5" or "1,3,5-7".',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the source PDF file',
+            },
+            range: {
+              type: 'string',
+              description: 'Page range to extract (e.g., "1-5", "1,3,5-7")',
+            },
+            outputPath: {
+              type: 'string',
+              description: 'Absolute path for the output PDF file',
+            },
+          },
+          required: ['path', 'range', 'outputPath'],
         },
       },
     ];
@@ -820,6 +895,65 @@ ${JSON.stringify(structuredData, null, 2)}`;
         {
           type: 'text',
           text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 合并 PDF 工具
+   */
+  private async mergePDF(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const paths = (args.paths as string[]).map((p) => this.pathResolver.resolve(p));
+    const outputPath = this.pathResolver.resolve(args.outputPath as string);
+
+    const result = await this.pdfUtils.merge(paths, outputPath);
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: result.message,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 拆分 PDF 工具
+   */
+  private async splitPDF(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const outputDir = this.pathResolver.resolve(args.outputDir as string);
+    const prefix = (args.prefix as string) ?? 'page';
+
+    const result = await this.pdfUtils.splitToPages(path, { outputDir, prefix });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: result.message + '\n\nOutput files:\n' + result.outputPaths?.join('\n'),
+        },
+      ],
+    };
+  }
+
+  /**
+   * 提取 PDF 页面工具
+   */
+  private async extractPDFPages(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const range = args.range as string;
+    const outputPath = this.pathResolver.resolve(args.outputPath as string);
+
+    const result = await this.pdfUtils.extractPages(path, range, outputPath);
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: result.message,
         },
       ],
     };

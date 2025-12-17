@@ -14,6 +14,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PDF encryption/decryption
 - Performance optimization with streaming and parallel processing
 
+## [1.5.0] - 2025-12-17
+
+### 📄 PDF Merge/Split Release
+
+#### ✨ New Features
+
+- ✅ **PDF Merge** - Combine multiple PDFs into one
+- ✅ **PDF Split** - Split PDF into individual pages
+- ✅ **PDF Page Extraction** - Extract specific page ranges
+- ✅ **PDF Rotation** - Rotate pages by 90/180/270 degrees
+
+#### 📦 New Components
+
+- `PDFUtils` class with merge, split, extract, rotate methods
+- MCP tools: `merge_pdf`, `split_pdf`, `extract_pdf_pages`
+
+#### 🔧 Dependencies
+
+- Added `pdf-lib@^1.17.1` for PDF manipulation
+
+#### 🔢 Total MCP Tools: 16
+
+- PDF: 8 tools (5 read + 3 write)
+- Word: 2 tools
+- Excel: 2 tools
+- PowerPoint: 2 tools
+- OCR: 2 tools
+
+---
+
 ## [1.4.0] - 2025-12-17
 
 ### 🔐 Encrypted PDF Support Release

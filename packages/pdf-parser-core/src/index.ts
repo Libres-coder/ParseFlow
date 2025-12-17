@@ -42,6 +42,14 @@ export type {
   OCRSearchResult
 } from './OCRParser.js';
 
+// PDF Utils
+export { PDFUtils } from './PDFUtils.js';
+export type {
+  MergeOptions,
+  SplitOptions,
+  PDFUtilsResult
+} from './PDFUtils.js';
+
 // PDF Types
 export type {
   ParserConfig,
