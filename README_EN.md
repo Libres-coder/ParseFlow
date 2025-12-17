@@ -7,7 +7,7 @@
 [![npm version](https://img.shields.io/npm/v/parseflow-core.svg)](https://www.npmjs.com/package/parseflow-core)
 [![MCP Server](https://img.shields.io/badge/MCP-Server-blue)](https://www.npmjs.com/package/parseflow-mcp-server)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.6.0-orange.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.7.0-orange.svg)](CHANGELOG.md)
 
 [中文](README.md) | **English**
 
@@ -39,8 +39,13 @@ ParseFlow is a comprehensive document parsing solution that supports **PDF**, **
 - ✅ AI vector embeddings
 - ✅ Intelligent document search (no exact keywords needed)
 
+### 📦 Batch Processing
+- ✅ Parallel processing of multiple files
+- ✅ Recursive directory scanning
+- ✅ Batch extraction and search
+
 ### 🤖 MCP Server
-- ✅ **18 tools** for AI assistants
+- ✅ **20 tools** for AI assistants
 - ✅ Works with Claude Desktop, Windsurf, Cursor
 
 ---
@@ -218,17 +223,32 @@ ParseFlow/
 
 ---
 
-## 🔧 MCP Tools
+## 🔧 MCP Tools (20)
 
-ParseFlow provides the following MCP tools:
+ParseFlow provides **20 MCP tools** for AI assistants:
 
-| Tool              | Description               | Parameters                                       | Status |
-| ----------------- | ------------------------- | ------------------------------------------------ | ------ |
-| `extract_text`    | Extract text from PDF     | `path`, `page?`, `range?`, `strategy?`           | ✅     |
-| `get_metadata`    | Get PDF metadata          | `path`                                           | ✅     |
-| `search_pdf`      | Search keywords in PDF    | `path`, `query`, `caseSensitive?`, `maxResults?` | ✅     |
-| `extract_images`  | Extract images from PDF   | `path`, `outputDir`, `format?`                   | ✅     |
-| `get_toc`         | Get table of contents     | `path`                                           | ✅     |
+| Category | Tool | Description |
+|----------|------|-------------|
+| **PDF** | `extract_text` | Extract text (supports encrypted PDFs) |
+| | `get_metadata` | Get metadata |
+| | `search_pdf` | Full-text search |
+| | `extract_images` | Extract images |
+| | `get_toc` | Get table of contents |
+| | `merge_pdf` | Merge multiple PDFs |
+| | `split_pdf` | Split into single pages |
+| | `extract_pdf_pages` | Extract specific pages |
+| **Word** | `extract_word` | Extract text/HTML |
+| | `search_word` | Text search |
+| **Excel** | `extract_excel` | Extract data |
+| | `search_excel` | Cell search |
+| **PowerPoint** | `extract_powerpoint` | Extract slides |
+| | `search_powerpoint` | Slide search |
+| **OCR** | `extract_ocr` | Image text recognition |
+| | `search_ocr` | OCR text search |
+| **AI** | `semantic_index` | Document vector indexing |
+| | `semantic_search` | Semantic similarity search |
+| **Batch** | `batch_extract` | Batch extract multiple files |
+| | `batch_search` | Batch search multiple files |
 
 For detailed API documentation, see [API Reference](docs/en/development/api.md)
 
