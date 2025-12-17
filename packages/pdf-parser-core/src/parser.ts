@@ -41,10 +41,23 @@ export class PDFParser {
 
   /**
    * 提取完整文本
+   * @param path - PDF 文件路径
+   * @param options - 提取选项，包括密码
    */
   async extractText(path: string, options?: ExtractOptions): Promise<string> {
     const buffer = this.readFile(path);
     return await this.textExtractor.extract(buffer, options);
+  }
+
+  /**
+   * 提取加密 PDF 文本
+   * @param path - PDF 文件路径
+   * @param password - PDF 密码
+   * @param options - 其他提取选项
+   */
+  async extractEncryptedText(path: string, password: string, options?: ExtractOptions): Promise<string> {
+    const buffer = this.readFile(path);
+    return await this.textExtractor.extract(buffer, { ...options, password });
   }
 
   /**

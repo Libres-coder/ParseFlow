@@ -109,6 +109,11 @@ export class ToolHandler {
                 'Text extraction strategy: "raw" for unprocessed text, "formatted" (default) for cleaned and structured text, "clean" for minimal whitespace',
               default: 'formatted',
             },
+            password: {
+              type: 'string',
+              description:
+                'Optional: Password for encrypted/password-protected PDF files',
+            },
           },
           required: ['path'],
         },
@@ -398,15 +403,19 @@ export class ToolHandler {
     const path = this.pathResolver.resolve(args.path as string);
     const page = args.page as number | undefined;
     const range = args.range as string | undefined;
+    const password = args.password as string | undefined;
+    const strategy = args.strategy as string | undefined;
 
     let text: string;
+
+    const options = { password, strategy: strategy as 'raw' | 'formatted' | 'clean' };
 
     if (page !== undefined) {
       text = await this.parser.extractPage(path, page);
     } else if (range) {
       text = await this.parser.extractRange(path, range);
     } else {
-      text = await this.parser.extractText(path);
+      text = await this.parser.extractText(path, options);
     }
 
     return {

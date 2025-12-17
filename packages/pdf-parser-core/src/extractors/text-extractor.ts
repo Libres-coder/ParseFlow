@@ -10,9 +10,14 @@ export class TextExtractor {
 
   /**
    * 提取文本
+   * @param buffer - PDF 文件 Buffer
+   * @param options - 提取选项，包括密码
    */
   async extract(buffer: Buffer, options?: ExtractOptions): Promise<string> {
-    const data = await pdf(buffer);
+    // pdf-parse 支持 password 选项，但类型定义不完整
+    const pdfOptions = options?.password ? { password: options.password } : undefined;
+    
+    const data = await pdf(buffer, pdfOptions as Parameters<typeof pdf>[1]);
     const text = data.text;
 
     const strategy = options?.strategy || 'formatted';

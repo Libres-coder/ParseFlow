@@ -14,6 +14,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PDF encryption/decryption
 - Performance optimization with streaming and parallel processing
 
+## [1.4.0] - 2025-12-17
+
+### 🔐 Encrypted PDF Support Release
+
+#### ✨ New Features
+
+- ✅ **Password-Protected PDF Support**
+  - Extract text from encrypted PDF files
+  - Password parameter in `extract_text` MCP tool
+  - New `extractEncryptedText` API method
+
+#### 🔧 API Changes
+
+- Added `password` option to `ExtractOptions`
+- Updated `extract_text` tool with password parameter
+
+---
+
 ## [1.3.0] - 2025-12-16
 
 ### 🎉 OCR Support Release

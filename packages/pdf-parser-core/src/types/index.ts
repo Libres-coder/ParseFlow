@@ -29,6 +29,7 @@ export interface ExtractOptions {
   preserveFormatting?: boolean;
   includeHeaders?: boolean;
   includeFooters?: boolean;
+  password?: string;
 }
 
 export interface SearchOptions {
