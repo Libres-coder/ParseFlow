@@ -200,7 +200,8 @@ node test-quick.js D:\7.pdf
 
 ## 📚 更多帮助
 
-- [完整配置指南](./WINDSURF_SETUP.md)
-- [常见问题](./FAQ.md)
-- [API 文档](./docs/API.md)
-- [架构设计](./docs/ARCHITECTURE.md)
+- [Windsurf 配置指南](../setup/windsurf.md)
+- [Cursor 配置指南](../setup/cursor.md)
+- [常见问题](./faq.md)
+- [API 文档](../development/api.md)
+- [架构设计](../development/architecture.md)
