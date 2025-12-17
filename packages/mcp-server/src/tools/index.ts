@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser, WordParser, ExcelParser, PowerPointParser, OCRParser, PDFUtils, SemanticSearch, type TOCItem } from 'parseflow-core';
+import { PDFParser, WordParser, ExcelParser, PowerPointParser, OCRParser, PDFUtils, SemanticSearch, BatchProcessor, type TOCItem } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
@@ -17,6 +17,7 @@ export class ToolHandler {
   private ocrParser: OCRParser;
   private pdfUtils: PDFUtils;
   private semanticSearch: SemanticSearch;
+  private batchProcessor: BatchProcessor;
 
   constructor(private parser: PDFParser) {
     this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
@@ -26,6 +27,7 @@ export class ToolHandler {
     this.ocrParser = new OCRParser();
     this.pdfUtils = new PDFUtils();
     this.semanticSearch = new SemanticSearch();
+    this.batchProcessor = new BatchProcessor();
     this.tools = this.defineTools();
   }
 
@@ -81,6 +83,10 @@ export class ToolHandler {
           return await this.semanticIndex(args);
         case 'semantic_search':
           return await this.semanticSearchQuery(args);
+        case 'batch_extract':
+          return await this.batchExtract(args);
+        case 'batch_search':
+          return await this.batchSearch(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -517,6 +523,70 @@ export class ToolHandler {
             },
           },
           required: ['query'],
+        },
+      },
+      {
+        name: 'batch_extract',
+        description:
+          'Extract text from multiple documents in parallel. Supports PDF, Word, Excel, PowerPoint, and images (OCR). Can process a list of files or an entire directory.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            paths: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Array of absolute file paths to process',
+            },
+            directory: {
+              type: 'string',
+              description: 'Directory path to process all supported files',
+            },
+            recursive: {
+              type: 'boolean',
+              description: 'Process subdirectories recursively (only with directory option)',
+              default: false,
+            },
+            concurrency: {
+              type: 'number',
+              description: 'Number of files to process in parallel (default: 3)',
+              default: 3,
+            },
+            includeMetadata: {
+              type: 'boolean',
+              description: 'Include file metadata in results',
+              default: false,
+            },
+          },
+        },
+      },
+      {
+        name: 'batch_search',
+        description:
+          'Search for a keyword or phrase across multiple documents in parallel. Supports PDF, Word, Excel, and PowerPoint.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            paths: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Array of absolute file paths to search',
+            },
+            query: {
+              type: 'string',
+              description: 'Search query string',
+            },
+            caseSensitive: {
+              type: 'boolean',
+              description: 'Case-sensitive search',
+              default: false,
+            },
+            concurrency: {
+              type: 'number',
+              description: 'Number of files to search in parallel (default: 3)',
+              default: 3,
+            },
+          },
+          required: ['paths', 'query'],
         },
       },
     ];
@@ -1074,6 +1144,105 @@ ${JSON.stringify(structuredData, null, 2)}`;
                 `[${i + 1}] Score: ${(r.score * 100).toFixed(1)}%\n${r.text}\n`
             )
             .join('\n---\n')}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 批量提取工具
+   */
+  private async batchExtract(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const paths = args.paths as string[] | undefined;
+    const directory = args.directory as string | undefined;
+    const recursive = (args.recursive as boolean) ?? false;
+    const concurrency = (args.concurrency as number) ?? 3;
+    const includeMetadata = (args.includeMetadata as boolean) ?? false;
+
+    let result;
+
+    if (directory) {
+      const resolvedDir = this.pathResolver.resolve(directory);
+      result = await this.batchProcessor.processDirectory(resolvedDir, {
+        recursive,
+        concurrency,
+        includeMetadata,
+      });
+    } else if (paths && paths.length > 0) {
+      const resolvedPaths = paths.map((p) => this.pathResolver.resolve(p));
+      result = await this.batchProcessor.processFiles(resolvedPaths, {
+        concurrency,
+        includeMetadata,
+      });
+    } else {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: 'Error: Either "paths" (array) or "directory" (string) must be provided.',
+          },
+        ],
+      };
+    }
+
+    const summary = `Batch Extraction Complete:
+- Total files: ${result.total}
+- Successful: ${result.successful}
+- Failed: ${result.failed}
+- Duration: ${(result.duration / 1000).toFixed(2)}s
+
+Results:
+${result.results
+  .map(
+    (r, i) =>
+      `[${i + 1}] ${r.path} (${r.type})
+   Status: ${r.success ? '✅ Success' : '❌ Failed'}${r.error ? `\n   Error: ${r.error}` : ''}${r.text ? `\n   Preview: ${r.text.substring(0, 200)}...` : ''}`
+  )
+  .join('\n\n')}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: summary,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 批量搜索工具
+   */
+  private async batchSearch(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const paths = args.paths as string[];
+    const query = args.query as string;
+    const caseSensitive = (args.caseSensitive as boolean) ?? false;
+    const concurrency = (args.concurrency as number) ?? 3;
+
+    const resolvedPaths = paths.map((p) => this.pathResolver.resolve(p));
+    const result = await this.batchProcessor.searchFiles(resolvedPaths, query, {
+      caseSensitive,
+      concurrency,
+    });
+
+    const text =
+      result.filesWithMatches === 0
+        ? `No matches found for "${query}" in ${result.total} files.`
+        : `Found matches in ${result.filesWithMatches} of ${result.total} files:
+
+${result.results
+  .map(
+    (r) =>
+      `📄 ${r.path} (${r.type})
+${r.matches.map((m) => `   • ${m.text}${m.context ? ` [${m.context}]` : ''}`).join('\n')}`
+  )
+  .join('\n\n')}`;
 
     return {
       content: [

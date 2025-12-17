@@ -58,6 +58,14 @@ export type {
   DocumentChunk
 } from './SemanticSearch.js';
 
+// Batch Processor
+export { BatchProcessor } from './BatchProcessor.js';
+export type {
+  BatchFileResult,
+  BatchResult,
+  BatchOptions
+} from './BatchProcessor.js';
+
 // PDF Types
 export type {
   ParserConfig,

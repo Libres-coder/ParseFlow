@@ -14,6 +14,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PDF encryption/decryption
 - Performance optimization with streaming and parallel processing
 
+## [1.7.0] - 2025-12-17
+
+### 📦 Batch Processing Release
+
+#### ✨ New Features
+
+- ✅ **Batch Extraction** - Process multiple documents in parallel
+- ✅ **Batch Search** - Search across multiple files simultaneously
+- ✅ **Directory Processing** - Process all supported files in a directory
+
+#### 📦 New Components
+
+- `BatchProcessor` class with processFiles, processDirectory, searchFiles methods
+- MCP tools: `batch_extract`, `batch_search`
+
+#### 🚀 Performance
+
+- Concurrent processing (configurable concurrency level)
+- Progress reporting support
+- Supports all file types (PDF, Word, Excel, PowerPoint, Images)
+
+#### 🔢 Total MCP Tools: 20
+
+- PDF: 8 tools
+- Word: 2 tools
+- Excel: 2 tools
+- PowerPoint: 2 tools
+- OCR: 2 tools
+- Semantic: 2 tools
+- Batch: 2 tools
+
+---
+
 ## [1.6.0] - 2025-12-17
 
 ### 🧠 Semantic Search Release
