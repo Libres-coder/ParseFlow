@@ -14,6 +14,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PDF encryption/decryption
 - Performance optimization with streaming and parallel processing
 
+## [1.6.0] - 2025-12-17
+
+### 🧠 Semantic Search Release
+
+#### ✨ New Features
+
+- ✅ **Semantic Search** - AI-powered document search using vector embeddings
+- ✅ **Document Indexing** - Split documents into chunks and create embeddings
+- ✅ **Similarity Search** - Find relevant passages even without exact keyword match
+
+#### 📦 New Components
+
+- `SemanticSearch` class with indexDocument, search, embed methods
+- MCP tools: `semantic_index`, `semantic_search`
+
+#### 🔧 Dependencies
+
+- Added `@xenova/transformers@^2.17.2` for AI embeddings
+- Uses `all-MiniLM-L6-v2` model by default
+
+#### 🔢 Total MCP Tools: 18
+
+- PDF: 8 tools
+- Word: 2 tools
+- Excel: 2 tools
+- PowerPoint: 2 tools
+- OCR: 2 tools
+- Semantic: 2 tools
+
+---
+
 ## [1.5.0] - 2025-12-17
 
 ### 📄 PDF Merge/Split Release

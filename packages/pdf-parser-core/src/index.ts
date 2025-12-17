@@ -50,6 +50,14 @@ export type {
   PDFUtilsResult
 } from './PDFUtils.js';
 
+// Semantic Search
+export { SemanticSearch } from './SemanticSearch.js';
+export type {
+  SemanticSearchOptions,
+  SemanticSearchResult,
+  DocumentChunk
+} from './SemanticSearch.js';
+
 // PDF Types
 export type {
   ParserConfig,

@@ -3,7 +3,7 @@
  */
 
 import { Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { PDFParser, WordParser, ExcelParser, PowerPointParser, OCRParser, PDFUtils, type TOCItem } from 'parseflow-core';
+import { PDFParser, WordParser, ExcelParser, PowerPointParser, OCRParser, PDFUtils, SemanticSearch, type TOCItem } from 'parseflow-core';
 import { logger } from '../utils/logger.js';
 import { PathResolver } from '../utils/path-resolver.js';
 import { handleError } from '../utils/error-handler.js';
@@ -16,6 +16,7 @@ export class ToolHandler {
   private pptParser: PowerPointParser;
   private ocrParser: OCRParser;
   private pdfUtils: PDFUtils;
+  private semanticSearch: SemanticSearch;
 
   constructor(private parser: PDFParser) {
     this.pathResolver = new PathResolver(process.env.PARSEFLOW_ALLOWED_PATHS?.split(';'));
@@ -24,6 +25,7 @@ export class ToolHandler {
     this.pptParser = new PowerPointParser();
     this.ocrParser = new OCRParser();
     this.pdfUtils = new PDFUtils();
+    this.semanticSearch = new SemanticSearch();
     this.tools = this.defineTools();
   }
 
@@ -75,6 +77,10 @@ export class ToolHandler {
           return await this.splitPDF(args);
         case 'extract_pdf_pages':
           return await this.extractPDFPages(args);
+        case 'semantic_index':
+          return await this.semanticIndex(args);
+        case 'semantic_search':
+          return await this.semanticSearchQuery(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -466,6 +472,51 @@ export class ToolHandler {
             },
           },
           required: ['path', 'range', 'outputPath'],
+        },
+      },
+      {
+        name: 'semantic_index',
+        description:
+          'Index a document for semantic search. This must be called before using semantic_search. Splits the document into chunks and creates vector embeddings.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Absolute path to the document file (PDF, Word, or text file)',
+            },
+            chunkSize: {
+              type: 'number',
+              description: 'Size of each text chunk in characters (default: 500)',
+              default: 500,
+            },
+          },
+          required: ['path'],
+        },
+      },
+      {
+        name: 'semantic_search',
+        description:
+          'Search for semantically similar content in indexed documents. Uses AI embeddings to find relevant passages even if exact keywords do not match.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            query: {
+              type: 'string',
+              description: 'The search query (can be a question or topic)',
+            },
+            topK: {
+              type: 'number',
+              description: 'Number of results to return (default: 5)',
+              default: 5,
+            },
+            minScore: {
+              type: 'number',
+              description: 'Minimum similarity score (0-1, default: 0.3)',
+              default: 0.3,
+            },
+          },
+          required: ['query'],
         },
       },
     ];
@@ -954,6 +1005,81 @@ ${JSON.stringify(structuredData, null, 2)}`;
         {
           type: 'text',
           text: result.message,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 语义索引工具
+   */
+  private async semanticIndex(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const path = this.pathResolver.resolve(args.path as string);
+    const chunkSize = (args.chunkSize as number) ?? 500;
+
+    // 根据文件类型提取文本
+    let text: string;
+    if (path.endsWith('.pdf')) {
+      text = await this.parser.extractText(path);
+    } else if (path.endsWith('.docx')) {
+      const result = await this.wordParser.extractText(path);
+      text = result.text;
+    } else {
+      // 假设是文本文件
+      const fs = await import('fs/promises');
+      text = await fs.readFile(path, 'utf-8');
+    }
+
+    // 清空旧索引并创建新索引
+    this.semanticSearch.clear();
+    const chunkCount = await this.semanticSearch.indexDocument(text, chunkSize);
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `Successfully indexed document: ${path}\nCreated ${chunkCount} chunks for semantic search.`,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 语义搜索工具
+   */
+  private async semanticSearchQuery(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const query = args.query as string;
+    const topK = (args.topK as number) ?? 5;
+    const minScore = (args.minScore as number) ?? 0.3;
+
+    if (this.semanticSearch.getChunkCount() === 0) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: 'No documents indexed. Please use semantic_index first to index a document.',
+          },
+        ],
+      };
+    }
+
+    const results = await this.semanticSearch.search(query, { topK, minScore });
+
+    const text =
+      results.length === 0
+        ? 'No relevant passages found.'
+        : `Found ${results.length} relevant passages:\n\n${results
+            .map(
+              (r, i) =>
+                `[${i + 1}] Score: ${(r.score * 100).toFixed(1)}%\n${r.text}\n`
+            )
+            .join('\n---\n')}`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text,
         },
       ],
     };
