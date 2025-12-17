@@ -2,48 +2,46 @@
 
 <div align="center">
 
-**Universal Document Parsing Library for PDF, Word, and Excel Files**
+**AI-Powered Universal Document Parsing Library**
 
 [![npm version](https://img.shields.io/npm/v/parseflow-core.svg)](https://www.npmjs.com/package/parseflow-core)
 [![MCP Server](https://img.shields.io/badge/MCP-Server-blue)](https://www.npmjs.com/package/parseflow-mcp-server)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.6.0-orange.svg)](CHANGELOG.md)
 
-[中文](./README.md) | **English** | [Examples](./OFFICE_EXAMPLES.md)
+[中文](README.md) | **English**
 
 </div>
 
 ---
 
-ParseFlow is a comprehensive document parsing solution that supports **PDF**, **Word (docx)**, and **Excel (xlsx/xls)** files. It provides both a standalone library and an MCP (Model Context Protocol) server for AI assistants.
+ParseFlow is a comprehensive document parsing solution that supports **PDF**, **Word**, **Excel**, **PowerPoint**, and **OCR**. It provides both a standalone library and an MCP server for AI assistants.
 
 ## ✨ Features
 
 ### 📄 PDF Support
-- ✅ Text extraction with multiple strategies (raw, formatted, clean)
-- ✅ Page-specific and range-based extraction
-- ✅ Metadata retrieval (title, author, dates, page count)
-- ✅ Full-text search with context
+- ✅ Text extraction with multiple strategies
+- ✅ 🔐 Encrypted PDF password support
+- ✅ 📄 PDF merge, split, extract pages
+- ✅ Metadata, search, TOC extraction
 
-### 📝 Word (docx) Support
-- ✅ Text extraction
-- ✅ HTML conversion
-- ✅ Metadata retrieval
-- ✅ Text search with context
+### 📝 Word / 📊 Excel / 🎯 PowerPoint
+- ✅ Text extraction and search
+- ✅ HTML conversion (Word)
+- ✅ Multi-sheet support (Excel)
+- ✅ Slide extraction (PowerPoint)
 
-### 📊 Excel (xlsx/xls) Support
-- ✅ Multi-sheet data extraction
-- ✅ Multiple output formats (JSON, CSV, Text)
-- ✅ Sheet-specific extraction
-- ✅ Cell-based search
+### 🔍 OCR Image Recognition
+- ✅ 12 languages supported
+- ✅ Image text extraction and search
 
-### 🎯 PowerPoint (pptx) Support
-- ✅ Slide text extraction
-- ✅ Text search across slides
+### 🧠 Semantic Search
+- ✅ AI vector embeddings
+- ✅ Intelligent document search (no exact keywords needed)
 
 ### 🤖 MCP Server
-- ✅ 11 tools for AI assistants
+- ✅ **18 tools** for AI assistants
 - ✅ Works with Claude Desktop, Windsurf, Cursor
-- ✅ Path security with allowlist
 
 ---
 
@@ -55,11 +53,15 @@ ParseFlow is a comprehensive document parsing solution that supports **PDF**, **
 npm install parseflow-core
 ```
 
-### MCP Server
+### MCP Server (Global)
 
 ```bash
 npm install -g parseflow-mcp-server
-# Or use with npx
+```
+
+Or use with npx:
+
+```bash
 npx parseflow-mcp-server
 ```
 
@@ -73,8 +75,18 @@ npx parseflow-mcp-server
 import { PDFParser } from 'parseflow-core';
 
 const parser = new PDFParser();
+
+// Extract all text
 const text = await parser.extractText('document.pdf');
+
+// Extract specific page
+const page5 = await parser.extractPage('document.pdf', 5);
+
+// Search
 const results = await parser.search('document.pdf', 'keyword');
+
+// Get metadata
+const metadata = await parser.getMetadata('document.pdf');
 ```
 
 ### Word Parsing
@@ -83,8 +95,16 @@ const results = await parser.search('document.pdf', 'keyword');
 import { WordParser } from 'parseflow-core';
 
 const parser = new WordParser();
+
+// Extract text
 const result = await parser.extractText('report.docx');
+console.log(result.text);
+
+// Convert to HTML
 const html = await parser.extractHTML('report.docx');
+
+// Search
+const matches = await parser.searchText('report.docx', 'budget');
 ```
 
 ### Excel Parsing
@@ -93,84 +113,233 @@ const html = await parser.extractHTML('report.docx');
 import { ExcelParser } from 'parseflow-core';
 
 const parser = new ExcelParser();
+
+// Extract all sheets (JSON format)
 const data = await parser.extractData('spreadsheet.xlsx');
+
+// Extract specific sheet
+const sales = await parser.extractData('data.xlsx', {
+  sheetName: 'Q4 Sales',
+  format: 'json'
+});
+
+// Search in cells
 const results = await parser.searchText('data.xlsx', 'revenue');
 ```
 
-### PowerPoint Parsing
+---
 
-```typescript
-import { PowerPointParser } from 'parseflow-core';
+## 📚 Documentation
 
-const parser = new PowerPointParser();
-const result = await parser.extractText('presentation.pptx');
-const results = await parser.searchText('slides.pptx', 'keyword');
+### 📖 User Guides
+
+- [Quick Start](docs/en/guides/quick-start.md) - Get started in 5 minutes
+- [FAQ](docs/en/guides/faq.md) - Frequently asked questions
+- [Examples](docs/en/guides/examples.md) - Code examples and best practices
+
+### ⚙️ Setup Guides
+
+- [Windsurf Setup](docs/en/setup/windsurf.md) - Windsurf IDE configuration (Recommended)
+- [Cursor Setup](docs/en/setup/cursor.md) - Cursor IDE configuration
+
+### 🛠️ Development Documentation
+
+- [API Reference](docs/en/development/api.md) - Complete API documentation
+- [Architecture](docs/en/development/architecture.md) - System architecture
+- [Development Guide](docs/en/development/development.md) - How to contribute
+- [Naming Conventions](docs/en/development/naming-conventions.md) - Code standards
+
+### 📋 Project Planning
+
+- [TODO](docs/en/planning/todo.md) - Feature roadmap
+- [Distribution Analysis](docs/en/planning/distribution-analysis.md) - Release plans
+
+### 📂 Documentation Index
+
+- [Complete Documentation](docs/en/README.md) - Full documentation index
+
+---
+
+## 🎯 Usage Examples
+
+### Text Extraction
+
+```
+Q: Extract text from D:\report.pdf
+A: [Parsed text content...]
+```
+
+### Keyword Search
+
+```
+Q: Search for "contract" in D:\document.pdf
+A: Found 3 results:
+   Page 1: ...contract terms...
+   Page 3: ...contract signed...
+   Page 5: ...contract expires...
+```
+
+### Metadata Retrieval
+
+```
+Q: What's the author of D:\document.pdf?
+A: Author: Unknown, Created: 2025-01-15
 ```
 
 ---
 
-## 🛠️ MCP Server Configuration
+## 🛠️ Project Structure
 
-### Claude Desktop
-
-Add to `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "parseflow": {
-      "command": "npx",
-      "args": ["-y", "parseflow-mcp-server"]
-    }
-  }
-}
+```
+ParseFlow/
+├── packages/
+│   ├── mcp-server/              # MCP Server
+│   │   ├── src/
+│   │   │   ├── index.ts         # Entry point
+│   │   │   ├── server.ts        # MCP Server core
+│   │   │   ├── tools/           # MCP tools
+│   │   │   ├── resources/       # MCP resources
+│   │   │   └── utils/           # Utilities
+│   │   └── dist/                # Build output
+│   └── pdf-parser-core/         # PDF parsing core
+│       ├── src/
+│       │   ├── parser.ts        # Main parser
+│       │   ├── extractors/      # Text extractors
+│       │   ├── search/          # Search functionality
+│       │   └── types/           # Type definitions
+│       └── dist/                # Build output
+├── docs/                        # Documentation
+│   ├── zh/                      # Chinese docs
+│   └── en/                      # English docs
+├── examples/                    # Usage examples
+├── tests/                       # Test files
+└── scripts/                     # Utility scripts
 ```
 
-### Available Tools (11)
+---
 
-| Tool | Description |
-|------|-------------|
-| `extract_text` | Extract text from PDF |
-| `get_metadata` | Get PDF metadata |
-| `search_pdf` | Search in PDF |
-| `extract_images` | Extract images from PDF |
-| `get_toc` | Get PDF table of contents |
-| `extract_word` | Extract text from Word |
-| `search_word` | Search in Word |
-| `extract_excel` | Extract data from Excel |
-| `search_excel` | Search in Excel |
-| `extract_powerpoint` | Extract text from PowerPoint |
-| `search_powerpoint` | Search in PowerPoint |
+## 🔧 MCP Tools
+
+ParseFlow provides the following MCP tools:
+
+| Tool              | Description               | Parameters                                       | Status |
+| ----------------- | ------------------------- | ------------------------------------------------ | ------ |
+| `extract_text`    | Extract text from PDF     | `path`, `page?`, `range?`, `strategy?`           | ✅     |
+| `get_metadata`    | Get PDF metadata          | `path`                                           | ✅     |
+| `search_pdf`      | Search keywords in PDF    | `path`, `query`, `caseSensitive?`, `maxResults?` | ✅     |
+| `extract_images`  | Extract images from PDF   | `path`, `outputDir`, `format?`                   | ✅     |
+| `get_toc`         | Get table of contents     | `path`                                           | ✅     |
+
+For detailed API documentation, see [API Reference](docs/en/development/api.md)
 
 ---
 
-## 📈 Roadmap
+## 🚀 Future Plans
 
-### v1.1.0 (Current) ✅
-- ✅ Word (docx) support
-- ✅ Excel (xlsx/xls) support
-- ✅ PowerPoint (pptx) support
-- ✅ 11 MCP tools
+### ✅ Completed Features (v1.0.0)
 
-### v1.2.0 (Planned)
-- ⏳ OCR text recognition
-- ⏳ Batch processing
-- ⏳ Encrypted PDF support
+- ✅ Text extraction
+- ✅ Metadata extraction
+- ✅ Keyword search
+- ✅ Image extraction (external tool integration)
+- ✅ Table of contents extraction (external tool integration)
+
+### High Priority
+
+#### ⭐ npm Package Release
+
+Simplify installation and usage!
+
+**Plans**:
+
+- ✅ Core functionality complete
+- ✅ Documentation complete
+- ✅ Testing complete
+- 📦 Ready to publish to npm
+- 🎯 Submit to official MCP Registry
+
+**Priority**: ⭐⭐⭐⭐⭐
+
+#### ⭐ GitHub Release
+
+Complete project release
+
+**Plans**:
+
+- 📋 Create release notes
+- 📦 Package distribution
+- 🎉 v1.0.0 release
+
+**Priority**: ⭐⭐⭐⭐⭐
+
+### Medium Priority
+
+- 🔄 Performance optimization (large file handling)
+- 📊 Advanced search features (fuzzy search, regex)
+- 🎨 Better error messages and user feedback
+
+### Future Considerations
+
+- 📸 OCR support (for scanned documents)
+- 🤖 AI-powered document analysis
+- 🔄 PDF merge/split functionality
+- 🔐 PDF encryption/decryption
+- 🌐 More IDE integrations
+
+**Detailed Roadmap**: [docs/en/planning/todo.md](docs/en/planning/todo.md)
 
 ---
 
-## 🔗 Links
+## 🤝 Contributing
 
-- **npm Core**: https://www.npmjs.com/package/parseflow-core
-- **npm MCP**: https://www.npmjs.com/package/parseflow-mcp-server
-- **GitHub**: https://github.com/Libres-coder/ParseFlow
+Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+### Contribution Process
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 🐛 Issue Reporting
+
+If you encounter problems:
+
+1. Check [docs/en/guides/faq.md](docs/en/guides/faq.md) for common issues
+2. Check [logs/parseflow.log](logs/) log file
+3. Submit an [Issue](https://github.com/Libres-coder/ParseFlow/issues)
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](./LICENSE)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ---
 
-**Made with ❤️ by Libres-coder**
+## 🙏 Acknowledgments
+
+- [Model Context Protocol](https://modelcontextprotocol.io) - MCP protocol standard
+- [pdf-parse](https://www.npmjs.com/package/pdf-parse) - PDF text extraction library
+- [pdf-lib](https://www.npmjs.com/package/pdf-lib) - PDF manipulation library
+- [Poppler](https://poppler.freedesktop.org/) - PDF rendering library
+- Windsurf Community - Testing and feedback
+
+---
+
+## 📮 Resources
+
+- [MCP Protocol Documentation](https://modelcontextprotocol.io)
+- [Windsurf IDE](https://codeium.com/windsurf)
+- [Project Documentation](docs/en/)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by ParseFlow Team**
+
+</div>

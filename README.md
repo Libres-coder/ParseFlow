@@ -2,48 +2,46 @@
 
 <div align="center">
 
-**PDF、Word、Excel 和 PowerPoint 文档解析库**
+**AI 驱动的全能文档解析库**
 
 [![npm version](https://img.shields.io/npm/v/parseflow-core.svg)](https://www.npmjs.com/package/parseflow-core)
 [![MCP Server](https://img.shields.io/badge/MCP-Server-blue)](https://www.npmjs.com/package/parseflow-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[English](./README_EN.md) | **中文** | [示例](./OFFICE_EXAMPLES.md)
+[English](./README_EN.md) | **中文**
 
 </div>
 
 ---
 
-ParseFlow 是一个全面的文档解析解决方案，支持 **PDF**、**Word (docx)**、**Excel (xlsx/xls)** 和 **PowerPoint (pptx)** 文件。它提供独立的核心库和 MCP (Model Context Protocol) 服务器，可供 AI 助手使用。
+ParseFlow 是一个全面的文档解析解决方案，支持 **PDF**、**Word**、**Excel**、**PowerPoint** 和 **图片 OCR**。它提供独立的核心库和 MCP 服务器，可供 AI 助手使用。
 
 ## ✨ 功能特性
 
 ### 📄 PDF 支持
 - ✅ 多策略文本提取（原始、格式化、清理）
 - ✅ 按页或按范围提取
-- ✅ 元数据获取（标题、作者、日期、页数）
-- ✅ 全文搜索
+- ✅ 🔐 加密 PDF 密码支持
+- ✅ 📄 PDF 合并、拆分、提取页面
+- ✅ 元数据获取、全文搜索
 
-### 📝 Word (docx) 支持
-- ✅ 文本提取
-- ✅ HTML 转换
-- ✅ 元数据获取
-- ✅ 文本搜索
+### 📝 Word / 📊 Excel / 🎯 PowerPoint
+- ✅ 文本提取和搜索
+- ✅ HTML 转换（Word）
+- ✅ 多工作表支持（Excel）
+- ✅ 幻灯片提取（PowerPoint）
 
-### 📊 Excel (xlsx/xls) 支持
-- ✅ 多工作表数据提取
-- ✅ 多种输出格式（JSON、CSV、文本）
-- ✅ 指定工作表提取
-- ✅ 单元格搜索
+### 🔍 OCR 图片识别
+- ✅ 支持 12 种语言
+- ✅ 图片文字提取和搜索
 
-### 🎯 PowerPoint (pptx) 支持
-- ✅ 幻灯片文本提取
-- ✅ 跨幻灯片搜索
+### 🧠 语义搜索
+- ✅ AI 向量嵌入
+- ✅ 智能文档搜索（无需精确关键词）
 
 ### 🤖 MCP 服务器
-- ✅ 11 个 AI 助手工具
+- ✅ **18 个** AI 助手工具
 - ✅ 支持 Claude Desktop、Windsurf、Cursor
-- ✅ 路径安全白名单
 
 ---
 
@@ -126,36 +124,42 @@ const results = await parser.searchText('slides.pptx', '关键词');
 }
 ```
 
-### 可用工具（11 个）
+### 可用工具（18 个）
 
-| 工具 | 描述 |
-|------|------|
-| `extract_text` | 从 PDF 提取文本 |
-| `get_metadata` | 获取 PDF 元数据 |
-| `search_pdf` | 在 PDF 中搜索 |
-| `extract_images` | 从 PDF 提取图片 |
-| `get_toc` | 获取 PDF 目录 |
-| `extract_word` | 从 Word 提取文本 |
-| `search_word` | 在 Word 中搜索 |
-| `extract_excel` | 从 Excel 提取数据 |
-| `search_excel` | 在 Excel 中搜索 |
-| `extract_powerpoint` | 从 PowerPoint 提取文本 |
-| `search_powerpoint` | 在 PowerPoint 中搜索 |
+| 类别 | 工具 | 描述 |
+|------|------|------|
+| **PDF** | `extract_text` | 提取文本（支持加密 PDF） |
+| | `get_metadata` | 获取元数据 |
+| | `search_pdf` | 全文搜索 |
+| | `extract_images` | 提取图片 |
+| | `get_toc` | 获取目录 |
+| | `merge_pdf` | 合并多个 PDF |
+| | `split_pdf` | 拆分为单页 |
+| | `extract_pdf_pages` | 提取指定页码 |
+| **Word** | `extract_word` | 提取文本/HTML |
+| | `search_word` | 文本搜索 |
+| **Excel** | `extract_excel` | 提取数据 |
+| | `search_excel` | 单元格搜索 |
+| **PPT** | `extract_powerpoint` | 提取幻灯片 |
+| | `search_powerpoint` | 幻灯片搜索 |
+| **OCR** | `extract_ocr` | 图片文字识别 |
+| | `search_ocr` | OCR 文本搜索 |
+| **AI** | `semantic_index` | 文档向量索引 |
+| | `semantic_search` | 语义相似搜索 |
 
 ---
 
-## 📈 路线图
+## 📈 版本历史
 
-### v1.1.0（当前）✅
-- ✅ Word (docx) 支持
-- ✅ Excel (xlsx/xls) 支持
-- ✅ PowerPoint (pptx) 支持
-- ✅ 11 个 MCP 工具
-
-### v1.2.0（计划中）
-- ⏳ OCR 文字识别
-- ⏳ 批量处理
-- ⏳ 加密 PDF 支持
+| 版本 | 功能 |
+|------|------|
+| v1.6.0 | 🧠 语义搜索（AI 向量嵌入） |
+| v1.5.0 | 📄 PDF 合并/拆分/提取 |
+| v1.4.0 | 🔐 加密 PDF 支持 |
+| v1.3.0 | 🔍 OCR 图片文字识别 |
+| v1.2.0 | 🎯 PowerPoint 支持 |
+| v1.1.0 | 📝 Word + 📊 Excel 支持 |
+| v1.0.0 | 📄 PDF 基础解析 |
 
 ---
 
