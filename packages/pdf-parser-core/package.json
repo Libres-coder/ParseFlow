@@ -1,6 +1,6 @@
 {
   "name": "parseflow-core",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Document parsing library for ParseFlow - Extract text and data from PDF, Word (docx), and Excel (xlsx) files",
   "type": "module",
   "main": "dist/index.js",

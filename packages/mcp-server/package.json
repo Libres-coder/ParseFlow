@@ -1,8 +1,8 @@
 {
   "name": "parseflow-mcp-server",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "mcpName": "io.github.libres-coder/parseflow",
-  "description": "AI-powered document parsing with 22 tools: PDF (watermark, merge, split), Word, Excel, PowerPoint, OCR, semantic search, and batch processing",
+  "description": "AI-powered document parsing with 23 tools: PDF (watermark, merge, split), Word, Excel, PowerPoint, OCR, semantic search, and batch processing",
   "keywords": [
     "mcp",
     "mcp-server",

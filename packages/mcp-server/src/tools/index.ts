@@ -91,6 +91,8 @@ export class ToolHandler {
           return await this.addWatermark(args);
         case 'add_image_watermark':
           return await this.addImageWatermark(args);
+        case 'remove_watermark':
+          return await this.removeWatermark(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -688,6 +690,46 @@ export class ToolHandler {
             },
           },
           required: ['inputPath', 'outputPath', 'imagePath'],
+        },
+      },
+      {
+        name: 'remove_watermark',
+        description:
+          'Remove watermark from PDF by covering it with white rectangle. Works best when watermark position is known.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            inputPath: {
+              type: 'string',
+              description: 'Absolute path to the input PDF file',
+            },
+            outputPath: {
+              type: 'string',
+              description: 'Absolute path for the output PDF file',
+            },
+            position: {
+              type: 'string',
+              description: 'Watermark position to cover: center, top-left, top-right, bottom-left, bottom-right',
+              enum: ['center', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
+              default: 'center',
+            },
+            area: {
+              type: 'object',
+              description: 'Custom area to cover (overrides position). Coordinates in PDF points.',
+              properties: {
+                x: { type: 'number', description: 'X coordinate from bottom-left' },
+                y: { type: 'number', description: 'Y coordinate from bottom-left' },
+                width: { type: 'number', description: 'Width of area to cover' },
+                height: { type: 'number', description: 'Height of area to cover' },
+              },
+            },
+            pages: {
+              type: 'array',
+              items: { type: 'number' },
+              description: 'Array of page numbers (1-indexed). If not specified, all pages',
+            },
+          },
+          required: ['inputPath', 'outputPath'],
         },
       },
     ];
@@ -1426,6 +1468,40 @@ ${r.matches.map((m) => `   • ${m.text}${m.context ? ` [${m.context}]` : ''}`).
 📝 Output: ${outputPath}
 📊 Pages: ${result.pageCount}
 🖼️ Watermark Image: ${imagePath}`,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 移除水印工具
+   */
+  private async removeWatermark(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const inputPath = this.pathResolver.resolve(args.inputPath as string);
+    const outputPath = this.pathResolver.resolve(args.outputPath as string);
+    const position = args.position as 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined;
+    const area = args.area as { x: number; y: number; width: number; height: number } | undefined;
+    const pages = args.pages as number[] | undefined;
+
+    logger.info('Removing watermark from PDF', { inputPath, outputPath, position });
+
+    const result = await this.pdfUtils.removeWatermark(inputPath, outputPath, {
+      position,
+      area,
+      pages,
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `✅ ${result.message}
+
+📄 Input: ${inputPath}
+📝 Output: ${outputPath}
+📊 Pages: ${result.pageCount}
+📍 Position: ${position || 'center'}
+⚠️ Note: Watermark covered with white rectangle`,
         },
       ],
     };

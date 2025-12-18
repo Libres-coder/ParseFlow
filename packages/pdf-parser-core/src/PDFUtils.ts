@@ -392,4 +392,87 @@ export class PDFUtils {
       message: `Image watermark added to ${pages.length} pages`,
     };
   }
+
+  /**
+   * 移除水印（通过覆盖指定区域）
+   * 注意：此方法通过在指定区域绘制白色矩形来"移除"水印
+   * 适用于已知水印位置的情况
+   * @param inputPath - 输入 PDF 文件路径
+   * @param outputPath - 输出文件路径
+   * @param options - 移除选项
+   */
+  async removeWatermark(
+    inputPath: string,
+    outputPath: string,
+    options: {
+      position?: 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+      area?: { x: number; y: number; width: number; height: number };
+      pages?: number[];
+    }
+  ): Promise<PDFUtilsResult> {
+    const pdfBytes = await fs.readFile(inputPath);
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const totalPages = pdfDoc.getPageCount();
+
+    const position = options.position || 'center';
+    const pages = options.pages || Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    for (const pageNum of pages) {
+      if (pageNum < 1 || pageNum > totalPages) continue;
+
+      const page = pdfDoc.getPage(pageNum - 1);
+      const { width, height } = page.getSize();
+
+      let area = options.area;
+
+      // 如果没有指定区域，根据位置计算默认覆盖区域
+      if (!area) {
+        const coverWidth = width * 0.4;
+        const coverHeight = height * 0.15;
+
+        switch (position) {
+          case 'center':
+            area = {
+              x: (width - coverWidth) / 2,
+              y: (height - coverHeight) / 2,
+              width: coverWidth,
+              height: coverHeight,
+            };
+            break;
+          case 'top-left':
+            area = { x: 30, y: height - 80, width: 200, height: 50 };
+            break;
+          case 'top-right':
+            area = { x: width - 230, y: height - 80, width: 200, height: 50 };
+            break;
+          case 'bottom-left':
+            area = { x: 30, y: 30, width: 200, height: 50 };
+            break;
+          case 'bottom-right':
+            area = { x: width - 230, y: 30, width: 200, height: 50 };
+            break;
+        }
+      }
+
+      // 用白色矩形覆盖水印区域
+      page.drawRectangle({
+        x: area!.x,
+        y: area!.y,
+        width: area!.width,
+        height: area!.height,
+        color: rgb(1, 1, 1), // 白色
+        opacity: 1,
+      });
+    }
+
+    const modifiedPdfBytes = await pdfDoc.save();
+    await fs.writeFile(outputPath, modifiedPdfBytes);
+
+    return {
+      success: true,
+      outputPath,
+      pageCount: totalPages,
+      message: `Watermark removed from ${pages.length} pages (covered with white)`,
+    };
+  }
 }

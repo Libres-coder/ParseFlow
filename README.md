@@ -129,7 +129,7 @@ const results = await parser.searchText('slides.pptx', '关键词');
 }
 ```
 
-### 可用工具（22 个）
+### 可用工具（23 个）
 
 | 类别 | 工具 | 描述 |
 |------|------|------|
@@ -143,6 +143,7 @@ const results = await parser.searchText('slides.pptx', '关键词');
 | | `extract_pdf_pages` | 提取指定页码 |
 | | `add_watermark` | 添加文字水印 |
 | | `add_image_watermark` | 添加图片水印 |
+| | `remove_watermark` | 移除水印（覆盖） |
 | **Word** | `extract_word` | 提取文本/HTML |
 | | `search_word` | 文本搜索 |
 | **Excel** | `extract_excel` | 提取数据 |

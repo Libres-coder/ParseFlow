@@ -13,6 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Streaming for large files
 - LRU caching
 
+## [1.8.1] - 2025-12-18
+
+### 🧹 Remove Watermark
+
+- ✅ **Remove Watermark** - Cover watermark area with white rectangle
+- MCP tool: `remove_watermark`
+- Supports position-based or custom area removal
+- Total MCP Tools: 23
+
+---
+
 ## [1.8.0] - 2025-12-18
 
 ### 💧 PDF Watermark Release
