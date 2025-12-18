@@ -129,7 +129,7 @@ const results = await parser.searchText('slides.pptx', '关键词');
 }
 ```
 
-### 可用工具（20 个）
+### 可用工具（22 个）
 
 | 类别 | 工具 | 描述 |
 |------|------|------|
@@ -141,6 +141,8 @@ const results = await parser.searchText('slides.pptx', '关键词');
 | | `merge_pdf` | 合并多个 PDF |
 | | `split_pdf` | 拆分为单页 |
 | | `extract_pdf_pages` | 提取指定页码 |
+| | `add_watermark` | 添加文字水印 |
+| | `add_image_watermark` | 添加图片水印 |
 | **Word** | `extract_word` | 提取文本/HTML |
 | | `search_word` | 文本搜索 |
 | **Excel** | `extract_excel` | 提取数据 |
@@ -160,6 +162,7 @@ const results = await parser.searchText('slides.pptx', '关键词');
 
 | 版本 | 功能 |
 |------|------|
+| v1.8.0 | 💧 PDF 水印（文字/图片水印） |
 | v1.7.0 | 📦 批量处理（并行处理多文件） |
 | v1.6.0 | 🧠 语义搜索（AI 向量嵌入） |
 | v1.5.0 | 📄 PDF 合并/拆分/提取 |

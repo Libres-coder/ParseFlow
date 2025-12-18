@@ -1,8 +1,8 @@
 /**
- * PDF 工具类 - 合并、拆分等操作
+ * PDF 工具类 - 合并、拆分、水印等操作
  */
 
-import { PDFDocument, degrees } from 'pdf-lib';
+import { PDFDocument, degrees, rgb, StandardFonts } from 'pdf-lib';
 import * as fs from 'fs/promises';
 
 export interface MergeOptions {
@@ -24,6 +24,17 @@ export interface PDFUtilsResult {
   outputPaths?: string[];
   pageCount?: number;
   message: string;
+}
+
+export interface WatermarkOptions {
+  text?: string;
+  imagePath?: string;
+  opacity?: number; // 0-1
+  fontSize?: number;
+  rotation?: number; // 旋转角度
+  color?: { r: number; g: number; b: number };
+  position?: 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  pages?: number[]; // 指定页码，不指定则全部页面
 }
 
 export class PDFUtils {
@@ -199,5 +210,186 @@ export class PDFUtils {
     }
 
     return Array.from(indices).sort((a, b) => a - b);
+  }
+
+  /**
+   * 添加文字水印到 PDF
+   * @param inputPath - 输入 PDF 文件路径
+   * @param outputPath - 输出文件路径
+   * @param options - 水印选项
+   */
+  async addWatermark(
+    inputPath: string,
+    outputPath: string,
+    options: WatermarkOptions
+  ): Promise<PDFUtilsResult> {
+    const pdfBytes = await fs.readFile(inputPath);
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const totalPages = pdfDoc.getPageCount();
+
+    // 默认选项
+    const text = options.text || 'WATERMARK';
+    const opacity = options.opacity !== undefined ? options.opacity : 0.3;
+    const fontSize = options.fontSize || 48;
+    const rotation = options.rotation || 45;
+    const color = options.color || { r: 0.5, g: 0.5, b: 0.5 };
+    const position = options.position || 'center';
+    const pages = options.pages || Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    // 加载字体
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+    // 处理每一页
+    for (const pageNum of pages) {
+      if (pageNum < 1 || pageNum > totalPages) continue;
+
+      const page = pdfDoc.getPage(pageNum - 1);
+      const { width, height } = page.getSize();
+      const textWidth = font.widthOfTextAtSize(text, fontSize);
+      const textHeight = fontSize;
+
+      // 计算位置
+      let x: number, y: number;
+      switch (position) {
+        case 'center':
+          x = (width - textWidth) / 2;
+          y = (height - textHeight) / 2;
+          break;
+        case 'top-left':
+          x = 50;
+          y = height - 50 - textHeight;
+          break;
+        case 'top-right':
+          x = width - 50 - textWidth;
+          y = height - 50 - textHeight;
+          break;
+        case 'bottom-left':
+          x = 50;
+          y = 50;
+          break;
+        case 'bottom-right':
+          x = width - 50 - textWidth;
+          y = 50;
+          break;
+        default:
+          x = (width - textWidth) / 2;
+          y = (height - textHeight) / 2;
+      }
+
+      // 添加水印
+      page.drawText(text, {
+        x,
+        y,
+        size: fontSize,
+        font,
+        color: rgb(color.r, color.g, color.b),
+        opacity,
+        rotate: degrees(rotation),
+      });
+    }
+
+    const modifiedPdfBytes = await pdfDoc.save();
+    await fs.writeFile(outputPath, modifiedPdfBytes);
+
+    return {
+      success: true,
+      outputPath,
+      pageCount: totalPages,
+      message: `Watermark added to ${pages.length} pages`,
+    };
+  }
+
+  /**
+   * 添加图片水印到 PDF
+   * @param inputPath - 输入 PDF 文件路径
+   * @param outputPath - 输出文件路径
+   * @param options - 水印选项
+   */
+  async addImageWatermark(
+    inputPath: string,
+    outputPath: string,
+    options: WatermarkOptions
+  ): Promise<PDFUtilsResult> {
+    if (!options.imagePath) {
+      throw new Error('Image path is required for image watermark');
+    }
+
+    const pdfBytes = await fs.readFile(inputPath);
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const totalPages = pdfDoc.getPageCount();
+
+    // 读取并嵌入图片
+    const imageBytes = await fs.readFile(options.imagePath);
+    const imageType = options.imagePath.toLowerCase();
+    let image;
+
+    if (imageType.endsWith('.png')) {
+      image = await pdfDoc.embedPng(imageBytes);
+    } else if (imageType.endsWith('.jpg') || imageType.endsWith('.jpeg')) {
+      image = await pdfDoc.embedJpg(imageBytes);
+    } else {
+      throw new Error('Unsupported image format. Use PNG or JPG');
+    }
+
+    const opacity = options.opacity !== undefined ? options.opacity : 0.3;
+    const position = options.position || 'center';
+    const pages = options.pages || Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    const imageDims = image.scale(0.3); // 缩放到 30%
+
+    // 处理每一页
+    for (const pageNum of pages) {
+      if (pageNum < 1 || pageNum > totalPages) continue;
+
+      const page = pdfDoc.getPage(pageNum - 1);
+      const { width, height } = page.getSize();
+
+      // 计算位置
+      let x: number, y: number;
+      switch (position) {
+        case 'center':
+          x = (width - imageDims.width) / 2;
+          y = (height - imageDims.height) / 2;
+          break;
+        case 'top-left':
+          x = 50;
+          y = height - 50 - imageDims.height;
+          break;
+        case 'top-right':
+          x = width - 50 - imageDims.width;
+          y = height - 50 - imageDims.height;
+          break;
+        case 'bottom-left':
+          x = 50;
+          y = 50;
+          break;
+        case 'bottom-right':
+          x = width - 50 - imageDims.width;
+          y = 50;
+          break;
+        default:
+          x = (width - imageDims.width) / 2;
+          y = (height - imageDims.height) / 2;
+      }
+
+      // 添加图片水印
+      page.drawImage(image, {
+        x,
+        y,
+        width: imageDims.width,
+        height: imageDims.height,
+        opacity,
+      });
+    }
+
+    const modifiedPdfBytes = await pdfDoc.save();
+    await fs.writeFile(outputPath, modifiedPdfBytes);
+
+    return {
+      success: true,
+      outputPath,
+      pageCount: totalPages,
+      message: `Image watermark added to ${pages.length} pages`,
+    };
   }
 }

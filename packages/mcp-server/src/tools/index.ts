@@ -87,6 +87,10 @@ export class ToolHandler {
           return await this.batchExtract(args);
         case 'batch_search':
           return await this.batchSearch(args);
+        case 'add_watermark':
+          return await this.addWatermark(args);
+        case 'add_image_watermark':
+          return await this.addImageWatermark(args);
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -587,6 +591,103 @@ export class ToolHandler {
             },
           },
           required: ['paths', 'query'],
+        },
+      },
+      {
+        name: 'add_watermark',
+        description:
+          'Add text watermark to PDF pages. Supports custom text, opacity, rotation, color, and position.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            inputPath: {
+              type: 'string',
+              description: 'Absolute path to the input PDF file',
+            },
+            outputPath: {
+              type: 'string',
+              description: 'Absolute path for the output PDF file',
+            },
+            text: {
+              type: 'string',
+              description: 'Watermark text (default: "WATERMARK")',
+            },
+            opacity: {
+              type: 'number',
+              description: 'Opacity value between 0 and 1 (default: 0.3)',
+              default: 0.3,
+            },
+            fontSize: {
+              type: 'number',
+              description: 'Font size in points (default: 48)',
+              default: 48,
+            },
+            rotation: {
+              type: 'number',
+              description: 'Rotation angle in degrees (default: 45)',
+              default: 45,
+            },
+            color: {
+              type: 'object',
+              description: 'RGB color object with r, g, b values (0-1)',
+              properties: {
+                r: { type: 'number' },
+                g: { type: 'number' },
+                b: { type: 'number' },
+              },
+            },
+            position: {
+              type: 'string',
+              description: 'Watermark position: center, top-left, top-right, bottom-left, bottom-right',
+              enum: ['center', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
+              default: 'center',
+            },
+            pages: {
+              type: 'array',
+              items: { type: 'number' },
+              description: 'Array of page numbers to watermark (1-indexed). If not specified, all pages',
+            },
+          },
+          required: ['inputPath', 'outputPath'],
+        },
+      },
+      {
+        name: 'add_image_watermark',
+        description:
+          'Add image watermark to PDF pages. Supports PNG and JPG images with custom opacity and position.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            inputPath: {
+              type: 'string',
+              description: 'Absolute path to the input PDF file',
+            },
+            outputPath: {
+              type: 'string',
+              description: 'Absolute path for the output PDF file',
+            },
+            imagePath: {
+              type: 'string',
+              description: 'Absolute path to the watermark image (PNG or JPG)',
+            },
+            opacity: {
+              type: 'number',
+              description: 'Opacity value between 0 and 1 (default: 0.3)',
+              default: 0.3,
+            },
+            position: {
+              type: 'string',
+              description: 'Watermark position: center, top-left, top-right, bottom-left, bottom-right',
+              enum: ['center', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
+              default: 'center',
+            },
+            pages: {
+              type: 'array',
+              items: { type: 'number' },
+              description: 'Array of page numbers to watermark (1-indexed). If not specified, all pages',
+            },
+          },
+          required: ['inputPath', 'outputPath', 'imagePath'],
         },
       },
     ];
@@ -1249,6 +1350,82 @@ ${r.matches.map((m) => `   • ${m.text}${m.context ? ` [${m.context}]` : ''}`).
         {
           type: 'text',
           text,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 添加文字水印工具
+   */
+  private async addWatermark(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const inputPath = this.pathResolver.resolve(args.inputPath as string);
+    const outputPath = this.pathResolver.resolve(args.outputPath as string);
+    const text = args.text as string | undefined;
+    const opacity = args.opacity as number | undefined;
+    const fontSize = args.fontSize as number | undefined;
+    const rotation = args.rotation as number | undefined;
+    const color = args.color as { r: number; g: number; b: number } | undefined;
+    const position = args.position as 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined;
+    const pages = args.pages as number[] | undefined;
+
+    logger.info('Adding watermark to PDF', { inputPath, outputPath, text });
+
+    const result = await this.pdfUtils.addWatermark(inputPath, outputPath, {
+      text,
+      opacity,
+      fontSize,
+      rotation,
+      color,
+      position,
+      pages,
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `✅ ${result.message}
+
+📄 Input: ${inputPath}
+📝 Output: ${outputPath}
+📊 Pages: ${result.pageCount}
+💧 Watermark: "${text || 'WATERMARK'}"`,
+        },
+      ],
+    };
+  }
+
+  /**
+   * 添加图片水印工具
+   */
+  private async addImageWatermark(args: Record<string, unknown>): Promise<{ content: TextContent[] }> {
+    const inputPath = this.pathResolver.resolve(args.inputPath as string);
+    const outputPath = this.pathResolver.resolve(args.outputPath as string);
+    const imagePath = this.pathResolver.resolve(args.imagePath as string);
+    const opacity = args.opacity as number | undefined;
+    const position = args.position as 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined;
+    const pages = args.pages as number[] | undefined;
+
+    logger.info('Adding image watermark to PDF', { inputPath, outputPath, imagePath });
+
+    const result = await this.pdfUtils.addImageWatermark(inputPath, outputPath, {
+      imagePath,
+      opacity,
+      position,
+      pages,
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `✅ ${result.message}
+
+📄 Input: ${inputPath}
+📝 Output: ${outputPath}
+📊 Pages: ${result.pageCount}
+🖼️ Watermark Image: ${imagePath}`,
         },
       ],
     };

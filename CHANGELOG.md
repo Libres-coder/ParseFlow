@@ -9,10 +9,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- Semantic search with vector embeddings
-- PDF merge/split functionality
-- PDF encryption/decryption
-- Performance optimization with streaming and parallel processing
+- PDF compression optimization
+- Streaming for large files
+- LRU caching
+
+## [1.8.0] - 2025-12-18
+
+### 💧 PDF Watermark Release
+
+#### ✨ New Features
+
+- ✅ **Text Watermark** - Add customizable text watermarks to PDF
+- ✅ **Image Watermark** - Add PNG/JPG images as watermarks
+- ✅ **Position Control** - 5 positions: center, top-left, top-right, bottom-left, bottom-right
+- ✅ **Page Selection** - Apply watermark to specific pages
+
+#### 📦 New Components
+
+- `PDFUtils.addWatermark()` - Add text watermark with custom font, color, opacity, rotation
+- `PDFUtils.addImageWatermark()` - Add image watermark (PNG/JPG support)
+- MCP tools: `add_watermark`, `add_image_watermark`
+
+#### 🎨 Watermark Options
+
+- Text, opacity, fontSize, rotation, color (RGB), position, pages
+
+#### 🔢 Total MCP Tools: 22
+
+- PDF: 10 tools (+2)
+- Word: 2 tools
+- Excel: 2 tools
+- PowerPoint: 2 tools
+- OCR: 2 tools
+- Semantic: 2 tools
+- Batch: 2 tools
+
+---
 
 ## [1.7.0] - 2025-12-17
 

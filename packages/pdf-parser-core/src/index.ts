@@ -47,7 +47,8 @@ export { PDFUtils } from './PDFUtils.js';
 export type {
   MergeOptions,
   SplitOptions,
-  PDFUtilsResult
+  PDFUtilsResult,
+  WatermarkOptions
 } from './PDFUtils.js';
 
 // Semantic Search
